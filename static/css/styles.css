@@ -546,5 +546,50 @@ body {
 .sidebar::-webkit-scrollbar-track { background: transparent; }
 .sidebar::-webkit-scrollbar-thumb { background: var(--emerald); border-radius: 4px; }
 
+/* ===== NAV CARDS ===== */
+.nav-card { transition: var(--transition); border: 1px solid transparent; }
+.nav-card:hover { border-color: var(--emerald); transform: translateY(-3px); box-shadow: var(--card-hover-shadow); }
+.nav-card .card-body { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+/* ===== CHART OVERLAY ===== */
+.chart-center-label {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    text-align: center; pointer-events: none;
+}
+
+/* ===== SUBJECT CARDS ===== */
+.subject-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--ivory);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+    cursor: default;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text);
+    height: 100%;
+}
+
+.subject-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-hover-shadow);
+    border-color: var(--emerald);
+}
+
+.subject-card i {
+    font-size: 1.1rem;
+    color: var(--emerald);
+    flex-shrink: 0;
+}
+
+.subject-card span {
+    line-height: 1.2;
+}
+
 /* ===== DIVIDER ===== */
 hr { border-color: var(--ivory); opacity: 0.8; }

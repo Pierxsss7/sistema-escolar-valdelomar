@@ -3,43 +3,135 @@
 {% block page_title %}<i class="bi bi-file-text text-primary"></i> Boleta de Calificaciones{% endblock %}
 {% block content %}
 {% with section='calificaciones' icon='file-text' %}
-<div class="card fade-in">
-    <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr><th>Materia</th><th>Periodo</th><th>Nota</th></tr>
-            </thead>
-            <tbody>
-                {% for c in calificaciones %}
-                <tr>
-                    <td class="fw-semibold">{{ c.materia.nombre }}</td>
-                    <td>{{ c.periodo.nombre }}</td>
-                    <td>
-                        <span class="badge-custom badge 
-                            {% if c.nota >= 70 %}bg-success
-                            {% elif c.nota >= 50 %}bg-warning text-dark
-                            {% else %}bg-danger{% endif %}">
-                            {{ c.nota }}
-                        </span>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="3"><div class="empty-state"><i class="bi bi-inbox"></i><p>Sin datos</p></div></td></tr>
+<div class="boleta-wrapper fade-in">
+    <div class="boleta-header">
+        <div class="boleta-escudo">
+            <img src="/static/img/escudo.svg" alt="Escudo" style="height:70px;">
+        </div>
+        <div class="boleta-title">
+            <h4>I.E. Abraham Valdelomar N° 116</h4>
+            <p>"Ciencia, Disciplina y Progreso"</p>
+            <h5>Boleta de Calificaciones</h5>
+        </div>
+        <div class="boleta-anno">Año {{ calificaciones.first.periodo.fecha_inicio.year|default:"2026" }}</div>
+    </div>
+
+    {% if alumno %}
+    <div class="boleta-info">
+        <div class="row g-3">
+            <div class="col-md-4"><strong>Alumno:</strong> {{ alumno.get_full_name }}</div>
+            <div class="col-md-3"><strong>Grado:</strong> {{ grupo.grado.nombre|default:"-" }}</div>
+            <div class="col-md-2"><strong>Sección:</strong> {{ grupo.nombre|default:"-" }}</div>
+            <div class="col-md-3"><strong>Nivel:</strong> {{ grupo.grado.get_nivel_display|default:"-" }}</div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% regroup calificaciones by materia as materias_list %}
+    {% for materia in materias_list %}
+    <table class="boleta-table">
+        <thead>
+            <tr>
+                <th>{{ materia.grouper.nombre }}</th>
+                {% for p in materia.list %}
+                <th>{{ p.periodo.nombre|slice:":12" }}</th>
                 {% endfor %}
-            </tbody>
-        </table>
-        {% if promedio %}
-        <div class="alert alert-info d-flex align-items-center gap-3">
-            <i class="bi bi-calculator fs-4"></i>
-            <div>
-                <strong>Promedio General:</strong> {{ promedio|floatformat:2 }}
+                <th>Prom.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="materia-name">{{ materia.grouper.nombre }}</td>
+                {% for c in materia.list %}
+                <td class="nota {% if c.nota >= 70 %}nota-aprobada{% elif c.nota >= 50 %}nota-regular{% else %}nota-desaprobada{% endif %}">
+                    {{ c.nota|floatformat:0 }}
+                </td>
+                {% endfor %}
+                <td class="nota-promedio">—</td>
+            </tr>
+        </tbody>
+    </table>
+    {% empty %}
+    <div class="empty-state"><i class="bi bi-inbox"></i><p>Sin calificaciones registradas</p></div>
+    {% endfor %}
+
+    {% if promedio %}
+    <div class="boleta-promedio">
+        <div class="promedio-label">Promedio General</div>
+        <div class="promedio-valor">{{ promedio|floatformat:1 }}</div>
+        <div class="promedio-rango">
+            {% if promedio >= 70 %}🌟 Destacado
+            {% elif promedio >= 50 %}📈 En Progreso
+            {% else %}📉 Requiere Apoyo{% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="boleta-footer">
+        <div class="row text-center">
+            <div class="col-6">
+                <div class="firma-linea"></div>
+                <small class="text-muted">Director(a)</small>
+            </div>
+            <div class="col-6">
+                <div class="firma-linea"></div>
+                <small class="text-muted">Tutor(a)</small>
             </div>
         </div>
-        {% endif %}
     </div>
 </div>
-<a href="{% url 'lista_calificaciones' %}" class="btn btn-outline-secondary mt-3">
-    <i class="bi bi-arrow-left"></i> Volver
-</a>
+
+<div class="d-flex gap-2 mt-4 no-print">
+    <a href="{% url 'lista_calificaciones' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Volver
+    </a>
+    <button onclick="window.print()" class="btn btn-primary">
+        <i class="bi bi-printer"></i> Imprimir / PDF
+    </button>
+</div>
 {% endwith %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+@media print {
+    body { background: #fff !important; }
+    .sidebar, .top-navbar, .no-print, .alert { display: none !important; }
+    .content { margin-left: 0 !important; }
+    .main-content { padding: 20px !important; }
+    .boleta-wrapper { box-shadow: none !important; border: 2px solid #1a4731 !important; }
+    .boleta-table th { background: #1a4731 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .nota-aprobada { background: #d4edda !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .nota-regular { background: #fff3cd !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .nota-desaprobada { background: #f8d7da !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .boleta-promedio { background: linear-gradient(135deg, #1a4731, #2d8a4e) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { margin: 15mm; size: A4 portrait; }
+}
+.boleta-wrapper {
+    background: #fff; border-radius: 16px; box-shadow: 0 4px 25px rgba(26,71,49,0.08);
+    padding: 32px; border: 1px solid var(--ivory);
+}
+.boleta-header { display: flex; align-items: center; gap: 20px; border-bottom: 2px solid var(--gold); padding-bottom: 20px; margin-bottom: 24px; }
+.boleta-title { flex: 1; }
+.boleta-title h4 { margin:0; font-weight:700; color:var(--primary); font-size:1.1rem; }
+.boleta-title p { margin:2px 0 4px; color:var(--gold); font-style:italic; font-size:0.85rem; font-weight:500; }
+.boleta-title h5 { margin:0; color:var(--text); font-weight:600; font-size:0.95rem; }
+.boleta-anno { color:var(--text-light); font-size:0.85rem; font-weight:500; }
+.boleta-info { background: var(--cream); border-radius: 10px; padding: 14px 18px; margin-bottom: 24px; font-size:0.9rem; }
+.boleta-table { width:100%; border-collapse:collapse; margin-bottom:20px; }
+.boleta-table th { background: var(--primary); color:#fff; padding:10px 12px; font-size:0.8rem; text-align:center; font-weight:600; }
+.boleta-table td { padding:8px 12px; text-align:center; border-bottom:1px solid var(--ivory); font-size:0.85rem; }
+.boleta-table td.materia-name { text-align:left; font-weight:600; color:var(--text); }
+.nota { font-weight:700; font-size:1rem; border-radius:4px; }
+.nota-aprobada { color:#155724; background:#d4edda; }
+.nota-regular { color:#856404; background:#fff3cd; }
+.nota-desaprobada { color:#721c24; background:#f8d7da; }
+.nota-promedio { font-weight:700; color:var(--primary); font-size:1rem; }
+.boleta-promedio { background: linear-gradient(135deg, var(--primary), var(--emerald)); color:#fff; border-radius:12px; padding:20px; text-align:center; margin:24px 0; }
+.promedio-label { font-size:0.85rem; opacity:0.85; }
+.promedio-valor { font-size:2.5rem; font-weight:700; line-height:1.2; }
+.promedio-rango { font-size:0.9rem; opacity:0.9; margin-top:4px; }
+.boleta-footer { border-top:1px solid var(--ivory); padding-top:24px; margin-top:16px; }
+.firma-linea { border-top:2px solid var(--primary); width:200px; margin:0 auto 6px; padding-top:4px; }
+</style>
 {% endblock %}
