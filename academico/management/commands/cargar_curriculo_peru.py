@@ -63,25 +63,6 @@ CURRICULO = {
             'Tutoría',
         ],
     },
-    'preparatoria': {
-        'grados': [
-            {'nombre': '1° Preparatoria', 'orden': 1},
-            {'nombre': '2° Preparatoria', 'orden': 2},
-        ],
-        'materias': [
-            'Comunicación',
-            'Matemática',
-            'Ciencia y Tecnología',
-            'Ciencias Sociales',
-            'Desarrollo Personal, Ciudadanía y Cívica',
-            'Educación Física',
-            'Arte y Cultura',
-            'Inglés',
-            'Educación Religiosa',
-            'Educación para el Trabajo',
-            'Tutoría',
-        ],
-    },
 }
 
 

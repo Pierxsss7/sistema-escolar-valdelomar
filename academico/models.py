@@ -8,7 +8,6 @@ class Grado(models.Model):
         ('preescolar', 'Preescolar'),
         ('primaria', 'Primaria'),
         ('secundaria', 'Secundaria'),
-        ('preparatoria', 'Preparatoria'),
     ])
     orden = models.IntegerField(help_text="Orden del grado (1, 2, 3, etc.)")
 

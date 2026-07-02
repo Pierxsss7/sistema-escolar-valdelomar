@@ -27,7 +27,7 @@ def crear_grado(request):
 
 @login_required
 def lista_materias(request, grado_id=None):
-    niveles = ['preescolar', 'primaria', 'secundaria', 'preparatoria']
+    niveles = ['preescolar', 'primaria', 'secundaria']
     materias_por_nivel = {}
     for nivel in niveles:
         materias_por_nivel[nivel] = Materia.objects.filter(grado__nivel=nivel).select_related('grado').order_by('grado__orden', 'nombre')

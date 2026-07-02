@@ -4,23 +4,21 @@
 {% block content %}
 {% with section='materias' icon='book-fill' %}
 
-{% with niveles=dict %}
 {% for nivel, materias in materias_por_nivel.items %}
 {% if materias %}
+{% regroup materias by nombre as materias_unicas %}
 <div class="card mb-4 fade-in">
     <div class="card-header d-flex align-items-center gap-2">
         {% if nivel == 'preescolar' %}
         <i class="bi bi-hearts"></i>
         {% elif nivel == 'primaria' %}
         <i class="bi bi-bookmark-star"></i>
-        {% elif nivel == 'secundaria' %}
-        <i class="bi bi-mortarboard"></i>
         {% else %}
-        <i class="bi bi-award"></i>
+        <i class="bi bi-mortarboard"></i>
         {% endif %}
         {{ nivel|title }}
         <span class="badge ms-auto" style="background: var(--gold); color: #000;">
-            {{ materias|length }} materias
+            {{ materias_unicas|length }} materias
         </span>
     </div>
     <div class="card-body p-0">
@@ -28,20 +26,22 @@
             <thead>
                 <tr>
                     <th>Materia</th>
-                    <th>Grado</th>
+                    <th>Grados</th>
                 </tr>
             </thead>
             <tbody>
-                {% for m in materias %}
+                {% for materia in materias_unicas %}
                 <tr>
                     <td class="fw-semibold">
                         <i class="bi bi-journal-text me-1" style="color: var(--emerald);"></i>
-                        {{ m.nombre }}
+                        {{ materia.grouper }}
                     </td>
                     <td>
-                        <span class="badge-custom badge" style="background: var(--cream); color: var(--primary);">
+                        {% for m in materia.list %}
+                        <span class="badge-custom badge me-1 mb-1" style="background: var(--cream); color: var(--primary);">
                             {{ m.grado.nombre }}
                         </span>
+                        {% endfor %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -51,7 +51,6 @@
 </div>
 {% endif %}
 {% endfor %}
-{% endwith %}
 
 {% if not materias_por_nivel.preescolar and not materias_por_nivel.primaria and not materias_por_nivel.secundaria %}
 <div class="empty-state fade-in">
