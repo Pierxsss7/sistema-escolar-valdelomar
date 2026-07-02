@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Reportes{% endblock %}
+{% block page_title %}<i class="bi bi-bar-chart-fill text-primary"></i> Reportes{% endblock %}
+{% block content %}
+{% with section='reportes' icon='bar-chart-fill' %}
+<div class="row g-4 mb-4 fade-in">
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-primary position-relative">
+            <i class="bi bi-people-fill stat-icon"></i>
+            <div class="stat-number">{{ total_alumnos }}</div>
+            <div class="stat-label">Alumnos</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-success position-relative">
+            <i class="bi bi-person-badge stat-icon"></i>
+            <div class="stat-number">{{ total_profesores }}</div>
+            <div class="stat-label">Profesores</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-warning position-relative">
+            <i class="bi bi-book-fill stat-icon"></i>
+            <div class="stat-number">{{ total_materias }}</div>
+            <div class="stat-label">Materias</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-info position-relative">
+            <i class="bi bi-layers-fill stat-icon"></i>
+            <div class="stat-number">{{ total_grados }}</div>
+            <div class="stat-label">Grados</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 fade-in">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><i class="bi bi-clock-history"></i> Últimas Asistencias</div>
+            <div class="card-body p-0">
+                <table class="table mb-0">
+                    <thead>
+                        <tr><th>Usuario</th><th>Fecha</th><th>Estado</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for a in ultimas_asistencias %}
+                        <tr>
+                            <td>{{ a.usuario.get_full_name }}</td>
+                            <td>{{ a.fecha|date:"d/m/Y" }}</td>
+                            <td>
+                                <span class="badge-custom badge 
+                                    {% if a.estado == 'presente' %}bg-success
+                                    {% elif a.estado == 'tarde' %}bg-warning text-dark
+                                    {% elif a.estado == 'justificada' %}bg-info text-dark
+                                    {% else %}bg-danger{% endif %}">
+                                    {{ a.get_estado_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="3" class="text-center text-muted py-3">Sin registros</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><i class="bi bi-download"></i> Exportar Datos</div>
+            <div class="card-body">
+                <p class="text-muted">Descarga los reportes en formato CSV para analizarlos en Excel.</p>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'reporte_calificaciones' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-graph-up"></i> Ver Reporte de Calificaciones
+                    </a>
+                    <a href="{% url 'reporte_asistencias' %}" class="btn btn-outline-success">
+                        <i class="bi bi-calendar-check"></i> Ver Reporte de Asistencias
+                    </a>
+                    <hr>
+                    <a href="{% url 'exportar_calificaciones' %}" class="btn btn-info">
+                        <i class="bi bi-file-earmark-spreadsheet"></i> Exportar Calificaciones (CSV)
+                    </a>
+                    <a href="{% url 'exportar_asistencias' %}" class="btn btn-warning">
+                        <i class="bi bi-file-earmark-spreadsheet"></i> Exportar Asistencias (CSV)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endwith %}
+{% endblock %}

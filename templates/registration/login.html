@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Iniciar Sesión{% endblock %}
+{% block auth_content %}
+<div class="login-page">
+    <div class="login-card fade-in">
+        <div class="logo">
+            <img src="{% static 'img/escudo.svg' %}" alt="Escudo" class="login-escudo">
+            <h2>I.E. Abraham Valdelomar 116</h2>
+            <p>N° 116</p>
+            <span class="sub">Sistema de Gestión Escolar</span>
+        </div>
+        <div class="divider"></div>
+
+        {% if form.errors %}
+        <div class="alert alert-danger py-2 d-flex align-items-center gap-2" style="border:none;background:#fef2f2;color:#991b1b;border-radius:10px;">
+            <i class="bi bi-exclamation-triangle"></i>
+            <span>Usuario o contraseña incorrectos</span>
+        </div>
+        {% endif %}
+
+        <form method="post" id="loginForm">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                    <i class="bi bi-person-circle me-1"></i> Usuario
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <input type="text" name="username" class="form-control" placeholder="Ingresa tu usuario" required autocomplete="username">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                    <i class="bi bi-lock me-1"></i> Contraseña
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <input type="password" name="password" class="form-control" placeholder="Ingresa tu contraseña" required autocomplete="current-password" id="passwordInput">
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()" style="border:1.5px solid #ddd8cc;border-left:none;">
+                        <i class="bi bi-eye" id="toggleIcon"></i>
+                    </button>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2 mt-2" id="loginBtn">
+                <i class="bi bi-box-arrow-in-right"></i> Ingresar
+            </button>
+        </form>
+
+        <div class="role-info mt-4 p-3" style="background:var(--cream);border-radius:10px;">
+            <small style="color:var(--text-light);font-size:0.72rem;display:block;text-align:center;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
+                <i class="bi bi-people me-1"></i> ¿Qué rol tienes?
+            </small>
+            <div class="d-flex justify-content-around text-center">
+                <div>
+                    <i class="bi bi-person-badge" style="color:var(--primary);font-size:1.2rem;"></i>
+                    <small class="d-block" style="font-size:0.65rem;color:var(--text-light);">Docente</small>
+                </div>
+                <div>
+                    <i class="bi bi-mortarboard" style="color:var(--emerald);font-size:1.2rem;"></i>
+                    <small class="d-block" style="font-size:0.65rem;color:var(--text-light);">Alumno</small>
+                </div>
+                <div>
+                    <i class="bi bi-heart" style="color:var(--gold);font-size:1.2rem;"></i>
+                    <small class="d-block" style="font-size:0.65rem;color:var(--text-light);">Padre</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <small style="color:var(--text-light);font-size:0.82rem;">
+                ¿No tienes cuenta? <a href="{% url 'registrar' %}" style="color:var(--gold);font-weight:600;">Regístrate aquí</a>
+            </small>
+        </div>
+        <div class="text-center mt-1">
+            <small style="color:var(--text-light);font-size:0.68rem;">
+                <i class="bi bi-shield-check me-1"></i> ¿Problemas? Contacta al administrador
+            </small>
+        </div>
+        <div class="text-center mt-1">
+            <small style="color:#ccc;font-size:0.6rem;">
+                © {% now "Y" %} I.E. Abraham Valdelomar 116
+            </small>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    var pwd = document.getElementById('passwordInput');
+    var icon = document.getElementById('toggleIcon');
+    if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
+    } else {
+        pwd.type = 'password';
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
+    }
+}
+
+document.getElementById('loginBtn').addEventListener('click', function() {
+    this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Ingresando...';
+    this.disabled = true;
+    document.getElementById('loginForm').submit();
+});
+</script>
+{% endblock %}

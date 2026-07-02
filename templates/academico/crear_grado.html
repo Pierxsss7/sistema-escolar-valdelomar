@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Nuevo Grado{% endblock %}
+{% block page_title %}<i class="bi bi-plus-circle text-primary"></i> Nuevo Grado{% endblock %}
+{% block content %}
+{% with section='grados' %}
+<div class="row justify-content-center fade-in">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-layers"></i> Datos del Grado
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nombre del Grado</label>
+                        <input type="text" name="nombre" class="form-control" placeholder="Ej: 1° Primaria" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nivel</label>
+                        <select name="nivel" class="form-select" required>
+                            <option value="">Seleccionar nivel...</option>
+                            <option value="preescolar">Preescolar</option>
+                            <option value="primaria">Primaria</option>
+                            <option value="secundaria">Secundaria</option>
+                            <option value="preparatoria">Preparatoria</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Orden</label>
+                        <input type="number" name="orden" class="form-control" placeholder="1, 2, 3..." required>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check2"></i> Guardar
+                    </button>
+                    <a href="{% url 'lista_grados' %}" class="btn btn-outline-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endwith %}
+{% endblock %}

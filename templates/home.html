@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% block title %}Panel Principal{% endblock %}
+{% block page_title %}Panel Principal{% endblock %}
+{% block content %}
+
+{% if user.rol == 'admin' %}
+<div class="row g-3 mb-4 fade-in">
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-primary position-relative">
+            <i class="bi bi-people-fill stat-icon"></i>
+            <div class="stat-number">{{ total_alumnos|default:"0" }}</div>
+            <div class="stat-label">Alumnos</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-success position-relative">
+            <i class="bi bi-person-badge stat-icon"></i>
+            <div class="stat-number">{{ total_profesores|default:"0" }}</div>
+            <div class="stat-label">Profesores</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-warning position-relative">
+            <i class="bi bi-book-fill stat-icon"></i>
+            <div class="stat-number">{{ total_materias|default:"0" }}</div>
+            <div class="stat-label">Materias</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-info position-relative">
+            <i class="bi bi-layers-fill stat-icon"></i>
+            <div class="stat-number">{{ total_grados|default:"0" }}</div>
+            <div class="stat-label">Grados</div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row g-3 fade-in">
+    {% if user.rol == 'admin' or user.rol == 'profesor' %}
+    <div class="col-md-3">
+        <a href="{% url 'lista_grados' %}" class="text-decoration-none">
+            <div class="card text-center p-3 h-100">
+                <div class="card-body">
+                    <i class="bi bi-layers-fill" style="font-size: 2.2rem; color: var(--primary);"></i>
+                    <h6 class="mt-2">Grados</h6>
+                    <p class="text-muted small mb-0">Niveles educativos</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endif %}
+    <div class="col-md-3">
+        <a href="{% url 'lista_materias' %}" class="text-decoration-none">
+            <div class="card text-center p-3 h-100">
+                <div class="card-body">
+                    <i class="bi bi-book-fill" style="font-size: 2.2rem; color: var(--emerald);"></i>
+                    <h6 class="mt-2">Materias</h6>
+                    <p class="text-muted small mb-0">Plan de estudios</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="{% url 'lista_asignaciones' %}" class="text-decoration-none">
+            <div class="card text-center p-3 h-100">
+                <div class="card-body">
+                    <i class="bi bi-journal-text" style="font-size: 2.2rem; color: var(--gold);"></i>
+                    <h6 class="mt-2">Asignaciones</h6>
+                    <p class="text-muted small mb-0">Clases y docentes</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="{% url 'lista_asistencias' %}" class="text-decoration-none">
+            <div class="card text-center p-3 h-100">
+                <div class="card-body">
+                    <i class="bi bi-calendar-check-fill" style="font-size: 2.2rem; color: var(--emerald);"></i>
+                    <h6 class="mt-2">Asistencias</h6>
+                    <p class="text-muted small mb-0">Control diario</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+{% if user.rol == 'alumno' %}
+<div class="row mt-4 fade-in">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-person-vcard"></i> Mi Perfil</div>
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="user-avatar" style="width: 56px; height: 56px; font-size: 1.4rem;">
+                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                    </div>
+                    <div>
+                        <h5 class="mb-1">{{ user.get_full_name }}</h5>
+                        <span class="badge" style="background: var(--gold); color: #000;">{{ user.get_rol_display }}</span>
+                    </div>
+                </div>
+                <p class="mb-1"><strong>Usuario:</strong> {{ user.username }}</p>
+                <p class="mb-1"><strong>Email:</strong> {{ user.email|default:"Sin registrar" }}</p>
+                <p><strong>Teléfono:</strong> {{ user.telefono|default:"Sin registrar" }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-lightning-charge"></i> Acceso Rápido</div>
+            <div class="card-body">
+                <a href="{% url 'mis_asistencias' %}" class="btn btn-outline-primary w-100 mb-2">
+                    <i class="bi bi-calendar-check"></i> Mis Asistencias
+                </a>
+                <a href="{% url 'lista_calificaciones' %}" class="btn btn-success w-100 mb-2">
+                    <i class="bi bi-graph-up"></i> Mis Calificaciones
+                </a>
+                <a href="{% url 'registrar_huella' %}" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-fingerprint"></i> Registrar Huella
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if user.rol == 'profesor' %}
+<div class="row mt-4 fade-in">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-journal-text"></i> Mis Clases</div>
+            <div class="card-body">
+                <p class="text-muted mb-3">Accede a tus asignaciones para tomar asistencia o registrar calificaciones.</p>
+                <a href="{% url 'lista_asignaciones' %}" class="btn btn-primary">
+                    <i class="bi bi-arrow-right"></i> Ir a mis clases
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if user.rol == 'padre' %}
+<div class="row mt-4 fade-in">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-heart"></i> Monitoreo de Hijos</div>
+            <div class="card-body">
+                <p class="text-muted mb-3">Accede al panel de monitoreo para ver las asistencias y calificaciones de tus hijos.</p>
+                <a href="{% url 'dashboard_padre' %}" class="btn btn-primary">
+                    <i class="bi bi-arrow-right"></i> Ver mis hijos
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if user.rol == 'admin' %}
+<div class="row mt-4 fade-in">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-lightning-charge"></i> Acciones Rápidas</div>
+            <div class="card-body">
+                <a href="{% url 'crear_grado' %}" class="btn btn-primary me-2 mb-2">
+                    <i class="bi bi-plus-circle"></i> Nuevo Grado
+                </a>
+                <a href="{% url 'dashboard' %}" class="btn btn-success me-2 mb-2">
+                    <i class="bi bi-bar-chart"></i> Reportes
+                </a>
+                <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary mb-2">
+                    <i class="bi bi-gear"></i> Panel Admin
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% if ultimas_asistencias %}
+<div class="row mt-4 fade-in">
+    <div class="col-12">
+        <div class="table-container">
+            <div class="p-3 border-bottom" style="background: #faf8f5;">
+                <strong style="color: var(--primary);"><i class="bi bi-clock-history"></i> Últimas Asistencias</strong>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr><th>Usuario</th><th>Fecha</th><th>Estado</th></tr>
+                </thead>
+                <tbody>
+                    {% for a in ultimas_asistencias %}
+                    <tr>
+                        <td>{{ a.usuario.get_full_name }}</td>
+                        <td>{{ a.fecha|date:"d/m/Y" }}</td>
+                        <td>
+                            <span class="badge-custom badge
+                                {% if a.estado == 'presente' %}bg-success
+                                {% elif a.estado == 'tarde' %}bg-warning text-dark
+                                {% elif a.estado == 'justificada' %}bg-info text-dark
+                                {% else %}bg-danger{% endif %}">
+                                {{ a.get_estado_display }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endif %}
+
+{% endblock %}

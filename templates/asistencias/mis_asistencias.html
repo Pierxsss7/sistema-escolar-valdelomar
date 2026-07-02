@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Mis Asistencias{% endblock %}
+{% block page_title %}<i class="bi bi-calendar-check-fill text-success"></i> Mis Asistencias{% endblock %}
+{% block content %}
+{% with section='home' %}
+<div class="row mb-4 fade-in">
+    <div class="col-md-4">
+        <div class="stat-card bg-gradient-success position-relative">
+            <i class="bi bi-check-circle stat-icon"></i>
+            <div class="stat-number">{{ asistencias|length }}</div>
+            <div class="stat-label">Total Registros</div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center">
+                <p class="mb-0 text-muted">Últimas asistencias registradas en tu historial académico.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-container fade-in">
+    <table class="table">
+        <thead>
+            <tr><th>Fecha</th><th>Materia</th><th>Estado</th><th>Hora</th></tr>
+        </thead>
+        <tbody>
+            {% for a in asistencias %}
+            <tr>
+                <td>{{ a.fecha|date:"d/m/Y" }}</td>
+                <td>{{ a.materia.nombre|default:"<span class='text-muted'>General</span>" }}</td>
+                <td>
+                    <span class="badge-custom badge 
+                        {% if a.estado == 'presente' %}bg-success
+                        {% elif a.estado == 'tarde' %}bg-warning text-dark
+                        {% elif a.estado == 'justificada' %}bg-info text-dark
+                        {% else %}bg-danger{% endif %}">
+                        {{ a.get_estado_display }}
+                    </span>
+                </td>
+                <td class="text-muted">{{ a.hora_entrada|time:"H:i"|default:"—" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">
+                    <div class="empty-state">
+                        <i class="bi bi-calendar-x"></i>
+                        <p>No tienes asistencias registradas aún</p>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endwith %}
+{% endblock %}

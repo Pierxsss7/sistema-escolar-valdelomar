@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Boleta de Calificaciones{% endblock %}
+{% block page_title %}<i class="bi bi-file-text text-primary"></i> Boleta de Calificaciones{% endblock %}
+{% block content %}
+{% with section='calificaciones' icon='file-text' %}
+<div class="card fade-in">
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr><th>Materia</th><th>Periodo</th><th>Nota</th></tr>
+            </thead>
+            <tbody>
+                {% for c in calificaciones %}
+                <tr>
+                    <td class="fw-semibold">{{ c.materia.nombre }}</td>
+                    <td>{{ c.periodo.nombre }}</td>
+                    <td>
+                        <span class="badge-custom badge 
+                            {% if c.nota >= 70 %}bg-success
+                            {% elif c.nota >= 50 %}bg-warning text-dark
+                            {% else %}bg-danger{% endif %}">
+                            {{ c.nota }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3"><div class="empty-state"><i class="bi bi-inbox"></i><p>Sin datos</p></div></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if promedio %}
+        <div class="alert alert-info d-flex align-items-center gap-3">
+            <i class="bi bi-calculator fs-4"></i>
+            <div>
+                <strong>Promedio General:</strong> {{ promedio|floatformat:2 }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<a href="{% url 'lista_calificaciones' %}" class="btn btn-outline-secondary mt-3">
+    <i class="bi bi-arrow-left"></i> Volver
+</a>
+{% endwith %}
+{% endblock %}

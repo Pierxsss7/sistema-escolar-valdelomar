@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Calificaciones - {{ hijo.get_full_name }}{% endblock %}
+{% block page_title %}<i class="bi bi-graph-up"></i> Calificaciones de {{ hijo.first_name }}{% endblock %}
+{% block content %}
+{% regroup calificaciones by periodo as calificaciones_por_periodo %}
+
+<div class="d-flex align-items-center gap-3 mb-4 fade-in">
+    <div class="user-avatar" style="width:48px;height:48px;font-size:1.2rem;background:linear-gradient(135deg,var(--gold),var(--emerald));">
+        {{ hijo.first_name|first|upper }}{{ hijo.last_name|first|upper }}
+    </div>
+    <div>
+        <h5 class="mb-0">{{ hijo.get_full_name }}</h5>
+        <small style="color:var(--text-light);">Historial completo de calificaciones</small>
+    </div>
+    <a href="{% url 'dashboard_padre' %}" class="btn btn-outline-secondary btn-sm ms-auto">
+        <i class="bi bi-arrow-left"></i> Volver
+    </a>
+</div>
+
+{% for periodo in calificaciones_por_periodo %}
+<div class="card mb-3 fade-in">
+    <div class="card-header">
+        <i class="bi bi-calendar3"></i> {{ periodo.grouper }}
+    </div>
+    <div class="table-container">
+        <table class="table mb-0">
+            <thead>
+                <tr><th>Materia</th><th>Nota</th><th>Desempeño</th></tr>
+            </thead>
+            <tbody>
+                {% for c in periodo.list %}
+                <tr>
+                    <td class="fw-semibold">{{ c.materia.nombre }}</td>
+                    <td>
+                        <span class="badge-custom badge
+                            {% if c.nota >= 70 %}bg-success
+                            {% elif c.nota >= 50 %}bg-warning text-dark
+                            {% else %}bg-danger{% endif %}">
+                            {{ c.nota|floatformat:0 }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if c.nota >= 90 %}
+                        <span class="text-success fw-semibold">Excelente</span>
+                        {% elif c.nota >= 70 %}
+                        <span class="text-primary fw-semibold">Bueno</span>
+                        {% elif c.nota >= 50 %}
+                        <span class="text-warning fw-semibold">En proceso</span>
+                        {% else %}
+                        <span class="text-danger fw-semibold">Requiere apoyo</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% empty %}
+<div class="empty-state fade-in">
+    <i class="bi bi-graph-up" style="font-size:3rem;"></i>
+    <h5>Sin calificaciones registradas</h5>
+    <p class="text-muted">Las calificaciones aparecerán cuando los docentes las registren.</p>
+</div>
+{% endfor %}
+{% endblock %}

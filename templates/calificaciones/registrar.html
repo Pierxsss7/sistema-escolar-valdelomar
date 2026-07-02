@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Registrar Calificaciones{% endblock %}
+{% block page_title %}<i class="bi bi-graph-up-arrow text-warning"></i> Registrar Calificaciones{% endblock %}
+{% block content %}
+{% with section='calificaciones' icon='graph-up-arrow' %}
+<div class="card mb-4 fade-in">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <small class="text-muted d-block">Materia</small>
+                <span class="fw-semibold">{{ asignacion.materia.nombre }}</span>
+            </div>
+            <div class="col-md-4">
+                <small class="text-muted d-block">Grupo</small>
+                <span class="fw-semibold">{{ asignacion.grupo }}</span>
+            </div>
+            <div class="col-md-4">
+                <small class="text-muted d-block">Profesor</small>
+                <span class="fw-semibold">{{ asignacion.profesor.get_full_name }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="post" class="fade-in">
+    {% csrf_token %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <label class="form-label fw-semibold">Periodo</label>
+            <select name="periodo" class="form-select" required>
+                <option value="">Seleccionar periodo...</option>
+                {% for p in periodos %}
+                <option value="{{ p.id }}">{{ p.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr><th>#</th><th>Alumno</th><th>Calificación</th></tr>
+            </thead>
+            <tbody>
+                {% for alumno in alumnos %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td class="fw-semibold">{{ alumno.get_full_name }}</td>
+                    <td>
+                        <div class="input-group" style="max-width: 200px;">
+                            <input type="number" name="nota_{{ alumno.id }}" class="form-control" min="0" max="100" step="0.1" placeholder="0-100">
+                            <span class="input-group-text">pts</span>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">
+                        <div class="empty-state">
+                            <i class="bi bi-people"></i>
+                            <p>No hay alumnos en este grupo</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-save"></i> Guardar Calificaciones
+        </button>
+        <a href="{% url 'lista_asignaciones' %}" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+</form>
+{% endwith %}
+{% endblock %}

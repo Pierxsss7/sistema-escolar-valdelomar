@@ -1,0 +1,206 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | I.E. Abraham Valdelomar 116{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}" style="display:flex;align-items:center;gap:12px;color:#c9a84c;text-decoration:none;">
+        <img src="{% static 'img/escudo.svg' %}" width="28" height="34" alt="Escudo" style="filter:drop-shadow(0 1px 3px rgba(0,0,0,0.3));">
+        <span style="font-weight:600;font-size:1rem;letter-spacing:0.3px;">
+            I.E. Abraham Valdelomar <span style="color:#e0c668;">116</span>
+        </span>
+    </a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+<style>
+    :root {
+        --primary: #1a4731;
+        --primary-light: #2d6b4a;
+        --secondary: #0a1a12;
+        --accent: #c9a84c;
+        --accent-light: #e0c668;
+        --emerald: #2d8a4e;
+        --primary-fg: #fff;
+        --body-bg: #f4f6f0;
+        --body-fg: #2d3748;
+        --body-quiet-color: #6a7a6a;
+        --body-loud-color: #1a1a2e;
+        --header-color: #c9a84c;
+        --header-branding-color: #c9a84c;
+        --header-bg: #0a1a12;
+        --header-link-color: #c9a84c;
+        --breadcrumbs-fg: #e0c668;
+        --breadcrumbs-bg: #0d241a;
+        --link-fg: #1a4731;
+        --link-hover-color: #2d8a4e;
+        --link-selected-fg: #1a4731;
+        --button-bg: #1a4731;
+        --button-fg: #fff;
+        --button-hover-bg: #2d6b4a;
+        --default-button-bg: #2d8a4e;
+        --default-button-hover-bg: #3dac5e;
+        --close-button-bg: #8a9a8a;
+        --close-button-hover-bg: #6a7a6a;
+        --delete-button-bg: #991b1b;
+        --delete-button-hover-bg: #ba2121;
+        --object-tools-bg: #1a4731;
+        --object-tools-hover-bg: #2d6b4a;
+        --selected-row: #e8f4e8;
+        --darkened-bg: #f0f2ec;
+    }
+
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    #header {
+        border-bottom: 3px solid var(--accent);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 10px 30px;
+    }
+
+    #branding h1 { margin: 0; }
+
+    #user-tools {
+        font-size: 0.82rem;
+        letter-spacing: 0.2px;
+    }
+
+    #user-tools a {
+        color: var(--accent-light);
+        border-bottom: none;
+    }
+
+    #user-tools a:hover { color: #fff; }
+
+    .module caption, .module h2, .inline-group h2 {
+        background: var(--secondary) !important;
+        color: var(--accent) !important;
+        font-weight: 600 !important;
+        font-size: 0.82rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 12px 16px !important;
+    }
+
+    div.breadcrumbs {
+        border-bottom: 1px solid var(--accent);
+        font-size: 0.82rem;
+        padding: 12px 30px;
+        color: var(--accent-light);
+    }
+
+    div.breadcrumbs a { color: var(--accent); }
+    div.breadcrumbs a:hover { color: #fff; }
+
+    /* Botones */
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        background: var(--button-bg);
+        color: var(--button-fg);
+        border-radius: 6px;
+        padding: 8px 18px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border: none;
+    }
+
+    .button:hover, input[type=submit]:hover, input[type=button]:hover {
+        background: var(--button-hover-bg);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(26, 71, 49, 0.25);
+    }
+
+    .default, input[type=submit].default, .submit-row input.default {
+        background: var(--default-button-bg);
+    }
+
+    .default:hover, input[type=submit].default:hover {
+        background: var(--default-button-hover-bg);
+        box-shadow: 0 4px 12px rgba(45, 139, 78, 0.3);
+    }
+
+    .deletelink {
+        background: var(--delete-button-bg);
+        border-radius: 6px;
+        padding: 8px 18px;
+        color: #fff !important;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+
+    .deletelink:hover {
+        background: var(--delete-button-hover-bg);
+    }
+
+    /* Tablas */
+    #changelist { background: #fff; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+    #changelist table { border-radius: 8px; overflow: hidden; }
+    #changelist .actions { padding: 14px 16px; }
+    #changelist .actions select { border-radius: 6px; border: 1.5px solid #ddd8cc; }
+    #changelist .actions .button { padding: 6px 14px; }
+
+    th a:link, th a:visited { color: var(--primary); }
+    th a:focus, th a:hover { color: var(--link-hover-color); }
+
+    /* Formularios */
+    .form-row { padding: 12px 0; }
+    .form-row .label { font-weight: 600; color: var(--primary); }
+    .form-row input, .form-row select, .form-row textarea {
+        border-radius: 6px;
+        border: 1.5px solid #ddd8cc;
+        padding: 8px 12px;
+    }
+    .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+        border-color: var(--emerald);
+        box-shadow: 0 0 0 3px rgba(45, 139, 78, 0.12);
+    }
+
+    /* Dashboard */
+    .dashboard #content { max-width: 1200px; }
+    .dashboard .module { border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: none; }
+    .dashboard .module table { border: none; }
+    .dashboard .module td, .dashboard .module th { padding: 12px 16px; }
+
+    /* Login admin */
+    .login #header { padding: 20px; }
+    .login #content { padding: 20px; }
+    .login .form-row { padding: 8px 0; }
+
+    /* Submit row */
+    .submit-row { padding: 16px; background: #f8faf6; border-top: 1px solid #e8ece0; }
+
+    /* Object tools */
+    .object-tools a:link, .object-tools a:visited {
+        background: var(--object-tools-bg);
+        border-radius: 6px;
+        padding: 6px 16px;
+        font-weight: 500;
+    }
+    .object-tools a:hover { background: var(--object-tools-hover-bg); }
+
+    /* Selected row */
+    tr.selected { background: var(--selected-row) !important; }
+
+    /* Mensajes */
+    .messagelist li { border-radius: 8px; padding: 12px 16px; }
+    .messagelist li.success { background: #e8f4e8; border-color: var(--emerald); color: #1a4731; }
+
+    /* Fieldset */
+    fieldset { border-radius: 8px; }
+    fieldset.collapsed { border: 1px solid #e8ece0; }
+
+    /* Help text */
+    .help { color: var(--body-quiet-color); font-size: 0.78rem; }
+</style>
+{% endblock %}
+
+{% block footer %}
+<div style="text-align:center;padding:16px 0;color:#aab8aa;font-size:0.72rem;border-top:1px solid #e8ece0;margin-top:20px;">
+    I.E. Abraham Valdelomar 116 — Sistema de Gestión Escolar
+</div>
+{% endblock %}

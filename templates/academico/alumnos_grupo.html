@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Alumnos - {{ grupo }}{% endblock %}
+{% block page_title %}<i class="bi bi-people-fill text-primary"></i> {{ grupo }}{% endblock %}
+{% block content %}
+{% with section='grupos' icon='people-fill' %}
+<div class="d-flex justify-content-between align-items-center mb-3 fade-in">
+    <h6 class="text-muted mb-0">Lista de alumnos inscritos</h6>
+    <span class="badge bg-primary">{{ inscripciones|length }} alumno(s)</span>
+</div>
+
+<div class="table-container fade-in">
+    <table class="table">
+        <thead>
+            <tr><th>#</th><th>Nombre Completo</th><th>Email</th><th>Teléfono</th></tr>
+        </thead>
+        <tbody>
+            {% for insc in inscripciones %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td class="fw-semibold">{{ insc.alumno.get_full_name }}</td>
+                <td>{{ insc.alumno.email|default:"<span class='text-muted'>—</span>" }}</td>
+                <td>{{ insc.alumno.telefono|default:"<span class='text-muted'>—</span>" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">
+                    <div class="empty-state">
+                        <i class="bi bi-person-x"></i>
+                        <p>No hay alumnos en este grupo</p>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endwith %}
+{% endblock %}

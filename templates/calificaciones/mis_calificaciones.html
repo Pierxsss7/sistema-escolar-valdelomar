@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Mis Calificaciones{% endblock %}
+{% block page_title %}<i class="bi bi-graph-up-arrow text-warning"></i> Mis Calificaciones{% endblock %}
+{% block content %}
+{% with section='home' %}
+{% regroup calificaciones by periodo as calificaciones_por_periodo %}
+
+{% for periodo in calificaciones_por_periodo %}
+<div class="card mb-4 fade-in">
+    <div class="card-header">
+        <i class="bi bi-calendar3"></i> {{ periodo.grouper }}
+    </div>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr><th>Materia</th><th>Nota</th><th>Desempeño</th></tr>
+            </thead>
+            <tbody>
+                {% for c in periodo.list %}
+                <tr>
+                    <td class="fw-semibold">{{ c.materia.nombre }}</td>
+                    <td>
+                        <div class="grade-circle 
+                            {% if c.nota >= 70 %}bg-success text-white
+                            {% elif c.nota >= 50 %}bg-warning text-dark
+                            {% else %}bg-danger text-white{% endif %}">
+                            {{ c.nota|floatformat:0 }}
+                        </div>
+                    </td>
+                    <td>
+                        {% if c.nota >= 90 %}
+                        <span class="text-success fw-semibold">Excelente</span>
+                        {% elif c.nota >= 70 %}
+                        <span class="text-primary fw-semibold">Bueno</span>
+                        {% elif c.nota >= 50 %}
+                        <span class="text-warning fw-semibold">Regular</span>
+                        {% else %}
+                        <span class="text-danger fw-semibold">Requiere apoyo</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% empty %}
+<div class="empty-state fade-in">
+    <i class="bi bi-graph-up"></i>
+    <h5>No tienes calificaciones registradas aún</h5>
+    <p class="text-muted">Las calificaciones aparecerán aquí cuando tus profesores las registren.</p>
+</div>
+{% endfor %}
+{% endwith %}
+{% endblock %}

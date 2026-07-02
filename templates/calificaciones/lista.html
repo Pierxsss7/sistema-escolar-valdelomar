@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Calificaciones{% endblock %}
+{% block page_title %}<i class="bi bi-graph-up-arrow text-warning"></i> Calificaciones{% endblock %}
+{% block content %}
+{% with section='calificaciones' icon='graph-up-arrow' %}
+<div class="table-container fade-in">
+    <table class="table">
+        <thead>
+            <tr><th>Alumno</th><th>Materia</th><th>Periodo</th><th>Nota</th></tr>
+        </thead>
+        <tbody>
+            {% for c in calificaciones %}
+            <tr>
+                <td class="fw-semibold">{{ c.alumno.get_full_name }}</td>
+                <td>{{ c.materia.nombre }}</td>
+                <td><span class="badge bg-secondary">{{ c.periodo.nombre }}</span></td>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="grade-circle 
+                            {% if c.nota >= 70 %}bg-success text-white
+                            {% elif c.nota >= 50 %}bg-warning text-dark
+                            {% else %}bg-danger text-white{% endif %}">
+                            {{ c.nota|floatformat:0 }}
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="progress-grade">
+                                <div class="progress-bar rounded
+                                    {% if c.nota >= 70 %}bg-success
+                                    {% elif c.nota >= 50 %}bg-warning
+                                    {% else %}bg-danger{% endif %}" 
+                                    role="progressbar" style="width: {{ c.nota|floatformat:0 }}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">
+                    <div class="empty-state">
+                        <i class="bi bi-graph-up"></i>
+                        <p>No hay calificaciones registradas</p>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endwith %}
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Crear Cuenta{% endblock %}
+{% block auth_content %}
+<div class="login-page">
+    <div class="login-card fade-in" style="max-width:480px;">
+        <div class="logo">
+            <img src="{% static 'img/escudo.svg' %}" alt="Escudo" class="login-escudo">
+            <h2>I.E. Abraham Valdelomar 116</h2>
+            <p>N° 116</p>
+            <span class="sub">Crear Cuenta de Padre de Familia</span>
+        </div>
+        <div class="divider"></div>
+
+        {% if form.errors %}
+        <div class="alert alert-danger py-2 d-flex align-items-center gap-2" style="border:none;background:#fef2f2;color:#991b1b;border-radius:10px;">
+            <i class="bi bi-exclamation-triangle"></i>
+            <span>Corrige los errores del formulario</span>
+        </div>
+        {% endif %}
+
+        <form method="post" id="registroForm">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                        <i class="bi bi-person me-1"></i> Nombres
+                    </label>
+                    <input type="text" name="first_name" class="form-control" placeholder="Tus nombres" required maxlength="30" value="{{ form.first_name.value|default:'' }}">
+                    {% if form.first_name.errors %}<small class="text-danger">{{ form.first_name.errors.0 }}</small>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                        <i class="bi bi-person me-1"></i> Apellidos
+                    </label>
+                    <input type="text" name="last_name" class="form-control" placeholder="Tus apellidos" required maxlength="30" value="{{ form.last_name.value|default:'' }}">
+                    {% if form.last_name.errors %}<small class="text-danger">{{ form.last_name.errors.0 }}</small>{% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                    <i class="bi bi-person-circle me-1"></i> Usuario
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <input type="text" name="username" class="form-control" placeholder="Elige un nombre de usuario" required maxlength="150" autocomplete="username" value="{{ form.username.value|default:'' }}">
+                </div>
+                {% if form.username.errors %}<small class="text-danger">{{ form.username.errors.0 }}</small>{% endif %}
+                <small class="text-muted" style="font-size:0.7rem;">Letras, números y @ . + - _ únicamente</small>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                    <i class="bi bi-envelope me-1"></i> Correo electrónico <small class="text-muted">(opcional)</small>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input type="email" name="email" class="form-control" placeholder="correo@ejemplo.com" value="{{ form.email.value|default:'' }}">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                    <i class="bi bi-telephone me-1"></i> Teléfono <small class="text-muted">(opcional)</small>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                    <input type="text" name="telefono" class="form-control" placeholder="999 999 999" value="{{ form.telefono.value|default:'' }}">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                    <i class="bi bi-lock me-1"></i> Contraseña
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <input type="password" name="password1" class="form-control" placeholder="Mínimo 8 caracteres" required autocomplete="new-password">
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePwd('password1','toggleIcon1')" style="border:1.5px solid #ddd8cc;border-left:none;">
+                        <i class="bi bi-eye" id="toggleIcon1"></i>
+                    </button>
+                </div>
+                {% if form.password1.errors %}<small class="text-danger">{{ form.password1.errors.0 }}</small>{% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                    <i class="bi bi-lock-fill me-1"></i> Confirmar Contraseña
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                    <input type="password" name="password2" class="form-control" placeholder="Repite la contraseña" required autocomplete="new-password">
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePwd('password2','toggleIcon2')" style="border:1.5px solid #ddd8cc;border-left:none;">
+                        <i class="bi bi-eye" id="toggleIcon2"></i>
+                    </button>
+                </div>
+                {% if form.password2.errors %}<small class="text-danger">{{ form.password2.errors.0 }}</small>{% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 mt-2" id="registroBtn">
+                <i class="bi bi-person-plus"></i> Crear Cuenta
+            </button>
+        </form>
+
+        <div class="text-center mt-3">
+            <small style="color:var(--text-light);font-size:0.82rem;">
+                ¿Ya tienes cuenta? <a href="{% url 'login' %}" style="color:var(--gold);font-weight:600;">Inicia Sesión</a>
+            </small>
+        </div>
+
+        <div class="text-center mt-1">
+            <small style="color:#ccc;font-size:0.6rem;">
+                © {% now "Y" %} I.E. Abraham Valdelomar 116
+            </small>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePwd(inputId, iconId) {
+    var pwd = document.getElementById(inputId);
+    var icon = document.getElementById(iconId);
+    if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
+    } else {
+        pwd.type = 'password';
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
+    }
+}
+
+document.getElementById('registroBtn').addEventListener('click', function() {
+    this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Creando cuenta...';
+    this.disabled = true;
+    document.getElementById('registroForm').submit();
+});
+</script>
+{% endblock %}
