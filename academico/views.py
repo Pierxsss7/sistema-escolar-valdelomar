@@ -30,7 +30,11 @@ def lista_materias(request, grado_id=None):
     niveles = ['preescolar', 'primaria', 'secundaria']
     materias_por_nivel = {}
     for nivel in niveles:
-        materias_por_nivel[nivel] = Materia.objects.filter(grado__nivel=nivel).select_related('grado').order_by('grado__orden', 'nombre')
+        qs = Materia.objects.filter(grado__nivel=nivel).select_related('grado')
+        agrupadas = {}
+        for m in qs:
+            agrupadas.setdefault(m.nombre, []).append(m.grado.nombre)
+        materias_por_nivel[nivel] = [{'nombre': k, 'grados': sorted(v)} for k, v in sorted(agrupadas.items())]
     grados = Grado.objects.all()
     return render(request, 'academico/materias.html', {
         'materias_por_nivel': materias_por_nivel,

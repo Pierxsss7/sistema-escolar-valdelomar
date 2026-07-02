@@ -6,7 +6,6 @@
 
 {% for nivel, materias in materias_por_nivel.items %}
 {% if materias %}
-{% regroup materias by nombre as materias_unicas %}
 <div class="card mb-4 fade-in">
     <div class="card-header d-flex align-items-center gap-2">
         {% if nivel == 'preescolar' %}
@@ -18,7 +17,7 @@
         {% endif %}
         {{ nivel|title }}
         <span class="badge ms-auto" style="background: var(--gold); color: #000;">
-            {{ materias_unicas|length }} materias
+            {{ materias|length }} materias
         </span>
     </div>
     <div class="card-body p-0">
@@ -30,16 +29,16 @@
                 </tr>
             </thead>
             <tbody>
-                {% for materia in materias_unicas %}
+                {% for m in materias %}
                 <tr>
                     <td class="fw-semibold">
                         <i class="bi bi-journal-text me-1" style="color: var(--emerald);"></i>
-                        {{ materia.grouper }}
+                        {{ m.nombre }}
                     </td>
                     <td>
-                        {% for m in materia.list %}
+                        {% for g in m.grados %}
                         <span class="badge-custom badge me-1 mb-1" style="background: var(--cream); color: var(--primary);">
-                            {{ m.grado.nombre }}
+                            {{ g }}
                         </span>
                         {% endfor %}
                     </td>
