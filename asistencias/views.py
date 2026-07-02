@@ -37,14 +37,14 @@ def tomar_asistencia(request, asignacion_id):
 
 @login_required
 def lista_asistencias(request):
-    asistencias = Asistencia.objects.select_related('usuario', 'materia').filter(
-        usuario=request.user if request.user.rol == 'alumno' else None
-    ) if request.user.rol == 'alumno' else Asistencia.objects.select_related('usuario', 'materia').all()
-
-    if request.user.rol in ['admin', 'profesor']:
+    if request.user.rol == 'admin':
         asistencias = Asistencia.objects.select_related('usuario', 'materia').all()
+    elif request.user.rol == 'profesor':
+        asistencias = Asistencia.objects.filter(registrado_por=request.user).select_related('usuario', 'materia').order_by('-fecha')
+    elif request.user.rol == 'alumno':
+        asistencias = Asistencia.objects.filter(usuario=request.user).select_related('materia').order_by('-fecha')
     else:
-        asistencias = Asistencia.objects.filter(usuario=request.user).select_related('materia')
+        asistencias = Asistencia.objects.select_related('usuario', 'materia').all()
 
     return render(request, 'asistencias/lista_asistencias.html', {'asistencias': asistencias})
 

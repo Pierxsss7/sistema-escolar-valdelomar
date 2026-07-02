@@ -216,8 +216,8 @@
                 <span class="badge mb-3" style="background:var(--emerald); color:#fff;">{{ user.get_rol_display }}</span>
                 <div class="row g-2 w-100 text-center">
                     <div class="col-6 border-end">
-                        <strong style="font-size:1.5rem; color:var(--primary);">{{ total_materias }}</strong>
-                        <small class="d-block text-muted">Materias</small>
+                        <strong style="font-size:1.5rem; color:var(--primary);">{{ mis_asignaciones|length }}</strong>
+                        <small class="d-block text-muted">Clases</small>
                     </div>
                     <div class="col-6">
                         <strong style="font-size:1.5rem; color:var(--emerald);">{{ total_alumnos }}</strong>
@@ -232,20 +232,83 @@
             <div class="card-header d-flex align-items-center gap-2">
                 <i class="bi bi-journal-text"></i> Mis Clases
             </div>
-            <div class="card-body d-flex flex-column align-items-start justify-content-center">
-                <p class="text-muted mb-3">Accede a tus asignaciones para tomar asistencia o registrar calificaciones.</p>
-                <div class="d-flex gap-2 flex-wrap">
-                    <a href="{% url 'lista_asignaciones' %}" class="btn btn-primary">
-                        <i class="bi bi-arrow-right"></i> Ir a mis clases
-                    </a>
-                    <a href="{% url 'lista_asistencias' %}" class="btn btn-outline-success">
-                        <i class="bi bi-calendar-check"></i> Tomar Asistencia
-                    </a>
-                    <a href="{% url 'lista_calificaciones' %}" class="btn btn-outline-warning">
-                        <i class="bi bi-graph-up"></i> Calificaciones
-                    </a>
+            <div class="card-body p-0">
+                {% if mis_asignaciones %}
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Materia</th>
+                            <th>Grupo</th>
+                            <th style="width:140px;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in mis_asignaciones %}
+                        <tr>
+                            <td class="fw-semibold">{{ a.materia.nombre }}</td>
+                            <td><span class="badge" style="background:var(--primary);color:#fff;">{{ a.grupo.grado.nombre }} - {{ a.grupo.nombre }}</span></td>
+                            <td>
+                                <a href="{% url 'tomar_asistencia' a.id %}" class="btn btn-sm btn-success">
+                                    <i class="bi bi-calendar-check"></i> Asistencia
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="card-body">
+                    <div class="empty-state">
+                        <i class="bi bi-journal-text"></i>
+                        <p>No tienes clases asignadas</p>
+                    </div>
                 </div>
+                {% endif %}
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3 fade-in">
+    <div class="col-12">
+        <div class="table-container">
+            <div class="p-3 border-bottom d-flex align-items-center gap-2 flex-wrap" style="background:#faf8f5;">
+                <i class="bi bi-clock-history" style="color:var(--primary);"></i>
+                <strong style="color:var(--primary);font-size:0.9rem;">Últimas asistencias registradas</strong>
+                <a href="{% url 'lista_asistencias' %}" class="btn btn-sm btn-outline-primary ms-auto">
+                    <i class="bi bi-eye"></i> Ver todas
+                </a>
+            </div>
+            {% if mis_ultimas_asistencias %}
+            <table class="table">
+                <thead>
+                    <tr><th>Alumno</th><th>Materia</th><th>Fecha</th><th>Estado</th></tr>
+                </thead>
+                <tbody>
+                    {% for a in mis_ultimas_asistencias %}
+                    <tr>
+                        <td class="fw-semibold">{{ a.usuario.get_full_name }}</td>
+                        <td>{{ a.materia.nombre }}</td>
+                        <td>{{ a.fecha|date:"d/m/Y" }}</td>
+                        <td>
+                            <span class="badge-custom badge
+                                {% if a.estado == 'presente' %}bg-success
+                                {% elif a.estado == 'tarde' %}bg-warning text-dark
+                                {% elif a.estado == 'justificada' %}bg-info text-dark
+                                {% else %}bg-danger{% endif %}">
+                                {{ a.get_estado_display }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state py-3">
+                <i class="bi bi-calendar-x"></i>
+                <p>Aún no has registrado asistencias. Selecciona una clase y toma asistencia.</p>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

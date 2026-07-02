@@ -8,7 +8,7 @@ from django.contrib.auth import views as auth_views
 from usuarios.models import Usuario
 from django.db.models import Count
 import json
-from academico.models import Grado, Materia
+from academico.models import Grado, Materia, Asignacion
 from asistencias.models import Asistencia
 from calificaciones.models import Calificacion
 
@@ -52,6 +52,8 @@ def home(request):
         'total_calificaciones': total_calif,
         'calif_aprobadas': calif_aprobadas,
         'calif_desaprobadas': calif_desaprobadas,
+        'mis_asignaciones': Asignacion.objects.filter(profesor=request.user).select_related('materia', 'grupo', 'grupo__grado') if request.user.rol == 'profesor' else [],
+        'mis_ultimas_asistencias': Asistencia.objects.filter(registrado_por=request.user).select_related('usuario', 'materia').order_by('-fecha', '-id')[:5] if request.user.rol == 'profesor' else [],
     }
     return render(request, 'home.html', context)
 
