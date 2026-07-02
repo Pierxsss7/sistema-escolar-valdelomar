@@ -102,13 +102,16 @@ def home(request):
             context['horario_grid'].append(fila)
         context['today'] = date.today()
         mis_notas = Calificacion.objects.filter(
-            asignacion__materia_id__in=materias_ids,
-            asignacion__grupo_id__in=grupos_ids,
+            materia_id__in=materias_ids,
+            alumno_id__in=alumnos_ids,
         )
         context['mis_notas_total'] = mis_notas.count()
         context['mis_notas_aprobadas'] = mis_notas.filter(nota__gte=11).count() if mis_notas.count() else 0
         context['mis_notas_promedio'] = round(mis_notas.aggregate(Avg('nota'))['nota__avg'] or 0, 1)
-        mis_asistencias = Asistencia.objects.filter(materia_id__in=materias_ids)
+        mis_asistencias = Asistencia.objects.filter(
+            materia_id__in=materias_ids,
+            usuario_id__in=alumnos_ids,
+        )
         context['mis_asist_presente'] = mis_asistencias.filter(estado='presente').count()
         context['mis_asist_total'] = mis_asistencias.count()
     else:

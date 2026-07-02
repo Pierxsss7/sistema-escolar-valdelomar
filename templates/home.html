@@ -623,51 +623,6 @@
 </div>
 {% endif %}
 
-<div class="row mt-3 fade-in">
-    <div class="col-12">
-        <div class="table-container">
-            <div class="p-3 border-bottom d-flex align-items-center gap-2 flex-wrap" style="background:#faf8f5;">
-                <i class="bi bi-clock-history" style="color:var(--primary);"></i>
-                <strong style="color:var(--primary);font-size:0.9rem;">Últimas asistencias registradas</strong>
-                <a href="{% url 'lista_asistencias' %}" class="btn btn-sm btn-outline-primary ms-auto">
-                    <i class="bi bi-eye"></i> Ver todas
-                </a>
-            </div>
-            {% if mis_ultimas_asistencias %}
-            <table class="table">
-                <thead>
-                    <tr><th>Alumno</th><th>Materia</th><th>Fecha</th><th>Estado</th></tr>
-                </thead>
-                <tbody>
-                    {% for a in mis_ultimas_asistencias %}
-                    <tr>
-                        <td class="fw-semibold">{{ a.usuario.get_full_name }}</td>
-                        <td>{{ a.materia.nombre }}</td>
-                        <td>{{ a.fecha|date:"d/m/Y" }}</td>
-                        <td>
-                            <span class="badge-custom badge
-                                {% if a.estado == 'presente' %}bg-success
-                                {% elif a.estado == 'tarde' %}bg-warning text-dark
-                                {% elif a.estado == 'justificada' %}bg-info text-dark
-                                {% else %}bg-danger{% endif %}">
-                                {{ a.get_estado_display }}
-                            </span>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="empty-state py-3">
-                <i class="bi bi-calendar-x"></i>
-                <p>Aún no has registrado asistencias. Selecciona una clase y toma asistencia.</p>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-</div>
-{% endif %}
-
 {% if user.rol == 'padre' %}
 <div class="row g-4 mt-2 fade-in">
     <div class="col-md-5">
