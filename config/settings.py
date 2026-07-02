@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'asistencias',
     'calificaciones',
     'reportes',
+    'tareas',
 ]
 
 MIDDLEWARE = [

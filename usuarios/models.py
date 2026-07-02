@@ -12,9 +12,13 @@ class Usuario(AbstractUser):
     ]
 
     rol = models.CharField(max_length=20, choices=TIPO_USUARIO, default='alumno')
+    dni = models.CharField(max_length=8, unique=True, blank=True, null=True, verbose_name='DNI')
     telefono = models.CharField(max_length=15, blank=True, null=True)
     direccion = models.TextField(blank=True, null=True)
     foto = models.ImageField(upload_to='fotos/', blank=True, null=True)
+    especialidad = models.CharField(max_length=200, blank=True, null=True, verbose_name='Especialidad')
+    titulo_profesional = models.CharField(max_length=200, blank=True, null=True, verbose_name='Título Profesional')
+    fecha_nacimiento = models.DateField(blank=True, null=True, verbose_name='Fecha de Nacimiento')
 
     class Meta:
         verbose_name = 'Usuario'

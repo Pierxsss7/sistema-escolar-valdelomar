@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Editar Tarea{% endblock %}
+{% block page_title %}Editar Tarea{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center fade-in">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex align-items-center gap-2">
+                <i class="bi bi-pencil"></i> Editar: {{ tarea.titulo }}
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Título <span class="text-danger">*</span></label>
+                        <input type="text" name="titulo" class="form-control" value="{{ tarea.titulo }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea name="descripcion" class="form-control" rows="4">{{ tarea.descripcion }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de entrega <span class="text-danger">*</span></label>
+                        <input type="date" name="fecha_entrega" class="form-control"
+                               value="{{ tarea.fecha_entrega|date:'Y-m-d' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Archivo actual</label>
+                        {% if tarea.archivo %}
+                        <div class="mb-2">
+                            <a href="{{ tarea.archivo.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-paperclip"></i> {{ tarea.archivo.name }}
+                            </a>
+                        </div>
+                        {% endif %}
+                        <input type="file" name="archivo" class="form-control"
+                               accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar,.jpg,.png">
+                        <small class="text-muted">Deja vacío para mantener el archivo actual.</small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> Guardar Cambios
+                        </button>
+                        <a href="{% url 'lista_tareas' %}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -80,13 +80,24 @@
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
-                    <i class="bi bi-telephone me-1"></i> Teléfono <small class="text-muted">(opcional)</small>
-                </label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                    <input type="text" name="telefono" class="form-control" placeholder="999 999 999" value="{{ form.telefono.value|default:'' }}">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                        <i class="bi bi-person-badge me-1"></i> DNI <small class="text-muted">(opcional)</small>
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                        <input type="text" name="dni" class="form-control" maxlength="8" placeholder="12345678" value="{{ form.dni.value|default:'' }}">
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                        <i class="bi bi-telephone me-1"></i> Teléfono <small class="text-muted">(opcional)</small>
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                        <input type="text" name="telefono" class="form-control" placeholder="999 999 999" value="{{ form.telefono.value|default:'' }}">
+                    </div>
                 </div>
             </div>
 

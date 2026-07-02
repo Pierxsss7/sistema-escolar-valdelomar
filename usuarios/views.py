@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib import messages
-from .models import CredencialBiometrica
+from .models import Usuario, CredencialBiometrica
 from .forms import RegistroForm
 
 
@@ -39,3 +39,27 @@ def registrar(request):
     else:
         form = RegistroForm()
     return render(request, 'registration/registro.html', {'form': form})
+
+
+@login_required
+def perfil(request):
+    if request.method == 'POST':
+        user = request.user
+        user.dni = request.POST.get('dni', '') or None
+        user.telefono = request.POST.get('telefono', '') or None
+        user.direccion = request.POST.get('direccion', '') or None
+        user.especialidad = request.POST.get('especialidad', '') or None
+        user.titulo_profesional = request.POST.get('titulo_profesional', '') or None
+        fecha_nac = request.POST.get('fecha_nacimiento', '') or None
+        if fecha_nac:
+            from datetime import datetime
+            try:
+                user.fecha_nacimiento = datetime.strptime(fecha_nac, '%Y-%m-%d').date()
+            except ValueError:
+                pass
+        if request.FILES.get('foto'):
+            user.foto = request.FILES['foto']
+        user.save()
+        messages.success(request, 'Perfil actualizado correctamente.')
+        return redirect('perfil')
+    return render(request, 'usuarios/perfil.html')

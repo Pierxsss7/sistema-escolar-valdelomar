@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Tareas y Asignaciones{% endblock %}
+{% block page_title %}Tareas y Asignaciones{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 fade-in">
+    <h5 class="mb-0" style="color:var(--primary);font-weight:600;">
+        <i class="bi bi-journal-richtext"></i> Lista de Tareas
+    </h5>
+    {% if user.rol == 'profesor' or user.rol == 'admin' or user.rol == 'director' %}
+    <a href="{% url 'crear_tarea' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Nueva Tarea
+    </a>
+    {% endif %}
+</div>
+
+{% if tareas %}
+<div class="table-container fade-in">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Materia</th>
+                <th>Grupo</th>
+                {% if user.rol == 'admin' or user.rol == 'director' %}<th>Profesor</th>{% endif %}
+                <th>Fecha de entrega</th>
+                <th>Archivo</th>
+                <th style="width:120px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in tareas %}
+            <tr>
+                <td class="fw-semibold">{{ t.titulo }}</td>
+                <td>{{ t.materia.nombre }}</td>
+                <td><span class="badge" style="background:var(--primary);color:#fff;">{{ t.grupo.grado.nombre }} - {{ t.grupo.nombre }}</span></td>
+                {% if user.rol == 'admin' or user.rol == 'director' %}<td>{{ t.profesor.get_full_name }}</td>{% endif %}
+                <td>{{ t.fecha_entrega|date:"d/m/Y" }}</td>
+                <td>
+                    {% if t.archivo %}
+                    <a href="{{ t.archivo.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                        <i class="bi bi-paperclip"></i> Ver
+                    </a>
+                    {% else %}
+                    <span class="text-muted">—</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if user.rol == 'profesor' and t.profesor == user or user.rol == 'admin' or user.rol == 'director' %}
+                    <a href="{% url 'editar_tarea' t.id %}" class="btn btn-sm btn-outline-secondary" title="Editar">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a href="{% url 'eliminar_tarea' t.id %}" class="btn btn-sm btn-outline-danger"
+                       onclick="return confirm('¿Eliminar esta tarea?')" title="Eliminar">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state fade-in">
+    <i class="bi bi-journal-richtext"></i>
+    <p>No hay tareas registradas{% if user.rol == 'profesor' %}. Crea tu primera tarea{% endif %}.</p>
+    {% if user.rol == 'profesor' or user.rol == 'admin' or user.rol == 'director' %}
+    <a href="{% url 'crear_tarea' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Crear Tarea
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

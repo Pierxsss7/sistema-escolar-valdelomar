@@ -67,4 +67,5 @@ urlpatterns = [
     path('asistencias/', include('asistencias.urls')),
     path('calificaciones/', include('calificaciones.urls')),
     path('reportes/', include('reportes.urls')),
+    path('tareas/', include('tareas.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

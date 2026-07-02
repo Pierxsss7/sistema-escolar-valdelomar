@@ -88,6 +88,11 @@
                     </a>
                 </li>
                 {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_tareas' %}">
+                        <i class="bi bi-journal-richtext"></i> Tareas
+                    </a>
+                </li>
             </ul>
 
             {% if user.rol == 'admin' or user.rol == 'director' %}
