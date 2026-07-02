@@ -29,7 +29,7 @@
                         <i class="bi bi-grid-1x2-fill"></i> Panel Principal
                     </a>
                 </li>
-                {% if user.rol == 'admin' or user.rol == 'profesor' %}
+                {% if user.rol == 'admin' or user.rol == 'director' or user.rol == 'profesor' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'lista_grados' %}">
                         <i class="bi bi-layers-fill"></i> Grados
@@ -41,7 +41,7 @@
                         <i class="bi bi-book-fill"></i> Materias
                     </a>
                 </li>
-                {% if user.rol == 'admin' %}
+                {% if user.rol == 'admin' or user.rol == 'director' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'lista_grupos' %}">
                         <i class="bi bi-people-fill"></i> Grupos
@@ -57,7 +57,7 @@
 
             <div class="menu-label mt-3">Control Académico</div>
             <ul class="nav flex-column">
-                {% if user.rol == 'profesor' or user.rol == 'admin' %}
+                {% if user.rol == 'profesor' or user.rol == 'admin' or user.rol == 'director' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'lista_asistencias' %}">
                         <i class="bi bi-calendar-check-fill"></i> Asistencias
@@ -90,7 +90,7 @@
                 {% endif %}
             </ul>
 
-            {% if user.rol == 'admin' %}
+            {% if user.rol == 'admin' or user.rol == 'director' %}
             <div class="menu-label mt-3">Administración</div>
             <ul class="nav flex-column">
                 <li class="nav-item">
@@ -98,11 +98,13 @@
                         <i class="bi bi-bar-chart-fill"></i> Reportes
                     </a>
                 </li>
+                {% if user.rol == 'admin' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'admin:index' %}">
                         <i class="bi bi-gear-fill"></i> Panel Admin
                     </a>
                 </li>
+                {% endif %}
             </ul>
             {% endif %}
 

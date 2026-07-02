@@ -157,6 +157,25 @@
 </div>
 {% endif %}
 
+{% if user.rol == 'director' %}
+<div class="row mt-4 fade-in">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-mortarboard-fill"></i> Panel de Dirección</div>
+            <div class="card-body">
+                <p class="text-muted mb-3">Vista general del instituto.</p>
+                <a href="{% url 'dashboard' %}" class="btn btn-primary me-2 mb-2">
+                    <i class="bi bi-bar-chart"></i> Reportes
+                </a>
+                <a href="{% url 'lista_asignaciones' %}" class="btn btn-success mb-2">
+                    <i class="bi bi-journal-text"></i> Asignaciones
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% if user.rol == 'admin' %}
 <div class="row mt-4 fade-in">
     <div class="col-12">

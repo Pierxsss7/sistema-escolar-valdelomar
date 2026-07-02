@@ -394,11 +394,29 @@ body {
     border: 1px solid rgba(201, 168, 76, 0.15);
 }
 
+.escudo-wrapper {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    box-shadow: 0 8px 30px rgba(26, 71, 49, 0.25);
+    animation: pulseEscudo 3s ease-in-out infinite;
+}
+
+@keyframes pulseEscudo {
+    0%, 100% { box-shadow: 0 8px 30px rgba(26, 71, 49, 0.25); }
+    50% { box-shadow: 0 8px 40px rgba(26, 71, 49, 0.4); }
+}
+
 .login-card .login-escudo {
-    width: 85px;
+    width: 55px;
     height: auto;
     display: block;
-    margin: 0 auto 16px;
+    filter: brightness(0) invert(1);
 }
 
 .login-card .logo { text-align: center; margin-bottom: 28px; }
@@ -409,6 +427,15 @@ body {
     font-size: 1.15rem;
     margin: 10px 0 2px;
     letter-spacing: 0.3px;
+}
+
+.login-card .logo .lema {
+    color: var(--gold);
+    font-weight: 500;
+    font-size: 0.7rem;
+    margin: 2px 0 0;
+    font-style: italic;
+    letter-spacing: 0.5px;
 }
 
 .login-card .logo p {

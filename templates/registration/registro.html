@@ -3,12 +3,12 @@
 {% block title %}Crear Cuenta{% endblock %}
 {% block auth_content %}
 <div class="login-page">
-    <div class="login-card fade-in" style="max-width:480px;">
+    <div class="login-card fade-in" style="max-width:500px;">
         <div class="logo">
             <img src="{% static 'img/escudo.svg' %}" alt="Escudo" class="login-escudo">
             <h2>I.E. Abraham Valdelomar 116</h2>
             <p>N° 116</p>
-            <span class="sub">Crear Cuenta de Padre de Familia</span>
+            <span class="sub">Crear una cuenta nueva</span>
         </div>
         <div class="divider"></div>
 
@@ -21,6 +21,26 @@
 
         <form method="post" id="registroForm">
             {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
+                    <i class="bi bi-person-badge me-1"></i> Tipo de cuenta
+                </label>
+                <div class="d-flex gap-3" id="rolSelector">
+                    <label class="rol-option flex-fill text-center p-3 rounded-3" style="cursor:pointer;border:2px solid #ddd8cc;transition:all .2s;" data-rol="profesor">
+                        <input type="radio" name="rol" value="profesor" class="d-none" {% if form.rol.value == 'profesor' %}checked{% endif %}>
+                        <i class="bi bi-person-badge d-block" style="font-size:1.8rem;color:var(--primary);"></i>
+                        <small class="d-block mt-1 fw-semibold" style="color:var(--primary);">Docente</small>
+                    </label>
+                    <label class="rol-option flex-fill text-center p-3 rounded-3" style="cursor:pointer;border:2px solid #ddd8cc;transition:all .2s;" data-rol="padre">
+                        <input type="radio" name="rol" value="padre" class="d-none" {% if form.rol.value == 'padre' or not form.rol.value %}checked{% endif %}>
+                        <i class="bi bi-heart d-block" style="font-size:1.8rem;color:var(--gold);"></i>
+                        <small class="d-block mt-1 fw-semibold" style="color:var(--gold);">Padre de Familia</small>
+                    </label>
+                </div>
+                {% if form.rol.errors %}<small class="text-danger">{{ form.rol.errors.0 }}</small>{% endif %}
+            </div>
+
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
@@ -130,6 +150,24 @@ function togglePwd(inputId, iconId) {
         icon.classList.remove('bi-eye-slash');
         icon.classList.add('bi-eye');
     }
+}
+
+document.querySelectorAll('.rol-option').forEach(function(el) {
+    el.addEventListener('click', function() {
+        document.querySelectorAll('.rol-option').forEach(function(o) {
+            o.style.borderColor = '#ddd8cc';
+            o.style.background = 'transparent';
+        });
+        this.style.borderColor = 'var(--primary)';
+        this.style.background = 'var(--cream)';
+        this.querySelector('input[type=radio]').checked = true;
+    });
+});
+
+var checked = document.querySelector('.rol-option input[type=radio]:checked');
+if (checked) {
+    checked.closest('.rol-option').style.borderColor = 'var(--primary)';
+    checked.closest('.rol-option').style.background = 'var(--cream)';
 }
 
 document.getElementById('registroBtn').addEventListener('click', function() {

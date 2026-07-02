@@ -5,15 +5,17 @@
 <div class="login-page">
     <div class="login-card fade-in">
         <div class="logo">
-            <img src="{% static 'img/escudo.svg' %}" alt="Escudo" class="login-escudo">
+            <div class="escudo-wrapper">
+                <img src="{% static 'img/escudo.svg' %}" alt="Escudo" class="login-escudo">
+            </div>
             <h2>I.E. Abraham Valdelomar 116</h2>
-            <p>N° 116</p>
+            <p class="lema">"Ciencia, Disciplina y Progreso"</p>
             <span class="sub">Sistema de Gestión Escolar</span>
         </div>
         <div class="divider"></div>
 
         {% if form.errors %}
-        <div class="alert alert-danger py-2 d-flex align-items-center gap-2" style="border:none;background:#fef2f2;color:#991b1b;border-radius:10px;">
+        <div class="alert alert-danger py-2 d-flex align-items-center gap-2" style="border:none;background:#fef2f2;color:#991b1b;border-radius:10px;font-size:0.85rem;">
             <i class="bi bi-exclamation-triangle"></i>
             <span>Usuario o contraseña incorrectos</span>
         </div>
@@ -27,7 +29,7 @@
                 </label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-person"></i></span>
-                    <input type="text" name="username" class="form-control" placeholder="Ingresa tu usuario" required autocomplete="username">
+                    <input type="text" name="username" class="form-control" placeholder="Ingresa tu usuario" required autocomplete="username" id="usernameInput">
                 </div>
             </div>
             <div class="mb-3">
@@ -49,20 +51,20 @@
 
         <div class="role-info mt-4 p-3" style="background:var(--cream);border-radius:10px;">
             <small style="color:var(--text-light);font-size:0.72rem;display:block;text-align:center;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
-                <i class="bi bi-people me-1"></i> ¿Qué rol tienes?
+                <i class="bi bi-people me-1"></i> Acceso para
             </small>
             <div class="d-flex justify-content-around text-center">
                 <div>
                     <i class="bi bi-person-badge" style="color:var(--primary);font-size:1.2rem;"></i>
-                    <small class="d-block" style="font-size:0.65rem;color:var(--text-light);">Docente</small>
+                    <small class="d-block" style="font-size:0.65rem;color:var(--text-light);">Docentes</small>
                 </div>
                 <div>
                     <i class="bi bi-mortarboard" style="color:var(--emerald);font-size:1.2rem;"></i>
-                    <small class="d-block" style="font-size:0.65rem;color:var(--text-light);">Alumno</small>
+                    <small class="d-block" style="font-size:0.65rem;color:var(--text-light);">Alumnos</small>
                 </div>
                 <div>
                     <i class="bi bi-heart" style="color:var(--gold);font-size:1.2rem;"></i>
-                    <small class="d-block" style="font-size:0.65rem;color:var(--text-light);">Padre</small>
+                    <small class="d-block" style="font-size:0.65rem;color:var(--text-light);">Padres</small>
                 </div>
             </div>
         </div>
@@ -105,5 +107,7 @@ document.getElementById('loginBtn').addEventListener('click', function() {
     this.disabled = true;
     document.getElementById('loginForm').submit();
 });
+
+document.getElementById('usernameInput').focus();
 </script>
 {% endblock %}

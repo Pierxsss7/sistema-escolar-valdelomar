@@ -5,9 +5,11 @@ from .models import Usuario
 
 class RegistroForm(UserCreationForm):
     TIPO_REGISTRO = [
+        ('profesor', 'Profesor / Docente'),
         ('padre', 'Padre de Familia'),
     ]
 
+    rol = forms.ChoiceField(choices=TIPO_REGISTRO, label='Tipo de cuenta')
     first_name = forms.CharField(max_length=30, label='Nombres')
     last_name = forms.CharField(max_length=30, label='Apellidos')
     email = forms.EmailField(required=False, label='Correo electrónico')
@@ -15,11 +17,11 @@ class RegistroForm(UserCreationForm):
 
     class Meta:
         model = Usuario
-        fields = ['username', 'first_name', 'last_name', 'email', 'telefono', 'password1', 'password2']
+        fields = ['username', 'first_name', 'last_name', 'email', 'telefono', 'rol', 'password1', 'password2']
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.rol = 'padre'
+        user.rol = self.cleaned_data['rol']
         if commit:
             user.save()
         return user
