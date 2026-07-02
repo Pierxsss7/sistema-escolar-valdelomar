@@ -21,19 +21,19 @@
                     <td class="fw-semibold">{{ c.materia.nombre }}</td>
                     <td>
                         <div class="grade-circle 
-                            {% if c.nota >= 70 %}bg-success text-white
-                            {% elif c.nota >= 50 %}bg-warning text-dark
+                            {% if c.nota >= 11 %}bg-success text-white
+                            {% elif c.nota >= 8 %}bg-warning text-dark
                             {% else %}bg-danger text-white{% endif %}">
                             {{ c.nota|floatformat:0 }}
                         </div>
                     </td>
                     <td>
-                        {% if c.nota >= 90 %}
+                        {% if c.nota >= 18 %}
                         <span class="text-success fw-semibold">Excelente</span>
-                        {% elif c.nota >= 70 %}
+                        {% elif c.nota >= 14 %}
                         <span class="text-primary fw-semibold">Bueno</span>
-                        {% elif c.nota >= 50 %}
-                        <span class="text-warning fw-semibold">Regular</span>
+                        {% elif c.nota >= 11 %}
+                        <span class="text-warning fw-semibold">En proceso</span>
                         {% else %}
                         <span class="text-danger fw-semibold">Requiere apoyo</span>
                         {% endif %}

@@ -35,7 +35,7 @@ def home(request):
 
     calificaciones = Calificacion.objects.all()
     total_calif = calificaciones.count()
-    calif_aprobadas = calificaciones.filter(nota__gte=70).count() if total_calif else 0
+    calif_aprobadas = calificaciones.filter(nota__gte=11).count() if total_calif else 0
     calif_desaprobadas = total_calif - calif_aprobadas
 
     context = {

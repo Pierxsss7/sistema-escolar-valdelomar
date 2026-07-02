@@ -33,18 +33,18 @@
                     <td class="fw-semibold">{{ c.materia.nombre }}</td>
                     <td>
                         <span class="badge-custom badge
-                            {% if c.nota >= 70 %}bg-success
-                            {% elif c.nota >= 50 %}bg-warning text-dark
+                            {% if c.nota >= 11 %}bg-success
+                            {% elif c.nota >= 8 %}bg-warning text-dark
                             {% else %}bg-danger{% endif %}">
                             {{ c.nota|floatformat:0 }}
                         </span>
                     </td>
                     <td>
-                        {% if c.nota >= 90 %}
+                        {% if c.nota >= 18 %}
                         <span class="text-success fw-semibold">Excelente</span>
-                        {% elif c.nota >= 70 %}
+                        {% elif c.nota >= 14 %}
                         <span class="text-primary fw-semibold">Bueno</span>
-                        {% elif c.nota >= 50 %}
+                        {% elif c.nota >= 11 %}
                         <span class="text-warning fw-semibold">En proceso</span>
                         {% else %}
                         <span class="text-danger fw-semibold">Requiere apoyo</span>

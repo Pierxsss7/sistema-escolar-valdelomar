@@ -43,7 +43,7 @@
             <tr>
                 <td class="materia-name">{{ materia.grouper.nombre }}</td>
                 {% for c in materia.list %}
-                <td class="nota {% if c.nota >= 70 %}nota-aprobada{% elif c.nota >= 50 %}nota-regular{% else %}nota-desaprobada{% endif %}">
+                <td class="nota {% if c.nota >= 11 %}nota-aprobada{% elif c.nota >= 8 %}nota-regular{% else %}nota-desaprobada{% endif %}">
                     {{ c.nota|floatformat:0 }}
                 </td>
                 {% endfor %}
@@ -60,8 +60,8 @@
         <div class="promedio-label">Promedio General</div>
         <div class="promedio-valor">{{ promedio|floatformat:1 }}</div>
         <div class="promedio-rango">
-            {% if promedio >= 70 %}🌟 Destacado
-            {% elif promedio >= 50 %}📈 En Progreso
+            {% if promedio >= 17 %}🌟 Destacado
+            {% elif promedio >= 11 %}📈 En Progreso
             {% else %}📉 Requiere Apoyo{% endif %}
         </div>
     </div>

@@ -174,11 +174,11 @@ class Command(BaseCommand):
         for ins in inscripciones:
             for asig in asig_por_grupo.get(ins.grupo_id, []):
                 for p in periodos:
-                    nota = round(random.uniform(10, 100), 2)
+                    nota = round(random.uniform(5, 20), 2)
                     obs = None
-                    if nota < 15: obs = 'Requiere apoyo adicional'
-                    elif nota >= 90: obs = 'Excelente desempeño'
-                    elif nota >= 75: obs = 'Buen rendimiento'
+                    if nota < 8: obs = 'Requiere apoyo adicional'
+                    elif nota >= 18: obs = 'Excelente desempeño'
+                    elif nota >= 14: obs = 'Buen rendimiento'
                     objs.append(Calificacion(
                         alumno_id=ins.alumno_id, materia_id=asig.materia_id, periodo=p,
                         nota=nota, observaciones=obs, registrado_por=admin,

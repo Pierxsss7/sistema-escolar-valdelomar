@@ -17,18 +17,18 @@
                 <td>
                     <div class="d-flex align-items-center gap-2">
                         <div class="grade-circle 
-                            {% if c.nota >= 70 %}bg-success text-white
-                            {% elif c.nota >= 50 %}bg-warning text-dark
+                            {% if c.nota >= 11 %}bg-success text-white
+                            {% elif c.nota >= 8 %}bg-warning text-dark
                             {% else %}bg-danger text-white{% endif %}">
                             {{ c.nota|floatformat:0 }}
                         </div>
                         <div class="flex-grow-1">
                             <div class="progress-grade">
                                 <div class="progress-bar rounded
-                                    {% if c.nota >= 70 %}bg-success
-                                    {% elif c.nota >= 50 %}bg-warning
+                                    {% if c.nota >= 11 %}bg-success
+                                    {% elif c.nota >= 8 %}bg-warning
                                     {% else %}bg-danger{% endif %}" 
-                                    role="progressbar" style="width: {{ c.nota|floatformat:0 }}%"></div>
+                                    role="progressbar" style="width: {% widthratio c.nota 20 100 %}%"></div>
                             </div>
                         </div>
                     </div>

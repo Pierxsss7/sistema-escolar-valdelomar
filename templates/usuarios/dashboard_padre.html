@@ -80,8 +80,8 @@
                                 <td>{{ c.periodo.nombre }}</td>
                                 <td>
                                     <span class="badge-custom badge
-                                        {% if c.nota >= 70 %}bg-success
-                                        {% elif c.nota >= 50 %}bg-warning text-dark
+                                        {% if c.nota >= 11 %}bg-success
+                                        {% elif c.nota >= 8 %}bg-warning text-dark
                                         {% else %}bg-danger{% endif %}">
                                         {{ c.nota|floatformat:0 }}
                                     </span>
