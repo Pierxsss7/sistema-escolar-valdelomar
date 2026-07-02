@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 250" width="200" height="250">
+  <defs>
+    <linearGradient id="oro" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0d060"/>
+      <stop offset="40%" style="stop-color:#c9a84c"/>
+      <stop offset="60%" style="stop-color:#e0c668"/>
+      <stop offset="100%" style="stop-color:#b8942a"/>
+    </linearGradient>
+    <linearGradient id="rojo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d42"/>
+      <stop offset="100%" style="stop-color:#991b1b"/>
+    </linearGradient>
+    <linearGradient id="llama" x1="50%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" style="stop-color:#f90"/>
+      <stop offset="35%" style="stop-color:#ff0"/>
+      <stop offset="70%" style="stop-color:#fff8c0"/>
+      <stop offset="100%" style="stop-color:#fff"/>
+    </linearGradient>
+    <linearGradient id="verde" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d8a4e"/>
+      <stop offset="100%" style="stop-color:#1a4731"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sombra -->
+  <ellipse cx="100" cy="240" rx="72" ry="7" fill="rgba(0,0,0,0.12)"/>
+
+  <!-- Escudo clásico español -->
+  <path d="M100 10 L180 45 L180 135 Q180 198 100 230 Q20 198 20 135 L20 45 Z"
+        fill="url(#rojo)" stroke="url(#oro)" stroke-width="7" stroke-linejoin="round"/>
+
+  <!-- Bordura interna dorada -->
+  <path d="M100 24 L166 54 L166 132 Q166 190 100 220 Q34 190 34 132 L34 54 Z"
+        fill="none" stroke="url(#oro)" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Cinta superior con nombre -->
+  <path d="M50 30 L150 30 L145 40 L55 40 Z" fill="url(#oro)"/>
+  <text x="100" y="37" text-anchor="middle" font-size="7.5" font-weight="bold"
+        fill="#6a1010" font-family="serif" letter-spacing="0.5">ABRAHAM VALDELOMAR</text>
+
+  <!-- Cinta inferior con el 116 -->
+  <path d="M58 192 L142 192 L148 204 L52 204 Z" fill="url(#oro)"/>
+  <text x="100" y="200" text-anchor="middle" font-size="10" font-weight="bold"
+        fill="#6a1010" font-family="serif">N° 116</text>
+
+  <!-- Antorcha - mango -->
+  <rect x="94" y="132" width="12" height="48" rx="3" fill="#555" stroke="#333" stroke-width="1"/>
+  <rect x="90" y="130" width="20" height="5" rx="2" fill="#777"/>
+  <rect x="88" y="176" width="24" height="4" rx="2" fill="#777"/>
+
+  <!-- Antorcha - copa -->
+  <path d="M84 118 Q84 132 100 132 Q116 132 116 118 L110 104 Q105 110 100 110 Q95 110 90 104 Z"
+        fill="#666" stroke="#444" stroke-width="1.5"/>
+  <ellipse cx="100" cy="118" rx="16" ry="5" fill="#555"/>
+
+  <!-- Llama principal -->
+  <path d="M100 62 Q86 90 82 108 Q92 100 100 100 Q108 100 118 108 Q114 90 100 62 Z"
+        fill="url(#llama)" opacity="0.95"/>
+  <!-- Llama interna -->
+  <path d="M100 74 Q91 94 88 106 Q94 98 100 98 Q106 98 112 106 Q109 94 100 74 Z"
+        fill="#ffe033" opacity="0.8"/>
+  <!-- Destello blanco -->
+  <path d="M100 84 Q96 98 94 106 Q98 100 100 100 Q102 100 106 106 Q104 98 100 84 Z"
+        fill="#fff" opacity="0.9"/>
+
+  <!-- Letras AV -->
+  <text x="100" y="163" text-anchor="middle" font-size="30" font-weight="bold"
+        fill="#fff" font-family="serif" stroke="#000" stroke-width="0.5">AV</text>
+
+  <!-- Laurel izquierdo con frutos rojos -->
+  <g>
+    <path d="M24 82 Q14 70 18 54 Q22 42 34 48 Q28 58 30 74 Z" fill="url(#verde)"/>
+    <path d="M20 98 Q8 86 12 66 Q16 54 26 58 Q20 70 22 88 Z" fill="#3dac5e"/>
+    <path d="M26 112 Q16 102 18 86 Q20 74 28 78 Q24 88 26 104 Z" fill="url(#verde)"/>
+    <circle cx="18" cy="54" r="3.5" fill="#d42"/>
+    <circle cx="14" cy="72" r="3" fill="#e44"/>
+    <circle cx="22" cy="90" r="2.5" fill="#c33"/>
+  </g>
+
+  <!-- Laurel derecho con frutos rojos -->
+  <g>
+    <path d="M176 82 Q186 70 182 54 Q178 42 166 48 Q172 58 170 74 Z" fill="url(#verde)"/>
+    <path d="M180 98 Q192 86 188 66 Q184 54 174 58 Q180 70 178 88 Z" fill="#3dac5e"/>
+    <path d="M174 112 Q184 102 182 86 Q180 74 172 78 Q176 88 174 104 Z" fill="url(#verde)"/>
+    <circle cx="182" cy="54" r="3.5" fill="#d42"/>
+    <circle cx="186" cy="72" r="3" fill="#e44"/>
+    <circle cx="178" cy="90" r="2.5" fill="#c33"/>
+  </g>
+
+  <!-- Estrella inferior central -->
+  <polygon points="100,212 103,220 112,220 105,226 107,235 100,230 93,235 95,226 88,220 97,220"
+           fill="url(#oro)" opacity="0.8"/>
+
+  <!-- Detalle linea divisoria horizontal -->
+  <line x1="60" y1="172" x2="140" y2="172" stroke="url(#oro)" stroke-width="1" opacity="0.3"/>
+</svg>
