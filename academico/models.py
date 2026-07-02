@@ -81,3 +81,54 @@ class Inscripcion(models.Model):
 
     def __str__(self):
         return f"{self.alumno.get_full_name()} -> {self.grupo}"
+
+
+class Horario(models.Model):
+    DIAS = [
+        ('LUN', 'Lunes'),
+        ('MAR', 'Martes'),
+        ('MIE', 'Miércoles'),
+        ('JUE', 'Jueves'),
+        ('VIE', 'Viernes'),
+        ('SAB', 'Sábado'),
+    ]
+    profesor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='horarios',
+        limit_choices_to={'rol': 'profesor'},
+    )
+    materia = models.ForeignKey(Materia, on_delete=models.CASCADE, related_name='horarios')
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE, related_name='horarios')
+    dia = models.CharField(max_length=3, choices=DIAS, verbose_name='Día')
+    hora_inicio = models.TimeField(verbose_name='Hora de inicio')
+    hora_fin = models.TimeField(verbose_name='Hora de fin')
+
+    class Meta:
+        verbose_name = 'Horario'
+        verbose_name_plural = 'Horarios'
+        ordering = ['dia', 'hora_inicio']
+
+    def __str__(self):
+        return f"{self.get_dia_display()} {self.hora_inicio:%H:%M}-{self.hora_fin:%H:%M} | {self.materia.nombre}"
+
+
+class Anuncio(models.Model):
+    titulo = models.CharField(max_length=200, verbose_name='Título')
+    contenido = models.TextField(verbose_name='Contenido')
+    autor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='anuncios',
+        verbose_name='Autor',
+    )
+    fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creación')
+    activo = models.BooleanField(default=True, verbose_name='Activo')
+
+    class Meta:
+        verbose_name = 'Anuncio'
+        verbose_name_plural = 'Anuncios'
+        ordering = ['-fecha_creacion']
+
+    def __str__(self):
+        return self.titulo

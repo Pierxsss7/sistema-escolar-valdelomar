@@ -93,6 +93,13 @@
                         <i class="bi bi-journal-richtext"></i> Tareas
                     </a>
                 </li>
+                {% if user.rol == 'profesor' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mis_horarios' %}">
+                        <i class="bi bi-calendar-week"></i> Mi Horario
+                    </a>
+                </li>
+                {% endif %}
             </ul>
 
             {% if user.rol == 'admin' or user.rol == 'director' %}

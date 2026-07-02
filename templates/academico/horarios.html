@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load academico_tags %}
+{% block title %}Mi Horario{% endblock %}
+{% block page_title %}Mi Horario Semanal{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    {% if grid %}
+    <div class="table-container" style="overflow-x:auto;">
+        <table class="table table-bordered" style="min-width:700px;">
+            <thead>
+                <tr class="text-center">
+                    <th style="width:70px;background:var(--primary);color:#fff;">Hora</th>
+                    {% for d in dias_orden %}
+                    <th style="background:{% cycle '#1a4731' '#2d8a4e' as rowcolor %};color:#fff;">
+                        {% if d == 'LUN' %}Lunes{% elif d == 'MAR' %}Martes{% elif d == 'MIE' %}Miércoles{% elif d == 'JUE' %}Jueves{% elif d == 'VIE' %}Viernes{% else %}Sábado{% endif %}
+                    </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for fila in grid %}
+                <tr>
+                    <td class="text-center fw-semibold align-middle" style="font-size:0.8rem;white-space:nowrap;background:#f8f7f4;">
+                        {{ fila.hora }}
+                    </td>
+                    {% for d in dias_orden %}
+                    <td class="text-center align-middle" style="padding:6px;">
+                        {% for clase in fila.celdas|get_item:d %}
+                        <div style="background:#e8f5e9;border-radius:8px;padding:8px 4px;border-left:3px solid var(--primary);margin-bottom:4px;">
+                            <strong style="font-size:0.82rem;color:var(--primary);display:block;">{{ clase.materia.nombre }}</strong>
+                            <small style="font-size:0.65rem;color:#666;">{{ clase.grupo.grado.nombre }} - {{ clase.grupo.nombre }}</small>
+                            <small style="font-size:0.6rem;color:#999;display:block;">{{ clase.hora_inicio|time:"H:i" }} - {{ clase.hora_fin|time:"H:i" }}</small>
+                        </div>
+                        {% empty %}
+                        {% if forloop.parentloop.first %}
+                        <span style="color:#ddd;">—</span>
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="bi bi-calendar-week"></i>
+        <p>No tienes horario asignado aún. Solicita al director que registre tu horario.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

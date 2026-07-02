@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Grado, Grupo, Materia, Asignacion, Inscripcion
+from .models import Grado, Grupo, Materia, Asignacion, Inscripcion, Horario, Anuncio
 
 
 @admin.register(Grado)
@@ -29,3 +29,15 @@ class AsignacionAdmin(admin.ModelAdmin):
 class InscripcionAdmin(admin.ModelAdmin):
     list_display = ['alumno', 'grupo', 'fecha_inscripcion', 'activo']
     list_filter = ['grupo__grado', 'activo']
+
+
+@admin.register(Horario)
+class HorarioAdmin(admin.ModelAdmin):
+    list_display = ['profesor', 'materia', 'grupo', 'dia', 'hora_inicio', 'hora_fin']
+    list_filter = ['dia', 'profesor']
+
+
+@admin.register(Anuncio)
+class AnuncioAdmin(admin.ModelAdmin):
+    list_display = ['titulo', 'autor', 'fecha_creacion', 'activo']
+    list_filter = ['activo']

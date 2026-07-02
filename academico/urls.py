@@ -9,4 +9,7 @@ urlpatterns = [
     path('grupos/', views.lista_grupos, name='lista_grupos'),
     path('asignaciones/', views.lista_asignaciones, name='lista_asignaciones'),
     path('grupos/<int:grupo_id>/alumnos/', views.alumnos_por_grupo, name='alumnos_por_grupo'),
+    path('horarios/', views.lista_horarios, name='lista_horarios'),
+    path('horarios/mis-horarios/', views.mis_horarios, name='mis_horarios'),
+    path('horarios/crear/', views.crear_horario, name='crear_horario'),
 ]

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Nuevo Horario{% endblock %}
+{% block page_title %}Nuevo Horario{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center fade-in">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex align-items-center gap-2">
+                <i class="bi bi-calendar-plus"></i> Registrar Horario
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Profesor <span class="text-danger">*</span></label>
+                            <select name="profesor" class="form-select" required>
+                                <option value="">— Seleccionar —</option>
+                                {% for p in profesores %}
+                                <option value="{{ p.id }}">{{ p.get_full_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Día <span class="text-danger">*</span></label>
+                            <select name="dia" class="form-select" required>
+                                <option value="">— Seleccionar —</option>
+                                <option value="LUN">Lunes</option>
+                                <option value="MAR">Martes</option>
+                                <option value="MIE">Miércoles</option>
+                                <option value="JUE">Jueves</option>
+                                <option value="VIE">Viernes</option>
+                                <option value="SAB">Sábado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Materia <span class="text-danger">*</span></label>
+                            <select name="materia" class="form-select" required>
+                                <option value="">— Seleccionar —</option>
+                                {% for m in materias %}
+                                <option value="{{ m.id }}">{{ m.nombre }} ({{ m.grado.nombre }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Grupo <span class="text-danger">*</span></label>
+                            <select name="grupo" class="form-select" required>
+                                <option value="">— Seleccionar —</option>
+                                {% for g in grupos %}
+                                <option value="{{ g.id }}">{{ g.grado.nombre }} - {{ g.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Hora de inicio <span class="text-danger">*</span></label>
+                            <input type="time" name="hora_inicio" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Hora de fin <span class="text-danger">*</span></label>
+                            <input type="time" name="hora_fin" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> Guardar
+                        </button>
+                        <a href="{% url 'lista_horarios' %}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

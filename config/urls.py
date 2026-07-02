@@ -6,11 +6,13 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from usuarios.models import Usuario
-from django.db.models import Count
+from django.db.models import Count, Avg
+from datetime import date, timedelta
 import json
-from academico.models import Grado, Materia, Asignacion
+from academico.models import Grado, Materia, Asignacion, Horario, Anuncio, Inscripcion
 from asistencias.models import Asistencia
 from calificaciones.models import Calificacion
+from tareas.models import Tarea
 
 
 @login_required
@@ -52,9 +54,66 @@ def home(request):
         'total_calificaciones': total_calif,
         'calif_aprobadas': calif_aprobadas,
         'calif_desaprobadas': calif_desaprobadas,
-        'mis_asignaciones': Asignacion.objects.filter(profesor=request.user).select_related('materia', 'grupo', 'grupo__grado') if request.user.rol == 'profesor' else [],
-        'mis_ultimas_asistencias': Asistencia.objects.filter(registrado_por=request.user).select_related('usuario', 'materia').order_by('-fecha', '-id')[:5] if request.user.rol == 'profesor' else [],
+        'anuncios': Anuncio.objects.filter(activo=True)[:5],
     }
+
+    if request.user.rol == 'profesor':
+        mis_asignaciones = Asignacion.objects.filter(
+            profesor=request.user
+        ).select_related('materia', 'grupo', 'grupo__grado')
+        grupos_ids = mis_asignaciones.values_list('grupo_id', flat=True).distinct()
+        materias_ids = mis_asignaciones.values_list('materia_id', flat=True).distinct()
+        alumnos_ids = Inscripcion.objects.filter(
+            grupo_id__in=grupos_ids, activo=True
+        ).values_list('alumno_id', flat=True).distinct()
+
+        context['mis_asignaciones'] = mis_asignaciones
+        context['mis_ultimas_asistencias'] = Asistencia.objects.filter(
+            registrado_por=request.user
+        ).select_related('usuario', 'materia').order_by('-fecha', '-id')[:5]
+        context['total_mis_alumnos'] = len(alumnos_ids)
+        context['proximas_tareas'] = Tarea.objects.filter(
+            profesor=request.user, activo=True,
+            fecha_entrega__gte=date.today(),
+        ).order_by('fecha_entrega')[:5]
+        context['mis_horarios_hoy'] = Horario.objects.filter(
+            profesor=request.user,
+            dia=date.today().strftime('%a').upper()[:3],
+        ).select_related('materia', 'grupo', 'grupo__grado')
+        context['mis_horarios'] = Horario.objects.filter(
+            profesor=request.user
+        ).select_related('materia', 'grupo', 'grupo__grado').order_by('dia', 'hora_inicio')
+        context['dia_labels'] = [
+            ('LUN', 'Lunes'), ('MAR', 'Martes'), ('MIE', 'Miércoles'),
+            ('JUE', 'Jueves'), ('VIE', 'Viernes'), ('SAB', 'Sábado'),
+        ]
+        horas_set = set()
+        for h in context['mis_horarios']:
+            horas_set.add(f'{h.hora_inicio:%H:%M}')
+        horas_orden = sorted(horas_set)[:5]
+        horarios_por_dia = {d[0]: [] for d in context['dia_labels']}
+        for h in context['mis_horarios']:
+            horarios_por_dia[h.dia].append(h)
+        context['horario_grid'] = []
+        for hora in horas_orden:
+            fila = {'hora': hora, 'dias': {}}
+            for d, _ in context['dia_labels']:
+                fila['dias'][d] = [h for h in horarios_por_dia[d] if f'{h.hora_inicio:%H:%M}' == hora]
+            context['horario_grid'].append(fila)
+        context['today'] = date.today()
+        mis_notas = Calificacion.objects.filter(
+            asignacion__materia_id__in=materias_ids,
+            asignacion__grupo_id__in=grupos_ids,
+        )
+        context['mis_notas_total'] = mis_notas.count()
+        context['mis_notas_aprobadas'] = mis_notas.filter(nota__gte=11).count() if mis_notas.count() else 0
+        context['mis_notas_promedio'] = round(mis_notas.aggregate(Avg('nota'))['nota__avg'] or 0, 1)
+        mis_asistencias = Asistencia.objects.filter(materia_id__in=materias_ids)
+        context['mis_asist_presente'] = mis_asistencias.filter(estado='presente').count()
+        context['mis_asist_total'] = mis_asistencias.count()
+    else:
+        context['mis_asignaciones'] = []
+
     return render(request, 'home.html', context)
 
 
