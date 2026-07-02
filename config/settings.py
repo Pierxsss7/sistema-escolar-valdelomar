@@ -19,6 +19,8 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=['https://*.railway.app'])
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
