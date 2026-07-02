@@ -415,13 +415,14 @@ new Chart(ctx1, {
                 {{ asist_presente }}, {{ asist_tarde }}, {{ asist_falta }}, {{ asist_justificada }}
             ],
             backgroundColor: ['#2d8a4e', '#e0c668', '#dc3545', '#0dcaf0'],
-            borderWidth: 0
+            borderWidth: 2,
+            borderColor: '#fff'
         }]
     },
     options: {
         responsive: true,
-        cutout: '65%',
-        plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true } } }
+        cutout: '60%',
+        plugins: { legend: { position: 'bottom', labels: { padding: 14, usePointStyle: true, font: { size: 11, weight: 'bold' } } } }
     }
 });
 } catch(e) { ctx1.parentElement.innerHTML = '<p class="text-muted text-center py-4">Sin datos de asistencia</p>'; }
@@ -437,14 +438,20 @@ new Chart(ctx2, {
         datasets: [{
             data: [{{ calif_aprobadas }}, {{ calif_desaprobadas }}],
             backgroundColor: ['#2d8a4e', '#dc3545'],
-            borderWidth: 0
+            borderWidth: 3,
+            borderColor: '#fff'
         }]
     },
     options: {
         responsive: true,
         maintainAspectRatio: false,
-        cutout: '75%',
-        plugins: { legend: { position: 'bottom', labels: { padding: 12, usePointStyle: true } } }
+        cutout: '45%',
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { padding: 14, usePointStyle: true, font: { size: 11, weight: 'bold' } }
+            }
+        }
     }
 });
 } catch(e) { ctx2.parentElement.innerHTML = '<p class="text-muted text-center py-4">Sin datos de calificaciones</p>'; }
