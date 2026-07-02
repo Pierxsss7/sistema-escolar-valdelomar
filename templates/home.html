@@ -206,72 +206,139 @@
 
 {% if user.rol == 'profesor' %}
 <div class="row g-4 mt-2 fade-in">
-    <div class="col-md-4">
-        <div class="card h-100 text-center p-4">
-            <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                {% if user.foto %}
-                <img src="{{ user.foto.url }}" alt="{{ user.get_full_name }}"
-                     style="width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);margin-bottom:0.75rem;">
-                {% else %}
-                <div class="user-avatar mb-3" style="width: 72px; height: 72px; font-size: 1.8rem;">
-                    {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+    <div class="col-md-5">
+        <div class="card h-100 border-0 shadow-sm" style="border-radius:16px;background:#fff;">
+            <div class="card-body p-4">
+                <div class="text-center mb-3">
+                    {% if user.foto %}
+                    <img src="{{ user.foto.url }}" alt="{{ user.get_full_name }}"
+                         style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid var(--primary);box-shadow:0 4px 14px rgba(26,71,49,0.15);">
+                    {% else %}
+                    <div class="user-avatar" style="width:100px;height:100px;font-size:2.8rem;margin:0 auto;border:4px solid var(--primary);">
+                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-                <h5 class="mb-1">{{ user.get_full_name }}</h5>
-                <span class="badge mb-3" style="background:var(--emerald); color:#fff;">{{ user.get_rol_display }}</span>
-                {% if user.dni %}<small class="text-muted mb-2"><i class="bi bi-person-badge"></i> DNI: {{ user.dni }}</small>{% endif %}
-                {% if user.titulo_profesional %}<small class="text-muted mb-2"><i class="bi bi-award"></i> {{ user.titulo_profesional }}</small>{% endif %}
-                <div class="row g-2 w-100 text-center mt-2">
-                    <div class="col-6 border-end">
-                        <strong style="font-size:1.5rem; color:var(--primary);">{{ mis_asignaciones|length }}</strong>
-                        <small class="d-block text-muted">Clases</small>
+                <div class="text-center mb-3">
+                    <h4 class="mb-1 fw-bold" style="color:var(--primary);">{{ user.get_full_name }}</h4>
+                    <span class="badge px-3 py-1" style="background:var(--emerald);color:#fff;font-size:0.8rem;font-weight:500;">{{ user.get_rol_display }}</span>
+                </div>
+
+                <div style="background:#f8f7f4;border-radius:12px;padding:14px;">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-person-badge" style="color:var(--primary);font-size:0.9rem;"></i>
+                                <div>
+                                    <small class="text-muted d-block" style="font-size:0.65rem;line-height:1;">DNI</small>
+                                    <span style="font-size:0.85rem;font-weight:600;">{{ user.dni|default:'—' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-envelope" style="color:var(--gold);font-size:0.9rem;"></i>
+                                <div>
+                                    <small class="text-muted d-block" style="font-size:0.65rem;line-height:1;">Email</small>
+                                    <span style="font-size:0.85rem;font-weight:600;">{{ user.email|default:'—' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-telephone" style="color:var(--emerald);font-size:0.9rem;"></i>
+                                <div>
+                                    <small class="text-muted d-block" style="font-size:0.65rem;line-height:1;">Teléfono</small>
+                                    <span style="font-size:0.85rem;font-weight:600;">{{ user.telefono|default:'—' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-calendar" style="color:#e0c668;font-size:0.9rem;"></i>
+                                <div>
+                                    <small class="text-muted d-block" style="font-size:0.65rem;line-height:1;">Nacimiento</small>
+                                    <span style="font-size:0.85rem;font-weight:600;">{{ user.fecha_nacimiento|date:'d/m/Y'|default:'—' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-2" style="border-color:#e8e4dc;">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <i class="bi bi-bookmark" style="color:var(--primary);font-size:0.9rem;"></i>
+                        <div>
+                            <small class="text-muted d-block" style="font-size:0.65rem;line-height:1;">Especialidad</small>
+                            <span style="font-size:0.85rem;font-weight:600;">{{ user.especialidad|default:'No especificada' }}</span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-award" style="color:var(--gold);font-size:0.9rem;"></i>
+                        <div>
+                            <small class="text-muted d-block" style="font-size:0.65rem;line-height:1;">Título Profesional</small>
+                            <span style="font-size:0.85rem;font-weight:600;">{{ user.titulo_profesional|default:'No especificado' }}</span>
+                        </div>
+                    </div>
+                    {% if user.direccion %}
+                    <hr class="my-2" style="border-color:#e8e4dc;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-geo-alt" style="color:#dc3545;font-size:0.9rem;"></i>
+                        <div>
+                            <small class="text-muted d-block" style="font-size:0.65rem;line-height:1;">Dirección</small>
+                            <span style="font-size:0.85rem;font-weight:600;">{{ user.direccion }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="row g-2 mt-3 text-center">
+                    <div class="col-6">
+                        <div style="background:#f0f7f3;border-radius:12px;padding:10px;">
+                            <strong style="font-size:1.6rem;color:var(--primary);display:block;">{{ mis_asignaciones|length }}</strong>
+                            <small class="text-muted" style="font-size:0.75rem;">Clases asignadas</small>
+                        </div>
                     </div>
                     <div class="col-6">
-                        <strong style="font-size:1.5rem; color:var(--emerald);">{{ total_alumnos }}</strong>
-                        <small class="d-block text-muted">Alumnos</small>
+                        <div style="background:#f0f7f3;border-radius:12px;padding:10px;">
+                            <strong style="font-size:1.6rem;color:var(--emerald);display:block;">{{ total_alumnos }}</strong>
+                            <small class="text-muted" style="font-size:0.75rem;">Alumnos</small>
+                        </div>
                     </div>
                 </div>
-                <a href="{% url 'perfil' %}" class="btn btn-sm btn-outline-primary mt-3 w-100">
-                    <i class="bi bi-pencil"></i> Editar Perfil
+
+                <a href="{% url 'perfil' %}" class="btn btn-outline-primary w-100 mt-3" style="border-radius:10px;">
+                    <i class="bi bi-pencil"></i> Editar Perfil Completo
                 </a>
             </div>
         </div>
     </div>
-    <div class="col-md-8">
-        <div class="card h-100">
-            <div class="card-header d-flex align-items-center gap-2">
-                <i class="bi bi-journal-text"></i> Mis Clases
+    <div class="col-md-7">
+        <div class="card h-100 border-0 shadow-sm" style="border-radius:16px;background:#fff;">
+            <div class="card-header d-flex align-items-center gap-2" style="background:transparent;border-bottom:1px solid #f0ece0;padding:16px 20px;">
+                <i class="bi bi-journal-text" style="color:var(--primary);"></i>
+                <strong style="color:var(--primary);">Mis Clases</strong>
             </div>
             <div class="card-body p-0">
                 {% if mis_asignaciones %}
-                <table class="table mb-0">
-                    <thead>
-                        <tr>
-                            <th>Materia</th>
-                            <th>Grupo</th>
-                            <th style="width:140px;">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for a in mis_asignaciones %}
-                        <tr>
-                            <td class="fw-semibold">{{ a.materia.nombre }}</td>
-                            <td><span class="badge" style="background:var(--primary);color:#fff;">{{ a.grupo.grado.nombre }} - {{ a.grupo.nombre }}</span></td>
-                            <td>
-                                <a href="{% url 'tomar_asistencia' a.id %}" class="btn btn-sm btn-success">
-                                    <i class="bi bi-calendar-check"></i> Asistencia
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% else %}
-                <div class="card-body">
-                    <div class="empty-state">
-                        <i class="bi bi-journal-text"></i>
-                        <p>No tienes clases asignadas</p>
+                <div style="padding:8px;">
+                    {% for a in mis_asignaciones %}
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid #f5f2ec;transition:background 0.15s;"
+                         onmouseover="this.style.background='#faf8f5'" onmouseout="this.style.background='transparent'">
+                        <div>
+                            <div style="font-weight:600;font-size:0.9rem;color:var(--dark);">{{ a.materia.nombre }}</div>
+                            <small style="color:#8a8578;">
+                                <i class="bi bi-people"></i> {{ a.grupo.grado.nombre }} - Grupo {{ a.grupo.nombre }}
+                            </small>
+                        </div>
+                        <a href="{% url 'tomar_asistencia' a.id %}" class="btn btn-sm btn-success" style="border-radius:8px;white-space:nowrap;">
+                            <i class="bi bi-calendar-check"></i> Asistencia
+                        </a>
                     </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state py-4">
+                    <i class="bi bi-journal-text"></i>
+                    <p>No tienes clases asignadas</p>
                 </div>
                 {% endif %}
             </div>
@@ -281,17 +348,18 @@
 
 <div class="row g-4 mt-2 fade-in">
     <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-header d-flex align-items-center gap-2">
-                <i class="bi bi-journal-richtext"></i> Tareas y Asignaciones
+        <div class="card border-0 shadow-sm" style="border-radius:16px;background:#fff;">
+            <div class="card-header d-flex align-items-center gap-2" style="background:transparent;border-bottom:1px solid #f0ece0;padding:14px 20px;">
+                <i class="bi bi-journal-richtext" style="color:var(--primary);"></i>
+                <strong style="color:var(--primary);">Tareas y Asignaciones</strong>
             </div>
-            <div class="card-body d-flex flex-column align-items-center justify-content-center text-center" style="min-height:120px;">
-                <p class="text-muted">Gestiona las tareas que asignas a tus alumnos.</p>
+            <div class="card-body d-flex flex-column align-items-center justify-content-center text-center" style="min-height:100px;padding:20px;">
+                <p class="text-muted mb-3">Crea y gestiona las tareas que asignas a tus alumnos.</p>
                 <div class="d-flex gap-2">
-                    <a href="{% url 'lista_tareas' %}" class="btn btn-primary">
+                    <a href="{% url 'lista_tareas' %}" class="btn btn-primary" style="border-radius:10px;">
                         <i class="bi bi-eye"></i> Ver Tareas
                     </a>
-                    <a href="{% url 'crear_tarea' %}" class="btn btn-outline-primary">
+                    <a href="{% url 'crear_tarea' %}" class="btn btn-outline-primary" style="border-radius:10px;">
                         <i class="bi bi-plus-circle"></i> Nueva Tarea
                     </a>
                 </div>
@@ -299,19 +367,15 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-header d-flex align-items-center gap-2">
-                <i class="bi bi-person-vcard"></i> Datos Profesionales
+        <div class="card border-0 shadow-sm" style="border-radius:16px;background:#fff;">
+            <div class="card-header d-flex align-items-center gap-2" style="background:transparent;border-bottom:1px solid #f0ece0;padding:14px 20px;">
+                <i class="bi bi-bar-chart" style="color:var(--emerald);"></i>
+                <strong style="color:var(--emerald);">Calificaciones</strong>
             </div>
-            <div class="card-body d-flex flex-column align-items-start justify-content-center" style="min-height:120px;">
-                {% if user.especialidad or user.titulo_profesional %}
-                <small class="text-muted mb-1"><i class="bi bi-bookmark"></i> Especialidad: <strong>{{ user.especialidad|default:'—' }}</strong></small>
-                <small class="text-muted mb-1"><i class="bi bi-award"></i> Título: <strong>{{ user.titulo_profesional|default:'—' }}</strong></small>
-                {% else %}
-                <p class="text-muted mb-2">Completa tus datos profesionales.</p>
-                {% endif %}
-                <a href="{% url 'perfil' %}" class="btn btn-sm btn-outline-primary mt-2">
-                    <i class="bi bi-pencil"></i> Editar Datos
+            <div class="card-body d-flex flex-column align-items-center justify-content-center text-center" style="min-height:100px;padding:20px;">
+                <p class="text-muted mb-3">Registra y consulta las calificaciones de tus alumnos.</p>
+                <a href="{% url 'lista_calificaciones' %}" class="btn btn-outline-success" style="border-radius:10px;">
+                    <i class="bi bi-graph-up"></i> Ir a Calificaciones
                 </a>
             </div>
         </div>
