@@ -110,6 +110,11 @@
                         <i class="bi bi-bar-chart-fill"></i> Reportes
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_dispositivos' %}">
+                        <i class="bi bi-fingerprint"></i> Biométrico
+                    </a>
+                </li>
                 {% if user.rol == 'admin' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'admin:index' %}">

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'calificaciones',
     'reportes',
     'tareas',
+    'biometrico',
 ]
 
 MIDDLEWARE = [

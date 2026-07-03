@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Vincular Docente{% endblock %}
+{% block page_title %}<i class="bi bi-person-plus"></i> Vincular Docente a Dispositivo{% endblock %}
+{% block content %}
+<div class="row fade-in">
+    <div class="col-md-5">
+        <div class="card mb-4">
+            <div class="card-header"><i class="bi bi-link"></i> Nueva Vinculación</div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Docente</label>
+                        <select name="usuario" class="form-select" required>
+                            <option value="">--- Seleccionar ---</option>
+                            {% for d in docentes %}
+                            <option value="{{ d.id }}">{{ d.get_full_name }} ({{ d.username }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dispositivo</label>
+                        <select name="dispositivo" class="form-select" required>
+                            <option value="">--- Seleccionar ---</option>
+                            {% for d in dispositivos %}
+                            <option value="{{ d.id }}">{{ d.nombre }} ({{ d.ip }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">ID del usuario en ZKTeco</label>
+                        <input type="number" name="user_id_zk" class="form-control" required
+                            placeholder="Ej: 1, 2, 3..." min="1">
+                        <div class="form-text">Este es el ID numérico que tiene el docente en el dispositivo ZKTeco.</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-check-lg"></i> Vincular
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header"><i class="bi bi-list"></i> Docentes Vinculados</div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Docente</th>
+                                <th>Dispositivo</th>
+                                <th>ID ZK</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in huellas %}
+                            <tr>
+                                <td>{{ h.usuario.get_full_name }}</td>
+                                <td>{{ h.dispositivo.nombre }}</td>
+                                <td><code>{{ h.user_id_zk }}</code></td>
+                                <td>
+                                    {% if h.activo %}
+                                        <span class="badge bg-success">Activo</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Inactivo</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-center py-4 text-muted">No hay docentes vinculados</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

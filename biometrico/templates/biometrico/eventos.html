@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Eventos - {{ dispositivo.nombre }}{% endblock %}
+{% block page_title %}<i class="bi bi-fingerprint"></i> Eventos: {{ dispositivo.nombre }}{% endblock %}
+{% block content %}
+<div class="row fade-in">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-list"></i> Últimos 100 eventos
+                <a href="{% url 'lista_dispositivos' %}" class="btn btn-sm btn-outline-secondary float-end">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>ID ZK</th>
+                                <th>Tipo</th>
+                                <th>Fecha/Hora</th>
+                                <th>Procesado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in eventos %}
+                            <tr>
+                                <td>{{ e.usuario.get_full_name|default:"---" }}</td>
+                                <td><code>{{ e.user_id_zk }}</code></td>
+                                <td>
+                                    {% if e.tipo == 'entrada' %}
+                                        <span class="badge bg-success">Entrada</span>
+                                    {% elif e.tipo == 'salida' %}
+                                        <span class="badge bg-warning">Salida</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ e.tipo }}</span>
+                                    {% endif %}
+                                </td>
+                                <td><small>{{ e.timestamp|date:'d/m/Y H:i:s' }}</small></td>
+                                <td>
+                                    {% if e.procesado %}
+                                        <i class="bi bi-check-circle text-success"></i> Sí
+                                    {% else %}
+                                        <i class="bi bi-x-circle text-danger"></i> No
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="5" class="text-center py-4 text-muted">No hay eventos registrados</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
