@@ -133,330 +133,299 @@
 
 {% if user.rol == 'alumno' %}
 
-<!-- HERO: Bienvenida -->
-<div class="alumno-hero fade-in">
-    <div class="alumno-hero-content">
-        <div class="alumno-hero-text">
-            <p class="alumno-hero-greeting">Bienvenido,</p>
-            <h1 class="alumno-hero-name">{{ user.get_full_name }}</h1>
-            <p class="alumno-hero-sub">
-                <i class="bi bi-mortarboard-fill"></i> {{ user.get_rol_display }}
-                {% if user.dni %} <span class="alumno-hero-sep">|</span> DNI: {{ user.dni }}{% endif %}
-            </p>
-        </div>
-        <div class="alumno-hero-avatar">
-            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
-        </div>
-    </div>
-</div>
+<!-- LAYOUT: Main + Sidebar -->
+<div class="alumno-dashboard-layout fade-in">
 
-<!-- STATS: 5 tarjetas estilo referencia -->
-<div class="alumno-stats-row fade-in">
-    <div class="alumno-stat-card-ref">
-        <div class="alumno-stat-icon-ref" style="background:rgba(59,130,246,0.1);color:#3b82f6;">
-            <i class="bi bi-book-fill"></i>
-        </div>
-        <div class="alumno-stat-text">
-            <div class="alumno-stat-title-ref">Mis Cursos</div>
-            <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ alumno_stats.materias_count }}</div>
-            <div class="alumno-stat-sub-ref" style="color:#64748b;">Cursos activos</div>
-        </div>
-    </div>
-    <div class="alumno-stat-card-ref">
-        <div class="alumno-stat-icon-ref" style="background:rgba(34,197,94,0.1);color:#22c55e;">
-            <i class="bi bi-graph-up-arrow"></i>
-        </div>
-        <div class="alumno-stat-text">
-            <div class="alumno-stat-title-ref">Promedio General</div>
-            <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ alumno_stats.promedio }}</div>
-            <div class="alumno-stat-sub-ref" style="color:#64748b;">{% if alumno_stats.promedio >= 16 %}Muy bueno{% elif alumno_stats.promedio >= 11 %}Bueno{% elif alumno_stats.promedio > 0 %}Regular{% else %}Sin notas{% endif %}</div>
-        </div>
-    </div>
-    <div class="alumno-stat-card-ref">
-        <div class="alumno-stat-icon-ref" style="background:rgba(99,102,241,0.1);color:#6366f1;">
-            <i class="bi bi-calendar2-check-fill"></i>
-        </div>
-        <div class="alumno-stat-text">
-            <div class="alumno-stat-title-ref">Asistencia</div>
-            <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ alumno_stats.pct_asistencia }}%</div>
-            <div class="alumno-stat-sub-ref" style="color:#64748b;">Este mes</div>
-        </div>
-    </div>
-    <div class="alumno-stat-card-ref">
-        <div class="alumno-stat-icon-ref" style="background:rgba(249,115,22,0.1);color:#f97316;">
-            <i class="bi bi-clipboard2-check-fill"></i>
-        </div>
-        <div class="alumno-stat-text">
-            <div class="alumno-stat-title-ref">Tareas Pendientes</div>
-            <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ tareas_pendientes|default:"0" }}</div>
-            <div class="alumno-stat-sub-ref" style="color:#64748b;">Por entregar</div>
-        </div>
-    </div>
-    <div class="alumno-stat-card-ref">
-        <div class="alumno-stat-icon-ref" style="background:rgba(244,63,94,0.1);color:#f43f5e;">
-            <i class="bi bi-star-fill"></i>
-        </div>
-        <div class="alumno-stat-text">
-            <div class="alumno-stat-title-ref">Conducta</div>
-            <div class="alumno-stat-number-ref" style="color:#1e293b;">Excelente</div>
-            <div class="alumno-stat-sub-ref" style="color:#64748b;">Sin observaciones</div>
-        </div>
-    </div>
-</div>
+    <!-- ========== COLUMNA PRINCIPAL ========== -->
+    <div class="alumno-main-col">
 
-<!-- ROW 1: Rendimiento + Acceso Rápido -->
-<div class="row g-4 mb-4 fade-in">
-    <!-- Rendimiento por materia -->
-    <div class="col-lg-7">
-        <div class="card alumno-card h-100">
-            <div class="alumno-card-header">
-                <div class="alumno-card-header-icon" style="background:rgba(26,71,49,0.1);color:var(--primary);">
-                    <i class="bi bi-bar-chart-fill"></i>
-                </div>
-                <div>
-                    <h6 class="alumno-card-title">Rendimiento por Materia</h6>
-                    <small class="alumno-card-sub">Promedio de cada asignatura</small>
-                </div>
-                <a href="{% url 'lista_calificaciones' %}" class="alumno-card-link">
-                    Ver todo <i class="bi bi-arrow-right"></i>
-                </a>
+        <!-- HERO: Banner bienvenida -->
+        <div class="alumno-hero-banner">
+            <div class="alumno-hero-banner-text">
+                <h1 class="alumno-hero-hola">¡Hola, {{ user.first_name }}! 👋</h1>
+                {% if alumno_grupo %}
+                <p class="alumno-hero-info">
+                    Grado: <strong>{{ alumno_grupo.grado.nombre }}</strong>
+                    <span class="alumno-hero-sep">|</span>
+                    Sección: <strong>"{{ alumno_grupo.nombre }}"</strong>
+                    <span class="alumno-hero-sep">|</span>
+                    Turno: <strong>Mañana</strong>
+                </p>
+                {% endif %}
+                <blockquote class="alumno-hero-quote">
+                    "La educación es la arma más poderosa que puedes usar para cambiar el mundo."
+                    <cite>— Nelson Mandela</cite>
+                </blockquote>
             </div>
-            <div class="alumno-card-body">
-                {% if alumno_calif_por_materia %}
-                <div class="alumno-materias-grid">
-                    {% for m in alumno_calif_por_materia %}
-                    <div class="alumno-materia-item">
-                        <div class="alumno-materia-info">
-                            <span class="alumno-materia-nombre">{{ m.nombre|truncatechars:22 }}</span>
-                            <span class="alumno-materia-notas">{{ m.total }} nota{{ m.total|pluralize }}</span>
+            <div class="alumno-hero-banner-art">
+                <div class="alumno-hero-3d">
+                    <div class="alumno-hero-3d-circle"></div>
+                    <div class="alumno-hero-3d-icon">🧑‍🎓</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATS: 5 tarjetas -->
+        <div class="alumno-stats-row">
+            <div class="alumno-stat-card-ref">
+                <div class="alumno-stat-icon-ref" style="background:rgba(59,130,246,0.1);color:#3b82f6;">
+                    <i class="bi bi-book-fill"></i>
+                </div>
+                <div class="alumno-stat-text">
+                    <div class="alumno-stat-title-ref">Mis Cursos</div>
+                    <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ alumno_stats.materias_count }}</div>
+                    <div class="alumno-stat-sub-ref" style="color:#64748b;">Cursos activos</div>
+                </div>
+            </div>
+            <div class="alumno-stat-card-ref">
+                <div class="alumno-stat-icon-ref" style="background:rgba(34,197,94,0.1);color:#22c55e;">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <div class="alumno-stat-text">
+                    <div class="alumno-stat-title-ref">Promedio General</div>
+                    <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ alumno_stats.promedio }}</div>
+                    <div class="alumno-stat-sub-ref" style="color:#64748b;">{% if alumno_stats.promedio >= 16 %}Muy bueno{% elif alumno_stats.promedio >= 11 %}Bueno{% elif alumno_stats.promedio > 0 %}Regular{% else %}Sin notas{% endif %}</div>
+                </div>
+            </div>
+            <div class="alumno-stat-card-ref">
+                <div class="alumno-stat-icon-ref" style="background:rgba(99,102,241,0.1);color:#6366f1;">
+                    <i class="bi bi-calendar2-check-fill"></i>
+                </div>
+                <div class="alumno-stat-text">
+                    <div class="alumno-stat-title-ref">Asistencia</div>
+                    <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ alumno_stats.pct_asistencia }}%</div>
+                    <div class="alumno-stat-sub-ref" style="color:#64748b;">Este mes</div>
+                </div>
+            </div>
+            <div class="alumno-stat-card-ref">
+                <div class="alumno-stat-icon-ref" style="background:rgba(249,115,22,0.1);color:#f97316;">
+                    <i class="bi bi-clipboard2-check-fill"></i>
+                </div>
+                <div class="alumno-stat-text">
+                    <div class="alumno-stat-title-ref">Tareas Pendientes</div>
+                    <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ tareas_pendientes|default:"0" }}</div>
+                    <div class="alumno-stat-sub-ref" style="color:#64748b;">Por entregar</div>
+                </div>
+            </div>
+            <div class="alumno-stat-card-ref">
+                <div class="alumno-stat-icon-ref" style="background:rgba(244,63,94,0.1);color:#f43f5e;">
+                    <i class="bi bi-star-fill"></i>
+                </div>
+                <div class="alumno-stat-text">
+                    <div class="alumno-stat-title-ref">Conducta</div>
+                    <div class="alumno-stat-number-ref" style="color:#1e293b;">Excelente</div>
+                    <div class="alumno-stat-sub-ref" style="color:#64748b;">Sin observaciones</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROW: Rendimiento Académico + Asistencia del Mes -->
+        <div class="row g-4 mb-4">
+            <!-- Rendimiento Académico (barras) -->
+            <div class="col-lg-7">
+                <div class="card alumno-card h-100">
+                    <div class="alumno-card-header">
+                        <div class="alumno-card-header-left">
+                            <h6 class="alumno-card-title">Rendimiento Académico</h6>
                         </div>
-                        <div class="alumno-materia-barra-wrapper">
-                            <div class="alumno-materia-barra-bg">
-                                <div class="alumno-materia-barra-fill"
-                                     style="width: {% widthratio m.promedio 20 100 %}%;
-                                     background: {% if m.promedio >= 16 %}var(--emerald){% elif m.promedio >= 11 %}var(--gold){% else %}#dc3545{% endif %};">
-                                </div>
-                            </div>
-                            <span class="alumno-materia-promedio"
-                                  style="color: {% if m.promedio >= 16 %}var(--emerald){% elif m.promedio >= 11 %}var(--gold){% else %}#dc3545{% endif %};">
-                                {{ m.promedio }}
-                            </span>
+                        <div class="alumno-card-header-right">
+                            <select class="alumno-select-periodo">
+                                <option>Este bimestre</option>
+                                {% for p in alumno_por_periodo %}
+                                <option>{{ p.nombre }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
-                    {% endfor %}
+                    <div class="alumno-card-body">
+                        {% if alumno_calif_por_materia %}
+                        <div class="alumno-chart-bars">
+                            {% for m in alumno_calif_por_materia %}
+                            <div class="alumno-bar-col">
+                                <div class="alumno-bar-value">{{ m.promedio }}</div>
+                                <div class="alumno-bar-track">
+                                    <div class="alumno-bar-fill"
+                                         style="height: {% widthratio m.promedio 20 100 %}%;
+                                         background: {% cycle '#3b82f6' '#22c55e' '#a855f7' '#f97316' '#ef4444' '#06b6d4' '#eab308' '#ec4899' %};">
+                                    </div>
+                                </div>
+                                <div class="alumno-bar-label">{{ m.nombre|truncatechars:12 }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="alumno-empty">
+                            <i class="bi bi-bar-chart"></i>
+                            <p>Aún no tienes calificaciones registradas.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Asistencia del Mes (donut) -->
+            <div class="col-lg-5">
+                <div class="card alumno-card h-100">
+                    <div class="alumno-card-header">
+                        <h6 class="alumno-card-title">Asistencia del Mes</h6>
+                    </div>
+                    <div class="alumno-card-body">
+                        <div class="alumno-donut-layout">
+                            <div class="alumno-donut-wrapper">
+                                <svg viewBox="0 0 120 120" class="alumno-donut-svg">
+                                    <circle cx="60" cy="60" r="50" fill="none" stroke="#f0ece0" stroke-width="12"/>
+                                    <circle cx="60" cy="60" r="50" fill="none"
+                                        stroke="#22c55e" stroke-width="12" stroke-linecap="round"
+                                        stroke-dasharray="314.2"
+                                        stroke-dashoffset="0"
+                                        transform="rotate(-90 60 60)"
+                                        style="stroke-dashoffset: calc(314.2 - (314.2 * {{ alumno_stats.pct_asistencia }} / 100)); transition: stroke-dashoffset 1.2s ease;"/>
+                                </svg>
+                                <div class="alumno-donut-center">
+                                    <span class="alumno-donut-pct">{{ alumno_stats.pct_asistencia }}%</span>
+                                    <span class="alumno-donut-label">Asistencia</span>
+                                </div>
+                            </div>
+                            <div class="alumno-donut-legend">
+                                <div class="alumno-legend-item">
+                                    <span class="alumno-legend-dot" style="background:#22c55e;"></span>
+                                    <span class="alumno-legend-text">Días presentes</span>
+                                    <span class="alumno-legend-val">{{ alumno_stats.asistencias_presente }}</span>
+                                </div>
+                                <div class="alumno-legend-item">
+                                    <span class="alumno-legend-dot" style="background:#ef4444;"></span>
+                                    <span class="alumno-legend-text">Días ausentes</span>
+                                    <span class="alumno-legend-val">{{ alumno_stats.asistencias_falta }}</span>
+                                </div>
+                                <div class="alumno-legend-item">
+                                    <span class="alumno-legend-dot" style="background:#f97316;"></span>
+                                    <span class="alumno-legend-text">Tardanzas</span>
+                                    <span class="alumno-legend-val">{{ alumno_stats.asistencias_tarde }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url 'mis_asistencias' %}" class="alumno-card-footer-link">
+                            <i class="bi bi-arrow-right"></i> Ver historial completo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLA: Mis Cursos -->
+        <div class="card alumno-card mb-4">
+            <div class="alumno-card-header">
+                <h6 class="alumno-card-title">Mis Cursos</h6>
+            </div>
+            <div class="alumno-card-body p-0">
+                {% if alumno_cursos_detalle %}
+                <div class="alumno-table-wrapper">
+                    <table class="alumno-cursos-table">
+                        <thead>
+                            <tr>
+                                <th>Curso</th>
+                                <th>Docente</th>
+                                <th>Última Nota</th>
+                                <th>Promedio</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in alumno_cursos_detalle %}
+                            <tr>
+                                <td>
+                                    <div class="alumno-curso-name">
+                                        <span class="alumno-curso-dot" style="background:{% cycle '#3b82f6' '#22c55e' '#a855f7' '#f97316' '#ef4444' '#06b6d4' '#eab308' '#ec4899' %};"></span>
+                                        {{ c.materia.nombre }}
+                                    </div>
+                                </td>
+                                <td>Prof. {{ c.profesor.get_full_name|default:c.profesor.username }}</td>
+                                <td>
+                                    {% if c.ultima_nota %}
+                                    <span class="alumno-badge-nota" style="background:{% if c.ultima_nota >= 16 %}rgba(34,197,94,0.1);color:#22c55e{% elif c.ultima_nota >= 11 %}rgba(249,115,22,0.1);color:#f97316{% else %}rgba(239,68,68,0.1);color:#ef4444{% endif %};">{{ c.ultima_nota }}</span>
+                                    {% else %}
+                                    <span class="alumno-badge-nota" style="background:#f0ece0;color:#999;">—</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if c.promedio %}
+                                    <strong style="color:{% if c.promedio >= 16 %}#22c55e{% elif c.promedio >= 11 %}#f97316{% else %}#ef4444{% endif %};">{{ c.promedio }}</strong>
+                                    {% else %}
+                                    <span style="color:#999;">—</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'lista_calificaciones' %}" class="alumno-btn-curso">Ver curso</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
                 {% else %}
                 <div class="alumno-empty">
-                    <i class="bi bi-bar-chart"></i>
-                    <p>Aún no tienes calificaciones registradas.</p>
+                    <i class="bi bi-book"></i>
+                    <p>No tienes cursos asignados aún.</p>
                 </div>
                 {% endif %}
             </div>
         </div>
+
     </div>
 
-    <!-- Panel lateral: Asistencia + Perfil rápido -->
-    <div class="col-lg-5">
-        <!-- Tarjeta de asistencia -->
+    <!-- ========== COLUMNA LATERAL ========== -->
+    <div class="alumno-side-col">
+
+        <!-- Próximas Evaluaciones -->
         <div class="card alumno-card mb-4">
             <div class="alumno-card-header">
-                <div class="alumno-card-header-icon" style="background:rgba(45,138,78,0.1);color:var(--emerald);">
-                    <i class="bi bi-calendar2-check-fill"></i>
-                </div>
-                <div>
-                    <h6 class="alumno-card-title">Mi Asistencia</h6>
-                    <small class="alumno-card-sub">Resumen del ciclo</small>
-                </div>
-            </div>
-            <div class="alumno-card-body">
-                <div class="alumno-asistencia-ring-row">
-                    <div class="alumno-asistencia-ring">
-                        <svg viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="42" fill="none" stroke="#f0ece0" stroke-width="8"/>
-                            <circle cx="50" cy="50" r="42" fill="none"
-                                stroke="var(--emerald)" stroke-width="8" stroke-linecap="round"
-                                stroke-dasharray="263.9" transform="rotate(-90 50 50)"
-                                style="stroke-dashoffset: calc(263.9 - (263.9 * {{ alumno_stats.pct_asistencia }} / 100)); transition: stroke-dashoffset 1.2s ease;"/>
-                        </svg>
-                        <div class="alumno-ring-center">
-                            <span class="alumno-ring-pct">{{ alumno_stats.pct_asistencia }}%</span>
-                            <span class="alumno-ring-label">Presente</span>
-                        </div>
-                    </div>
-                    <div class="alumno-asistencia-detalles">
-                        <div class="alumno-detalle-item">
-                            <span class="alumno-detalle-dot" style="background:var(--emerald);"></span>
-                            <span class="alumno-detalle-texto">Presente</span>
-                            <span class="alumno-detalle-valor">{{ alumno_stats.asistencias_presente }}</span>
-                        </div>
-                        <div class="alumno-detalle-item">
-                            <span class="alumno-detalle-dot" style="background:var(--gold);"></span>
-                            <span class="alumno-detalle-texto">Tardanzas</span>
-                            <span class="alumno-detalle-valor">{{ alumno_stats.asistencias_tarde }}</span>
-                        </div>
-                        <div class="alumno-detalle-item">
-                            <span class="alumno-detalle-dot" style="background:#dc3545;"></span>
-                            <span class="alumno-detalle-texto">Faltas</span>
-                            <span class="alumno-detalle-valor">{{ alumno_stats.asistencias_falta }}</span>
-                        </div>
-                    </div>
-                </div>
-                <a href="{% url 'mis_asistencias' %}" class="alumno-card-footer-link">
-                    <i class="bi bi-calendar-week"></i> Ver historial completo
-                </a>
-            </div>
-        </div>
-
-        <!-- Acceso rápido -->
-        <div class="card alumno-card">
-            <div class="alumno-card-header">
-                <div class="alumno-card-header-icon" style="background:rgba(201,168,76,0.1);color:var(--gold);">
-                    <i class="bi bi-lightning-charge-fill"></i>
-                </div>
-                <div>
-                    <h6 class="alumno-card-title">Acceso Rápido</h6>
-                </div>
-            </div>
-            <div class="alumno-card-body">
-                <div class="alumno-quick-grid">
-                    <a href="{% url 'lista_calificaciones' %}" class="alumno-quick-btn">
-                        <i class="bi bi-graph-up"></i>
-                        <span>Calificaciones</span>
-                    </a>
-                    <a href="{% url 'mis_asistencias' %}" class="alumno-quick-btn">
-                        <i class="bi bi-calendar-check"></i>
-                        <span>Asistencias</span>
-                    </a>
-                    <a href="{% url 'lista_materias' %}" class="alumno-quick-btn">
-                        <i class="bi bi-book"></i>
-                        <span>Materias</span>
-                    </a>
-                    <a href="{% url 'registrar_huella' %}" class="alumno-quick-btn">
-                        <i class="bi bi-fingerprint"></i>
-                        <span>Huella</span>
-                    </a>
-                    <a href="{% url 'lista_tareas' %}" class="alumno-quick-btn">
-                        <i class="bi bi-journal-richtext"></i>
-                        <span>Tareas</span>
-                    </a>
-                    <a href="{% url 'mis_horarios' %}" class="alumno-quick-btn">
-                        <i class="bi bi-calendar-week"></i>
-                        <span>Horario</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ROW 2: Últimas Calificaciones + Anuncios -->
-<div class="row g-4 mb-4 fade-in">
-    <!-- Últimas calificaciones -->
-    <div class="col-lg-7">
-        <div class="card alumno-card h-100">
-            <div class="alumno-card-header">
-                <div class="alumno-card-header-icon" style="background:rgba(201,168,76,0.1);color:var(--gold);">
-                    <i class="bi bi-clipboard2-data-fill"></i>
-                </div>
-                <div>
-                    <h6 class="alumno-card-title">Últimas Calificaciones</h6>
-                    <small class="alumno-card-sub">Notas más recientes</small>
-                </div>
-                <a href="{% url 'lista_calificaciones' %}" class="alumno-card-link">
-                    Ver todas <i class="bi bi-arrow-right"></i>
-                </a>
+                <h6 class="alumno-card-title">Próximas Evaluaciones</h6>
+                <a href="{% url 'lista_calificaciones' %}" class="alumno-card-link-sm">Ver todas</a>
             </div>
             <div class="alumno-card-body p-0">
                 {% if mis_calificaciones %}
-                <div class="alumno-calif-list">
-                    {% for c in mis_calificaciones %}
-                    <div class="alumno-calif-item">
-                        <div class="alumno-calif-materia">
-                            <div class="alumno-calif-materia-icon" style="background:{% cycle 'rgba(26,71,49,0.08)' 'rgba(45,138,78,0.08)' 'rgba(201,168,76,0.08)' 'rgba(74,158,138,0.08)' %};">
-                                <i class="bi bi-journal-text" style="color:{% cycle 'var(--primary)' 'var(--emerald)' 'var(--gold)' 'var(--seafoam)' %};"></i>
-                            </div>
-                            <div>
-                                <div class="alumno-calif-nombre">{{ c.materia.nombre|truncatechars:20 }}</div>
-                                <small class="alumno-calif-periodo">{{ c.periodo.nombre|truncatechars:18 }}</small>
-                            </div>
+                <div class="alumno-side-list">
+                    {% for c in mis_calificaciones|slice:":3" %}
+                    <div class="alumno-side-item">
+                        <div class="alumno-side-icon" style="background:rgba(59,130,246,0.1);color:#3b82f6;">
+                            <i class="bi bi-journal-text"></i>
                         </div>
-                        <div class="alumno-calif-nota-wrapper">
-                            <div class="alumno-calif-nota"
-                                 style="background:{% if c.nota >= 16 %}rgba(45,138,78,0.1);color:var(--emerald){% elif c.nota >= 11 %}rgba(201,168,76,0.1);color:var(--gold){% else %}rgba(220,53,69,0.1);color:#dc3545{% endif %};">
-                                {{ c.nota }}
-                            </div>
+                        <div class="alumno-side-info">
+                            <div class="alumno-side-title">Examen de {{ c.materia.nombre|truncatechars:18 }}</div>
+                            <div class="alumno-side-sub">{{ c.periodo.nombre|truncatechars:20 }}</div>
+                        </div>
+                        <div class="alumno-side-action">
+                            <i class="bi bi-calendar3"></i>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
                 {% else %}
-                <div class="alumno-empty">
-                    <i class="bi bi-clipboard2-data"></i>
-                    <p>No hay calificaciones registradas aún.</p>
+                <div class="alumno-empty-small">
+                    <i class="bi bi-journal"></i>
+                    <p>No hay evaluaciones próximas.</p>
                 </div>
                 {% endif %}
             </div>
         </div>
-    </div>
 
-    <!-- Anuncios + Rendimiento por periodo -->
-    <div class="col-lg-5">
-        <!-- Rendimiento por periodo -->
-        {% if alumno_por_periodo %}
+        <!-- Comunicados Recientes -->
         <div class="card alumno-card mb-4">
             <div class="alumno-card-header">
-                <div class="alumno-card-header-icon" style="background:rgba(74,158,138,0.1);color:var(--seafoam);">
-                    <i class="bi bi-pie-chart-fill"></i>
-                </div>
-                <div>
-                    <h6 class="alumno-card-title">Rendimiento por Periodo</h6>
-                </div>
-            </div>
-            <div class="alumno-card-body">
-                <div class="alumno-periodos-list">
-                    {% for p in alumno_por_periodo %}
-                    <div class="alumno-periodo-item">
-                        <div class="alumno-periodo-info">
-                            <span class="alumno-periodo-nombre">{{ p.nombre|truncatechars:22 }}</span>
-                            <div class="alumno-periodo-barra-bg">
-                                <div class="alumno-periodo-barra-fill"
-                                     style="width: {% widthratio p.promedio 20 100 %}%;
-                                     background: {% if p.promedio >= 16 %}var(--emerald){% elif p.promedio >= 11 %}var(--gold){% else %}#dc3545{% endif %};">
-                                </div>
-                            </div>
-                        </div>
-                        <span class="alumno-periodo-valor"
-                              style="color: {% if p.promedio >= 16 %}var(--emerald){% elif p.promedio >= 11 %}var(--gold){% else %}#dc3545{% endif %};">
-                            {{ p.promedio }}
-                        </span>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Anuncios -->
-        <div class="card alumno-card">
-            <div class="alumno-card-header">
-                <div class="alumno-card-header-icon" style="background:rgba(220,53,69,0.08);color:#dc3545;">
-                    <i class="bi bi-megaphone-fill"></i>
-                </div>
-                <div>
-                    <h6 class="alumno-card-title">Anuncios</h6>
-                    <small class="alumno-card-sub">Avisos del colegio</small>
-                </div>
+                <h6 class="alumno-card-title">Comunicados Recientes</h6>
+                <a href="#" class="alumno-card-link-sm">Ver todas</a>
             </div>
             <div class="alumno-card-body p-0">
-                {% if anuncios %}
-                <div class="alumno-anuncios-list">
-                    {% for a in anuncios %}
-                    <div class="alumno-anuncio-item">
-                        <div class="alumno-anuncio-dot"></div>
-                        <div class="alumno-anuncio-contenido">
-                            <div class="alumno-anuncio-titulo">{{ a.titulo }}</div>
-                            <p class="alumno-anuncio-texto">{{ a.contenido|truncatechars:100 }}</p>
-                            <small class="alumno-anuncio-fecha">{{ a.fecha_creacion|date:'d/m/Y' }}</small>
+                {% if comunicados_recientes %}
+                <div class="alumno-side-list">
+                    {% for a in comunicados_recientes|slice:":3" %}
+                    <div class="alumno-side-item">
+                        <div class="alumno-side-icon" style="background:rgba(34,197,94,0.1);color:#22c55e;">
+                            <i class="bi bi-megaphone"></i>
+                        </div>
+                        <div class="alumno-side-info">
+                            <div class="alumno-side-title">{{ a.titulo|truncatechars:22 }}</div>
+                            <div class="alumno-side-sub">{{ a.fecha_creacion|date:'d/m/Y' }}</div>
                         </div>
                     </div>
                     {% endfor %}
@@ -464,65 +433,65 @@
                 {% else %}
                 <div class="alumno-empty-small">
                     <i class="bi bi-megaphone"></i>
-                    <p>No hay anuncios activos.</p>
+                    <p>No hay comunicados recientes.</p>
                 </div>
                 {% endif %}
             </div>
         </div>
-    </div>
-</div>
 
-<!-- ROW 3: Últimas Asistencias -->
-{% if mis_asistencias_recientes %}
-<div class="row fade-in mb-4">
-    <div class="col-12">
-        <div class="card alumno-card">
+        <!-- Próximas Tareas -->
+        <div class="card alumno-card mb-4">
             <div class="alumno-card-header">
-                <div class="alumno-card-header-icon" style="background:rgba(26,71,49,0.1);color:var(--primary);">
-                    <i class="bi bi-clock-history"></i>
-                </div>
-                <div>
-                    <h6 class="alumno-card-title">Últimas Asistencias</h6>
-                    <small class="alumno-card-sub">Registro reciente</small>
-                </div>
-                <a href="{% url 'mis_asistencias' %}" class="alumno-card-link">
-                    Ver todas <i class="bi bi-arrow-right"></i>
-                </a>
+                <h6 class="alumno-card-title">Próximas Tareas</h6>
+                <a href="{% url 'lista_tareas' %}" class="alumno-card-link-sm">Ver todas</a>
             </div>
             <div class="alumno-card-body p-0">
-                <div class="alumno-asist-table-wrapper">
-                    <table class="alumno-asist-table">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Materia</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for a in mis_asistencias_recientes %}
-                            <tr>
-                                <td>{{ a.fecha|date:'d/m/Y' }}</td>
-                                <td>{{ a.materia.nombre|truncatechars:25 }}</td>
-                                <td>
-                                    <span class="alumno-badge-est
-                                        {% if a.estado == 'presente' %}alumno-badge-verde
-                                        {% elif a.estado == 'tarde' %}alumno-badge-amarillo
-                                        {% elif a.estado == 'justificada' %}alumno-badge-azul
-                                        {% else %}alumno-badge-rojo{% endif %}">
-                                        {{ a.get_estado_display }}
-                                    </span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                {% if proximas_tareas_alumno %}
+                <div class="alumno-side-list">
+                    {% for t in proximas_tareas_alumno|slice:":3" %}
+                    <div class="alumno-side-item">
+                        <div class="alumno-side-icon" style="background:rgba(168,85,247,0.1);color:#a855f7;">
+                            <i class="bi bi-journal-richtext"></i>
+                        </div>
+                        <div class="alumno-side-info">
+                            <div class="alumno-side-title">{{ t.titulo|truncatechars:22 }}</div>
+                            <div class="alumno-side-sub">{{ t.materia.nombre|truncatechars:18 }}</div>
+                        </div>
+                        <div class="alumno-side-date">
+                            {{ t.fecha_entrega|date:'d M' }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alumno-empty-small">
+                    <i class="bi bi-check2-circle"></i>
+                    <p>No hay tareas pendientes.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Evento Próximo -->
+        <div class="alumno-evento-card">
+            <div class="alumno-evento-header">
+                <h6 class="alumno-evento-title">Evento Próximo</h6>
+                <a href="#" class="alumno-card-link-sm" style="color:#fff;">Ver calendario →</a>
+            </div>
+            <div class="alumno-evento-body">
+                <div class="alumno-evento-icon">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+                <div>
+                    <div class="alumno-evento-name">Día del Logro</div>
+                    <div class="alumno-evento-date">31 de mayo, 2024</div>
                 </div>
             </div>
         </div>
+
     </div>
+
 </div>
-{% endif %}
 
 {% endif %}
 

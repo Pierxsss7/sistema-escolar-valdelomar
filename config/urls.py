@@ -133,6 +133,7 @@ def home(request):
 def _contexto_alumno(user, grupo):
     ctx = {}
     if not grupo:
+        ctx['alumno_grupo'] = None
         ctx['mis_materias_grupo'] = []
         ctx['mis_calificaciones'] = []
         ctx['mis_asistencias_recientes'] = []
@@ -144,13 +145,17 @@ def _contexto_alumno(user, grupo):
         }
         ctx['alumno_calif_por_materia'] = []
         ctx['alumno_por_periodo'] = []
+        ctx['alumno_cursos_detalle'] = []
         ctx['tareas_pendientes'] = 0
+        ctx['proximas_tareas_alumno'] = []
+        ctx['comunicados_recientes'] = []
         return ctx
 
     materias_ids = Asignacion.objects.filter(
         grupo=grupo
     ).values_list('materia_id', flat=True).distinct()
 
+    ctx['alumno_grupo'] = grupo
     ctx['mis_materias_grupo'] = Materia.objects.filter(
         id__in=materias_ids
     ).select_related('grado')
@@ -220,6 +225,36 @@ def _contexto_alumno(user, grupo):
     ctx['mis_asistencias_recientes'] = todas_asist.select_related(
         'materia'
     ).order_by('-fecha', '-id')[:6]
+
+    asignaciones_grupo = Asignacion.objects.filter(
+        grupo=grupo
+    ).select_related('materia', 'profesor')
+
+    cursos_detalle = []
+    for asig in asignaciones_grupo:
+        ultima_calif = todas_calif.filter(
+            materia=asig.materia
+        ).select_related('periodo').order_by('-fecha_registro').first()
+        prom_materia = todas_calif.filter(
+            materia=asig.materia
+        ).aggregate(prom=Avg('nota'))['prom']
+        cursos_detalle.append({
+            'materia': asig.materia,
+            'profesor': asig.profesor,
+            'ultima_nota': ultima_calif.nota if ultima_calif else None,
+            'ultima_nota_periodo': ultima_calif.periodo.nombre if ultima_calif else None,
+            'promedio': round(prom_materia, 1) if prom_materia else None,
+        })
+    ctx['alumno_cursos_detalle'] = cursos_detalle
+
+    ctx['proximas_tareas_alumno'] = Tarea.objects.filter(
+        materia_id__in=materias_ids, activo=True,
+        fecha_entrega__gte=date.today(),
+    ).select_related('materia').order_by('fecha_entrega')[:5]
+
+    ctx['comunicados_recientes'] = Anuncio.objects.filter(
+        activo=True
+    ).select_related('autor').order_by('-fecha_creacion')[:5]
 
     return ctx
 

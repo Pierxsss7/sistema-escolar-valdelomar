@@ -1,7 +1,7 @@
-:root {
+﻿:root {
     --sidebar-width: 270px;
 
-    /* Paleta Valdelomar — Valle & Mar */
+    /* Paleta Valdelomar â€” Valle & Mar */
     --primary: #1a4731;
     --primary-dark: #0f2e1f;
     --primary-light: #2d6b4a;
@@ -710,85 +710,126 @@ body {
 hr { border-color: var(--ivory); opacity: 0.8; }
 
 /* ================================================
+   STUDENT DASHBOARD â€” Panel Principal del Alumno
+   ================================================ */
+
+
+/* ================================================
    STUDENT DASHBOARD — Panel Principal del Alumno
    ================================================ */
 
-/* Hero Welcome */
-.alumno-hero {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--emerald) 50%, var(--seafoam) 100%);
+/* Dashboard Layout */
+.alumno-dashboard-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 28px;
+    align-items: start;
+}
+
+.alumno-main-col { min-width: 0; }
+.alumno-side-col { min-width: 0; }
+
+/* Hero Banner */
+.alumno-hero-banner {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
     border-radius: 20px;
-    padding: 32px 36px;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-    color: #fff;
-}
-
-.alumno-hero::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 180px; height: 180px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 50%;
-}
-
-.alumno-hero::after {
-    content: '';
-    position: absolute;
-    bottom: -60px; left: 30%;
-    width: 250px; height: 250px;
-    background: rgba(255,255,255,0.03);
-    border-radius: 50%;
-}
-
-.alumno-hero-content {
+    padding: 36px 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 24px;
+    overflow: hidden;
     position: relative;
-    z-index: 1;
 }
 
-.alumno-hero-greeting {
-    font-size: 0.9rem;
-    opacity: 0.85;
-    margin-bottom: 4px;
-    letter-spacing: 0.5px;
+.alumno-hero-banner::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    background: rgba(34,197,94,0.08);
+    border-radius: 50%;
 }
 
-.alumno-hero-name {
+.alumno-hero-banner-text { flex: 1; min-width: 0; z-index: 1; }
+
+.alumno-hero-hola {
     font-size: 1.8rem;
     font-weight: 800;
-    margin: 0 0 6px;
-    letter-spacing: -0.5px;
+    color: #1a1a2e;
+    margin: 0 0 8px;
     line-height: 1.2;
 }
 
-.alumno-hero-sub {
-    font-size: 0.8rem;
-    opacity: 0.75;
-    margin: 0;
+.alumno-hero-info {
+    font-size: 0.85rem;
+    color: #555;
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
 }
 
-.alumno-hero-sep { margin: 0 8px; opacity: 0.4; }
+.alumno-hero-info strong { color: #1a1a2e; font-weight: 700; }
 
-.alumno-hero-avatar {
-    width: 72px; height: 72px;
+.alumno-hero-sep { color: #aaa; margin: 0 4px; }
+
+.alumno-hero-quote {
+    font-size: 0.82rem;
+    color: #666;
+    font-style: italic;
+    border-left: 3px solid rgba(34,197,94,0.3);
+    padding-left: 14px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.alumno-hero-quote cite {
+    display: block;
+    font-size: 0.72rem;
+    color: #888;
+    margin-top: 4px;
+    font-style: normal;
+}
+
+.alumno-hero-banner-art {
+    flex-shrink: 0;
+    margin-left: 24px;
+    z-index: 1;
+}
+
+.alumno-hero-3d {
+    position: relative;
+    width: 130px;
+    height: 130px;
+}
+
+.alumno-hero-3d-circle {
+    position: absolute;
+    inset: 0;
     border-radius: 50%;
-    background: rgba(255,255,255,0.18);
-    backdrop-filter: blur(10px);
-    border: 3px solid rgba(255,255,255,0.3);
+    background: rgba(34,197,94,0.12);
+    animation: pulse-circle 3s ease-in-out infinite;
+}
+
+@keyframes pulse-circle {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.08); opacity: 1; }
+}
+
+.alumno-hero-3d-icon {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #fff;
-    flex-shrink: 0;
+    font-size: 4rem;
 }
 
-/* Stat Cards — Reference Style */
+/* Stat Cards */
 .alumno-stats-row {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -861,20 +902,14 @@ hr { border-color: var(--ivory); opacity: 0.8; }
 .alumno-card-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     padding: 18px 22px;
     border-bottom: 1px solid #f0ece0;
 }
 
-.alumno-card-header-icon {
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    flex-shrink: 0;
-}
+.alumno-card-header-left { display: flex; align-items: center; gap: 10px; }
+.alumno-card-header-right { display: flex; align-items: center; gap: 8px; }
 
 .alumno-card-title {
     font-size: 0.9rem;
@@ -883,26 +918,16 @@ hr { border-color: var(--ivory); opacity: 0.8; }
     margin: 0;
 }
 
-.alumno-card-sub {
-    font-size: 0.7rem;
-    color: var(--text-light);
-    margin: 0;
-}
-
-.alumno-card-link {
-    margin-left: auto;
-    font-size: 0.78rem;
+.alumno-card-link-sm {
+    font-size: 0.72rem;
     font-weight: 600;
     color: var(--primary);
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
     transition: var(--transition);
+    white-space: nowrap;
 }
 
-.alumno-card-link:hover { color: var(--emerald); }
+.alumno-card-link-sm:hover { color: var(--emerald); }
 
 .alumno-card-body { padding: 20px 22px; }
 
@@ -925,204 +950,231 @@ hr { border-color: var(--ivory); opacity: 0.8; }
     color: var(--emerald);
 }
 
-/* Materia Bars */
-.alumno-materias-grid {
+/* Select Periodo */
+.alumno-select-periodo {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text);
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 5px 10px;
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+}
+
+.alumno-select-periodo:focus { border-color: var(--emerald); }
+
+/* Bar Chart */
+.alumno-chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    height: 220px;
+    padding: 0 8px;
+}
+
+.alumno-bar-col {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-}
-
-.alumno-materia-item {
-    display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    gap: 6px;
+    min-width: 0;
 }
 
-.alumno-materia-info { flex: 1; min-width: 0; }
-
-.alumno-materia-nombre {
-    display: block;
-    font-size: 0.82rem;
-    font-weight: 600;
+.alumno-bar-value {
+    font-size: 0.72rem;
+    font-weight: 700;
     color: var(--dark);
-    line-height: 1.2;
 }
 
-.alumno-materia-notas {
-    font-size: 0.68rem;
-    color: var(--text-light);
-}
-
-.alumno-materia-barra-wrapper {
+.alumno-bar-track {
+    width: 100%;
+    max-width: 48px;
+    height: 160px;
+    background: #f5f5f5;
+    border-radius: 8px;
     display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
-.alumno-materia-barra-bg {
-    width: 100px;
-    height: 6px;
-    background: #f0ece0;
-    border-radius: 3px;
+    align-items: flex-end;
     overflow: hidden;
 }
 
-.alumno-materia-barra-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+.alumno-bar-fill {
+    width: 100%;
+    border-radius: 8px;
+    transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.alumno-materia-promedio {
-    font-size: 0.85rem;
-    font-weight: 700;
-    min-width: 28px;
-    text-align: right;
+.alumno-bar-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #888;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70px;
 }
 
-/* Attendance Ring */
-.alumno-asistencia-ring-row {
+/* Donut Attendance */
+.alumno-donut-layout {
     display: flex;
     align-items: center;
     gap: 24px;
     margin-bottom: 12px;
 }
 
-.alumno-asistencia-ring {
+.alumno-donut-wrapper {
     position: relative;
-    width: 110px;
-    height: 110px;
+    width: 130px;
+    height: 130px;
     flex-shrink: 0;
 }
 
-.alumno-asistencia-ring svg {
-    width: 100%;
-    height: 100%;
-}
+.alumno-donut-svg { width: 100%; height: 100%; }
 
-.alumno-ring-center {
+.alumno-donut-center {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
 }
 
-.alumno-ring-pct {
+.alumno-donut-pct {
     display: block;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: var(--dark);
     line-height: 1;
 }
 
-.alumno-ring-label {
+.alumno-donut-label {
     display: block;
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     color: var(--text-light);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 2px;
 }
 
-.alumno-asistencia-detalles {
+.alumno-donut-legend {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     flex: 1;
 }
 
-.alumno-detalle-item {
+.alumno-legend-item {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 0.8rem;
 }
 
-.alumno-detalle-dot {
+.alumno-legend-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
 }
 
-.alumno-detalle-texto {
-    color: var(--text);
-    flex: 1;
+.alumno-legend-text { color: var(--text); flex: 1; }
+.alumno-legend-val { font-weight: 700; color: var(--dark); }
+
+/* Cursos Table */
+.alumno-table-wrapper { overflow-x: auto; }
+
+.alumno-cursos-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
 }
 
-.alumno-detalle-valor {
-    font-weight: 700;
+.alumno-cursos-table thead th {
+    background: #f8f7f4;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 22px;
+    border-bottom: 2px solid #e8e4dc;
+    text-align: left;
+}
+
+.alumno-cursos-table tbody td {
+    padding: 14px 22px;
+    border-bottom: 1px solid #f0ece0;
+    color: var(--text);
+    vertical-align: middle;
+}
+
+.alumno-cursos-table tbody tr:hover { background: #f6f9f4; }
+.alumno-cursos-table tbody tr:last-child td { border-bottom: none; }
+
+.alumno-curso-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
     color: var(--dark);
 }
 
-/* Quick Access Grid */
-.alumno-quick-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+.alumno-curso-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
-.alumno-quick-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 16px 8px;
-    border-radius: 12px;
-    border: 1.5px solid #f0ece0;
-    background: #fff;
-    text-decoration: none;
-    color: var(--text);
+.alumno-badge-nota {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    min-width: 36px;
+    text-align: center;
+}
+
+.alumno-btn-curso {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 8px;
     font-size: 0.72rem;
     font-weight: 600;
+    border: 1.5px solid #e0e0e0;
+    background: #fff;
+    color: var(--text);
+    text-decoration: none;
     transition: var(--transition);
 }
 
-.alumno-quick-btn i {
-    font-size: 1.3rem;
-    color: var(--primary);
-    transition: var(--transition);
+.alumno-btn-curso:hover {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: #fff;
 }
 
-.alumno-quick-btn:hover {
-    border-color: var(--emerald);
-    background: #f6f9f4;
-    transform: translateY(-2px);
-}
+/* Sidebar Cards — Side List */
+.alumno-side-list { padding: 4px 0; }
 
-.alumno-quick-btn:hover i {
-    color: var(--emerald);
-}
-
-/* Calificaciones List */
-.alumno-calif-list {
-    padding: 8px 0;
-}
-
-.alumno-calif-item {
+.alumno-side-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 12px 22px;
+    gap: 12px;
+    padding: 12px 18px;
     border-bottom: 1px solid #f5f2ec;
     transition: var(--transition);
 }
 
-.alumno-calif-item:last-child { border-bottom: none; }
-.alumno-calif-item:hover { background: #faf8f5; }
+.alumno-side-item:last-child { border-bottom: none; }
+.alumno-side-item:hover { background: #faf8f5; }
 
-.alumno-calif-materia {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-width: 0;
-}
-
-.alumno-calif-materia-icon {
-    width: 36px; height: 36px;
+.alumno-side-icon {
+    width: 38px;
+    height: 38px;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -1131,157 +1183,92 @@ hr { border-color: var(--ivory); opacity: 0.8; }
     flex-shrink: 0;
 }
 
-.alumno-calif-nombre {
-    font-size: 0.82rem;
+.alumno-side-info { flex: 1; min-width: 0; }
+
+.alumno-side-title {
+    font-size: 0.8rem;
     font-weight: 600;
     color: var(--dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.alumno-calif-periodo {
+.alumno-side-sub {
     font-size: 0.68rem;
     color: var(--text-light);
 }
 
-.alumno-calif-nota-wrapper { flex-shrink: 0; }
-
-.alumno-calif-nota {
-    font-size: 0.95rem;
-    font-weight: 700;
-    padding: 6px 14px;
-    border-radius: 10px;
-    min-width: 48px;
-    text-align: center;
+.alumno-side-action {
+    color: #ccc;
+    font-size: 0.9rem;
+    flex-shrink: 0;
 }
 
-/* Periodos */
-.alumno-periodos-list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+.alumno-side-date {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--primary);
+    background: rgba(26,71,49,0.06);
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-.alumno-periodo-item {
+/* Evento Próximo Card */
+.alumno-evento-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    box-shadow: 0 8px 30px rgba(102,126,234,0.3);
+}
+
+.alumno-evento-header {
     display: flex;
     align-items: center;
-    gap: 14px;
+    justify-content: space-between;
+    padding: 18px 22px 10px;
 }
 
-.alumno-periodo-info { flex: 1; }
-
-.alumno-periodo-nombre {
-    display: block;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 6px;
-}
-
-.alumno-periodo-barra-bg {
-    height: 7px;
-    background: #f0ece0;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.alumno-periodo-barra-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.alumno-periodo-valor {
-    font-size: 1rem;
+.alumno-evento-title {
+    font-size: 0.9rem;
     font-weight: 700;
-    min-width: 32px;
-    text-align: right;
+    color: #fff;
+    margin: 0;
 }
 
-/* Anuncios */
-.alumno-anuncios-list {
-    padding: 8px 0;
-}
-
-.alumno-anuncio-item {
+.alumno-evento-body {
     display: flex;
-    gap: 12px;
-    padding: 14px 22px;
-    border-bottom: 1px solid #f5f2ec;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 22px 22px;
 }
 
-.alumno-anuncio-item:last-child { border-bottom: none; }
-
-.alumno-anuncio-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--gold);
+.alumno-evento-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
     flex-shrink: 0;
-    margin-top: 6px;
 }
 
-.alumno-anuncio-titulo {
-    font-size: 0.82rem;
+.alumno-evento-name {
+    font-size: 0.9rem;
     font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 4px;
 }
 
-.alumno-anuncio-texto {
-    font-size: 0.76rem;
-    color: #666;
-    margin: 0 0 4px;
-    line-height: 1.4;
-}
-
-.alumno-anuncio-fecha {
-    font-size: 0.65rem;
-    color: var(--text-light);
-}
-
-/* Asistencia Table */
-.alumno-asist-table-wrapper {
-    overflow-x: auto;
-}
-
-.alumno-asist-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-}
-
-.alumno-asist-table thead th {
-    background: #f8f7f4;
-    color: var(--primary);
-    font-weight: 600;
+.alumno-evento-date {
     font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 12px 22px;
-    border-bottom: 2px solid var(--emerald);
+    opacity: 0.8;
+    margin-top: 2px;
 }
-
-.alumno-asist-table tbody td {
-    padding: 11px 22px;
-    border-bottom: 1px solid #f0ece0;
-    color: var(--text);
-}
-
-.alumno-asist-table tbody tr:hover { background: #f6f9f4; }
-.alumno-asist-table tbody tr:last-child td { border-bottom: none; }
-
-/* Badge Estado */
-.alumno-badge-est {
-    padding: 3px 12px;
-    border-radius: 20px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-}
-
-.alumno-badge-verde { background: rgba(45,138,78,0.12); color: #1a7a3a; }
-.alumno-badge-amarillo { background: rgba(201,168,76,0.15); color: #8a6e1a; }
-.alumno-badge-azul { background: rgba(13,202,240,0.12); color: #0a6e8a; }
-.alumno-badge-rojo { background: rgba(220,53,69,0.12); color: #b02a3a; }
 
 /* Empty States */
 .alumno-empty {
@@ -1304,43 +1291,42 @@ hr { border-color: var(--ivory); opacity: 0.8; }
 
 /* ===== RESPONSIVE ALUMNO ===== */
 @media (max-width: 1200px) {
-    .alumno-stats-row {
-        grid-template-columns: repeat(3, 1fr);
+    .alumno-dashboard-layout {
+        grid-template-columns: 1fr;
     }
+    .alumno-side-col {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    .alumno-evento-card { grid-column: 1 / -1; }
+    .alumno-stats-row { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 991px) {
-    .alumno-stats-row {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .alumno-hero { padding: 24px 20px; }
-    .alumno-hero-name { font-size: 1.4rem; }
-    .alumno-asistencia-ring-row { flex-direction: column; align-items: flex-start; }
-    .alumno-quick-grid { grid-template-columns: repeat(2, 1fr); }
+    .alumno-stats-row { grid-template-columns: repeat(2, 1fr); }
+    .alumno-side-col { grid-template-columns: 1fr; }
+    .alumno-hero-banner { padding: 28px 24px; }
+    .alumno-hero-hola { font-size: 1.4rem; }
+    .alumno-donut-layout { flex-direction: column; align-items: flex-start; }
+    .alumno-chart-bars { height: 180px; }
 }
 
 @media (max-width: 576px) {
-    .alumno-stats-row {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-    .alumno-stat-card-ref {
-        padding: 14px;
-        gap: 10px;
-    }
-    .alumno-stat-icon-ref {
-        width: 40px; height: 40px;
-        font-size: 1rem;
-        border-radius: 12px;
-    }
+    .alumno-stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .alumno-stat-card-ref { padding: 14px; gap: 10px; }
+    .alumno-stat-icon-ref { width: 40px; height: 40px; font-size: 1rem; border-radius: 12px; }
     .alumno-stat-number-ref { font-size: 1.2rem; }
-    .alumno-hero-avatar { width: 56px; height: 56px; font-size: 1.3rem; }
-    .alumno-hero-name { font-size: 1.2rem; }
+    .alumno-hero-banner { padding: 20px 18px; flex-direction: column; text-align: center; }
+    .alumno-hero-banner-art { margin-left: 0; margin-top: 16px; }
+    .alumno-hero-info { justify-content: center; }
+    .alumno-hero-quote { text-align: left; }
     .alumno-card-header { padding: 14px 16px; }
     .alumno-card-body { padding: 16px; }
-    .alumno-materia-barra-bg { width: 60px; }
-    .alumno-asist-table thead th,
-    .alumno-asist-table tbody td { padding: 10px 14px; }
+    .alumno-cursos-table thead th,
+    .alumno-cursos-table tbody td { padding: 10px 14px; font-size: 0.78rem; }
+    .alumno-chart-bars { gap: 8px; height: 150px; }
+    .alumno-bar-label { font-size: 0.58rem; }
 }
 
 /* ===== SIDEBAR ALUMNO — Logout ===== */
