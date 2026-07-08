@@ -377,7 +377,7 @@ body {
 .login-left-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(10,26,18,0.65) 0%, rgba(10,26,18,0.8) 50%, rgba(10,26,18,0.92) 100%);
+    background: linear-gradient(180deg, rgba(10,26,18,0.35) 0%, rgba(10,26,18,0.50) 50%, rgba(10,26,18,0.70) 100%);
 }
 
 .login-left-content {
