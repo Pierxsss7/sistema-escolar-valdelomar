@@ -1,151 +1,558 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block title %}Crear Cuenta{% endblock %}
-{% block auth_content %}
-<div class="login-page">
-    <div class="login-card fade-in" style="max-width:500px;">
-        <div class="logo">
-            <img src="{% static 'img/escudo.svg' %}" alt="Escudo" class="login-escudo">
-            <h2>I.E. Abraham Valdelomar 116</h2>
-            <p>N° 116</p>
-            <span class="sub">Crear una cuenta nueva</span>
-        </div>
-        <div class="divider"></div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta — I.E. Abraham Valdelomar 116</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="icon" type="image/svg+xml" href="/static/img/escudo.svg">
+    <style>
+        .reg-split {
+            min-height: 100vh;
+            display: flex;
+            background: #f5f5f5;
+        }
+        .reg-left {
+            flex: 0 0 40%;
+            position: relative;
+            background: linear-gradient(160deg, #0a1a12 0%, #1a4731 40%, #0f2e1f 100%);
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+        }
+        .reg-left-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.04;
+            background-image:
+                radial-gradient(circle at 20% 30%, #fff 1px, transparent 1px),
+                radial-gradient(circle at 80% 70%, #fff 1px, transparent 1px),
+                radial-gradient(circle at 50% 50%, #fff 0.5px, transparent 0.5px);
+            background-size: 60px 60px, 80px 80px, 40px 40px;
+        }
+        .reg-left-content {
+            position: relative;
+            z-index: 1;
+            padding: 40px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: space-between;
+        }
+        .reg-left-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .reg-left-escudo {
+            width: 70px;
+            height: 70px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.15);
+            flex-shrink: 0;
+        }
+        .reg-left-escudo-img {
+            width: 48px;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+        .reg-left-brand { flex: 1; }
+        .reg-left-nombre {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .reg-left-subnombre {
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            margin: 0;
+        }
+        .reg-left-info { margin-top: auto; }
+        .reg-left-linea {
+            width: 50px;
+            height: 3px;
+            background: #2563eb;
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .reg-left-lema {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+            margin: 0;
+        }
+        .reg-left-bottom { margin-top: auto; }
+        .reg-left-bienvenido {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #fff;
+            margin: 0 0 6px;
+            line-height: 1.1;
+        }
+        .reg-left-sistema {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2563eb;
+            margin: 0 0 14px;
+        }
+        .reg-left-linea-azul {
+            width: 50px;
+            height: 3px;
+            background: #2563eb;
+            border-radius: 2px;
+            margin-bottom: 16px;
+        }
+        .reg-left-desc {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.6;
+            margin: 0;
+            max-width: 380px;
+        }
+        .reg-left-features {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .reg-feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .reg-feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .reg-feature-icon i {
+            color: rgba(255,255,255,0.6);
+            font-size: 1rem;
+        }
+        .reg-feature-text {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.3;
+        }
+        .reg-feature-text strong {
+            color: rgba(255,255,255,0.85);
+            display: block;
+            font-size: 0.85rem;
+        }
 
-        {% if form.errors %}
-        <div class="alert alert-danger py-2 d-flex align-items-center gap-2" style="border:none;background:#fef2f2;color:#991b1b;border-radius:10px;">
-            <i class="bi bi-exclamation-triangle"></i>
-            <span>Corrige los errores del formulario</span>
-        </div>
-        {% endif %}
+        .reg-right {
+            flex: 0 0 60%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        .reg-right-content {
+            width: 100%;
+            max-width: 520px;
+        }
+        .reg-right-header { margin-bottom: 28px; }
+        .reg-right-brand {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .reg-right-brand-116 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #2563eb;
+        }
+        .reg-right-brand-nombre {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        .reg-right-titulo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #1a1a2e;
+            margin: 0 0 8px;
+        }
+        .reg-right-subtitulo {
+            font-size: 0.88rem;
+            color: #7a8a7a;
+            margin: 0;
+        }
 
-        <form method="post" id="registroForm">
-            {% csrf_token %}
+        .reg-error {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            color: #991b1b;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+        .reg-error i { font-size: 1rem; flex-shrink: 0; }
 
-            <div class="mb-3">
-                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
-                    <i class="bi bi-person-badge me-1"></i> Tipo de cuenta
-                </label>
-                <div class="d-flex gap-3" id="rolSelector">
-                    <label class="rol-option flex-fill text-center p-3 rounded-3" style="cursor:pointer;border:2px solid #ddd8cc;transition:all .2s;" data-rol="profesor">
-                        <input type="radio" name="rol" value="profesor" class="d-none" {% if form.rol.value == 'profesor' %}checked{% endif %}>
-                        <i class="bi bi-person-badge d-block" style="font-size:1.8rem;color:var(--primary);"></i>
-                        <small class="d-block mt-1 fw-semibold" style="color:var(--primary);">Docente</small>
-                    </label>
-                    <label class="rol-option flex-fill text-center p-3 rounded-3" style="cursor:pointer;border:2px solid #ddd8cc;transition:all .2s;" data-rol="padre">
-                        <input type="radio" name="rol" value="padre" class="d-none" {% if form.rol.value == 'padre' or not form.rol.value %}checked{% endif %}>
-                        <i class="bi bi-heart d-block" style="font-size:1.8rem;color:var(--gold);"></i>
-                        <small class="d-block mt-1 fw-semibold" style="color:var(--gold);">Padre de Familia</small>
-                    </label>
+        .reg-rol-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .reg-rol-card {
+            flex: 1;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+        .reg-rol-card:hover {
+            border-color: #93c5fd;
+            background: #f0f7ff;
+        }
+        .reg-rol-card.active {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+        .reg-rol-card input { display: none; }
+        .reg-rol-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 1.2rem;
+        }
+        .reg-rol-card:first-child .reg-rol-icon {
+            background: rgba(37,99,235,0.1);
+            color: #2563eb;
+        }
+        .reg-rol-card:last-child .reg-rol-icon {
+            background: rgba(234,179,8,0.1);
+            color: #ca8a04;
+        }
+        .reg-rol-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .reg-field {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 0 16px;
+            margin-bottom: 14px;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+        .reg-field:focus-within {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+        .reg-field-icon {
+            color: #9ca3af;
+            font-size: 1rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .reg-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 13px 0;
+            font-size: 0.88rem;
+            color: #1a1a2e;
+            background: transparent;
+        }
+        .reg-input::placeholder { color: #9ca3af; }
+        .reg-field-eye {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 4px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .reg-field-eye:hover { color: #1a1a2e; }
+
+        .reg-field-hint {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            margin-top: -8px;
+            margin-bottom: 14px;
+            padding-left: 4px;
+        }
+
+        .reg-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .reg-btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .reg-btn-submit:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37,99,235,0.3);
+        }
+
+        .reg-login-link {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #7a8a7a;
+            margin-top: 24px;
+        }
+        .reg-login-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .reg-login-link a:hover { text-decoration: underline; }
+
+        .reg-field-error {
+            font-size: 0.75rem;
+            color: #dc2626;
+            margin-top: -8px;
+            margin-bottom: 10px;
+            padding-left: 4px;
+        }
+
+        @media (max-width: 991px) {
+            .reg-split { flex-direction: column; }
+            .reg-left { flex: none; min-height: 280px; }
+            .reg-left-content { padding: 28px; }
+            .reg-left-bienvenido { font-size: 2rem; }
+            .reg-left-features { display: none; }
+            .reg-right { padding: 32px 24px; }
+        }
+        @media (max-width: 576px) {
+            .reg-left { min-height: 200px; }
+            .reg-left-content { padding: 20px; }
+            .reg-left-nombre { font-size: 1.2rem; }
+            .reg-left-bienvenido { font-size: 1.6rem; }
+            .reg-left-bottom { display: none; }
+            .reg-right { padding: 24px 20px; }
+            .reg-right-titulo { font-size: 1.4rem; }
+            .reg-rol-group { flex-direction: column; }
+            .reg-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="reg-split">
+
+    <!-- PANEL IZQUIERDO -->
+    <div class="reg-left">
+        <div class="reg-left-pattern"></div>
+        <div class="reg-left-content">
+            <div class="reg-left-top">
+                <div class="reg-left-escudo">
+                    <img src="/static/img/escudo.svg" alt="Escudo" class="reg-left-escudo-img">
                 </div>
-                {% if form.rol.errors %}<small class="text-danger">{{ form.rol.errors.0 }}</small>{% endif %}
+                <div class="reg-left-brand">
+                    <h1 class="reg-left-nombre">valdelomar 116</h1>
+                    <h2 class="reg-left-subnombre">abraham valdeloma</h2>
+                </div>
             </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
-                        <i class="bi bi-person me-1"></i> Nombres
-                    </label>
-                    <input type="text" name="first_name" class="form-control" placeholder="Tus nombres" required maxlength="30" value="{{ form.first_name.value|default:'' }}">
-                    {% if form.first_name.errors %}<small class="text-danger">{{ form.first_name.errors.0 }}</small>{% endif %}
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
-                        <i class="bi bi-person me-1"></i> Apellidos
-                    </label>
-                    <input type="text" name="last_name" class="form-control" placeholder="Tus apellidos" required maxlength="30" value="{{ form.last_name.value|default:'' }}">
-                    {% if form.last_name.errors %}<small class="text-danger">{{ form.last_name.errors.0 }}</small>{% endif %}
-                </div>
+            <div class="reg-left-info">
+                <div class="reg-left-linea"></div>
+                <p class="reg-left-lema">Formamos líderes para el mañana</p>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
-                    <i class="bi bi-person-circle me-1"></i> Usuario
-                </label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                    <input type="text" name="username" class="form-control" placeholder="Elige un nombre de usuario" required maxlength="150" autocomplete="username" value="{{ form.username.value|default:'' }}">
-                </div>
-                {% if form.username.errors %}<small class="text-danger">{{ form.username.errors.0 }}</small>{% endif %}
-                <small class="text-muted" style="font-size:0.7rem;">Letras, números y @ . + - _ únicamente</small>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
-                    <i class="bi bi-envelope me-1"></i> Correo electrónico <small class="text-muted">(opcional)</small>
-                </label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                    <input type="email" name="email" class="form-control" placeholder="correo@ejemplo.com" value="{{ form.email.value|default:'' }}">
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
-                        <i class="bi bi-person-badge me-1"></i> DNI <small class="text-muted">(opcional)</small>
-                    </label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
-                        <input type="text" name="dni" class="form-control" maxlength="8" placeholder="12345678" value="{{ form.dni.value|default:'' }}">
+            <div class="reg-left-features">
+                <div class="reg-feature-item">
+                    <div class="reg-feature-icon"><i class="bi bi-book"></i></div>
+                    <div class="reg-feature-text">
+                        <strong>Gestión Académica</strong>
+                        Calificaciones, asistencia y tareas en un solo lugar
                     </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
-                        <i class="bi bi-telephone me-1"></i> Teléfono <small class="text-muted">(opcional)</small>
-                    </label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                        <input type="text" name="telefono" class="form-control" placeholder="999 999 999" value="{{ form.telefono.value|default:'' }}">
+                <div class="reg-feature-item">
+                    <div class="reg-feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                    <div class="reg-feature-text">
+                        <strong>Seguimiento en Tiempo Real</strong>
+                        Monitorea el progreso académico al instante
+                    </div>
+                </div>
+                <div class="reg-feature-item">
+                    <div class="reg-feature-icon"><i class="bi bi-shield-lock"></i></div>
+                    <div class="reg-feature-text">
+                        <strong>Plataforma Segura</strong>
+                        Tus datos protegidos con los más altos estándares
                     </div>
                 </div>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
-                    <i class="bi bi-lock me-1"></i> Contraseña
-                </label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                    <input type="password" name="password1" class="form-control" placeholder="Mínimo 8 caracteres" required autocomplete="new-password">
-                    <button class="btn btn-outline-secondary" type="button" onclick="togglePwd('password1','toggleIcon1')" style="border:1.5px solid #ddd8cc;border-left:none;">
-                        <i class="bi bi-eye" id="toggleIcon1"></i>
-                    </button>
-                </div>
-                {% if form.password1.errors %}<small class="text-danger">{{ form.password1.errors.0 }}</small>{% endif %}
+            <div class="reg-left-bottom">
+                <h2 class="reg-left-bienvenido">Únete</h2>
+                <p class="reg-left-sistema">Sistema de Gestión Académica</p>
+                <div class="reg-left-linea-azul"></div>
+                <p class="reg-left-desc">
+                    Crea tu cuenta y accede a todas las herramientas
+                    para gestionar tu actividad académica de forma rápida y segura.
+                </p>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-semibold" style="color:var(--primary);font-size:0.82rem;">
-                    <i class="bi bi-lock-fill me-1"></i> Confirmar Contraseña
-                </label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                    <input type="password" name="password2" class="form-control" placeholder="Repite la contraseña" required autocomplete="new-password">
-                    <button class="btn btn-outline-secondary" type="button" onclick="togglePwd('password2','toggleIcon2')" style="border:1.5px solid #ddd8cc;border-left:none;">
-                        <i class="bi bi-eye" id="toggleIcon2"></i>
-                    </button>
-                </div>
-                {% if form.password2.errors %}<small class="text-danger">{{ form.password2.errors.0 }}</small>{% endif %}
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100 py-2 mt-2" id="registroBtn">
-                <i class="bi bi-person-plus"></i> Crear Cuenta
-            </button>
-        </form>
-
-        <div class="text-center mt-3">
-            <small style="color:var(--text-light);font-size:0.82rem;">
-                ¿Ya tienes cuenta? <a href="{% url 'login' %}" style="color:var(--gold);font-weight:600;">Inicia Sesión</a>
-            </small>
-        </div>
-
-        <div class="text-center mt-1">
-            <small style="color:#ccc;font-size:0.6rem;">
-                © {% now "Y" %} I.E. Abraham Valdelomar 116
-            </small>
         </div>
     </div>
+
+    <!-- PANEL DERECHO -->
+    <div class="reg-right">
+        <div class="reg-right-content">
+            <div class="reg-right-header">
+                <div class="reg-right-brand">
+                    <span class="reg-right-brand-116">valdelomar 116</span>
+                    <span class="reg-right-brand-nombre">abraham valdeloma</span>
+                </div>
+            </div>
+
+            <h2 class="reg-right-titulo">Crear Cuenta</h2>
+            <p class="reg-right-subtitulo">Completa los datos para registrarte en la plataforma.</p>
+
+            {% if form.errors %}
+            <div class="reg-error">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span>Corrige los errores del formulario.</span>
+            </div>
+            {% endif %}
+
+            <form method="post" id="registroForm">
+                {% csrf_token %}
+
+                <!-- Tipo de cuenta -->
+                <div class="reg-rol-group" id="rolSelector">
+                    <label class="reg-rol-card" data-rol="profesor">
+                        <input type="radio" name="rol" value="profesor" {% if form.rol.value == 'profesor' %}checked{% endif %}>
+                        <div class="reg-rol-icon"><i class="bi bi-person-badge"></i></div>
+                        <div class="reg-rol-label">Docente</div>
+                    </label>
+                    <label class="reg-rol-card" data-rol="padre">
+                        <input type="radio" name="rol" value="padre" {% if form.rol.value == 'padre' or not form.rol.value %}checked{% endif %}>
+                        <div class="reg-rol-icon"><i class="bi bi-heart"></i></div>
+                        <div class="reg-rol-label">Padre de Familia</div>
+                    </label>
+                </div>
+                {% if form.rol.errors %}<div class="reg-field-error">{{ form.rol.errors.0 }}</div>{% endif %}
+
+                <!-- Nombres / Apellidos -->
+                <div class="reg-row">
+                    <div>
+                        <div class="reg-field">
+                            <div class="reg-field-icon"><i class="bi bi-person"></i></div>
+                            <input type="text" name="first_name" class="reg-input" placeholder="Nombres" required maxlength="30" value="{{ form.first_name.value|default:'' }}">
+                        </div>
+                        {% if form.first_name.errors %}<div class="reg-field-error">{{ form.first_name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div>
+                        <div class="reg-field">
+                            <div class="reg-field-icon"><i class="bi bi-person"></i></div>
+                            <input type="text" name="last_name" class="reg-input" placeholder="Apellidos" required maxlength="30" value="{{ form.last_name.value|default:'' }}">
+                        </div>
+                        {% if form.last_name.errors %}<div class="reg-field-error">{{ form.last_name.errors.0 }}</div>{% endif %}
+                    </div>
+                </div>
+
+                <!-- Usuario -->
+                <div class="reg-field">
+                    <div class="reg-field-icon"><i class="bi bi-at"></i></div>
+                    <input type="text" name="username" class="reg-input" placeholder="Nombre de usuario" required maxlength="150" autocomplete="username" value="{{ form.username.value|default:'' }}">
+                </div>
+                {% if form.username.errors %}<div class="reg-field-error">{{ form.username.errors.0 }}</div>{% endif %}
+                <div class="reg-field-hint">Letras, números y @ . + - _ únicamente</div>
+
+                <!-- Correo -->
+                <div class="reg-field">
+                    <div class="reg-field-icon"><i class="bi bi-envelope"></i></div>
+                    <input type="email" name="email" class="reg-input" placeholder="Correo electrónico (opcional)" value="{{ form.email.value|default:'' }}">
+                </div>
+
+                <!-- DNI / Teléfono -->
+                <div class="reg-row">
+                    <div>
+                        <div class="reg-field">
+                            <div class="reg-field-icon"><i class="bi bi-person-badge"></i></div>
+                            <input type="text" name="dni" class="reg-input" maxlength="8" placeholder="DNI (opcional)" value="{{ form.dni.value|default:'' }}">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="reg-field">
+                            <div class="reg-field-icon"><i class="bi bi-telephone"></i></div>
+                            <input type="text" name="telefono" class="reg-input" placeholder="Teléfono (opcional)" value="{{ form.telefono.value|default:'' }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="reg-field">
+                    <div class="reg-field-icon"><i class="bi bi-lock"></i></div>
+                    <input type="password" name="password1" class="reg-input" placeholder="Contraseña (mínimo 8 caracteres)" required autocomplete="new-password">
+                    <button type="button" class="reg-field-eye" onclick="togglePwd('password1','icon1')">
+                        <i class="bi bi-eye" id="icon1"></i>
+                    </button>
+                </div>
+                {% if form.password1.errors %}<div class="reg-field-error">{{ form.password1.errors.0 }}</div>{% endif %}
+
+                <!-- Confirmar Contraseña -->
+                <div class="reg-field">
+                    <div class="reg-field-icon"><i class="bi bi-lock-fill"></i></div>
+                    <input type="password" name="password2" class="reg-input" placeholder="Confirmar contraseña" required autocomplete="new-password">
+                    <button type="button" class="reg-field-eye" onclick="togglePwd('password2','icon2')">
+                        <i class="bi bi-eye" id="icon2"></i>
+                    </button>
+                </div>
+                {% if form.password2.errors %}<div class="reg-field-error">{{ form.password2.errors.0 }}</div>{% endif %}
+
+                <button type="submit" class="reg-btn-submit" id="registroBtn">
+                    <i class="bi bi-person-plus"></i> Crear Cuenta
+                </button>
+            </form>
+
+            <p class="reg-login-link">
+                ¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia Sesión</a>
+            </p>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -163,22 +570,19 @@ function togglePwd(inputId, iconId) {
     }
 }
 
-document.querySelectorAll('.rol-option').forEach(function(el) {
-    el.addEventListener('click', function() {
-        document.querySelectorAll('.rol-option').forEach(function(o) {
-            o.style.borderColor = '#ddd8cc';
-            o.style.background = 'transparent';
+document.querySelectorAll('.reg-rol-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+        document.querySelectorAll('.reg-rol-card').forEach(function(c) {
+            c.classList.remove('active');
         });
-        this.style.borderColor = 'var(--primary)';
-        this.style.background = 'var(--cream)';
+        this.classList.add('active');
         this.querySelector('input[type=radio]').checked = true;
     });
 });
 
-var checked = document.querySelector('.rol-option input[type=radio]:checked');
+var checked = document.querySelector('.reg-rol-card input[type=radio]:checked');
 if (checked) {
-    checked.closest('.rol-option').style.borderColor = 'var(--primary)';
-    checked.closest('.rol-option').style.background = 'var(--cream)';
+    checked.closest('.reg-rol-card').classList.add('active');
 }
 
 document.getElementById('registroBtn').addEventListener('click', function() {
@@ -186,5 +590,8 @@ document.getElementById('registroBtn').addEventListener('click', function() {
     this.disabled = true;
     document.getElementById('registroForm').submit();
 });
+
+document.querySelector('input[name="first_name"]').focus();
 </script>
-{% endblock %}
+</body>
+</html>
