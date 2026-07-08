@@ -22,6 +22,103 @@
         </div>
 
         <div class="sidebar-menu">
+            {% if user.rol == 'alumno' %}
+            {# ===== SIDEBAR ALUMNO ===== #}
+            <ul class="nav flex-column">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        <i class="bi bi-house-fill"></i> Inicio
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Académico</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_materias' %}">
+                        <i class="bi bi-briefcase-fill"></i> Mis Cursos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mis_horarios' %}">
+                        <i class="bi bi-clock-fill"></i> Mi Horario
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_calificaciones' %}">
+                        <i class="bi bi-star-fill"></i> Mis Notas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mis_asistencias' %}">
+                        <i class="bi bi-clipboard2-check-fill"></i> Mi Asistencia
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_tareas' %}">
+                        <i class="bi bi-journal-text"></i> Tareas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_materias' %}">
+                        <i class="bi bi-box-seam-fill"></i> Materiales
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Formación</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" style="opacity:0.45;">
+                        <i class="bi bi-heart-fill"></i> Conducta
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" style="opacity:0.45;">
+                        <i class="bi bi-award-fill"></i> Logros
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Comunicación</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" style="opacity:0.45;">
+                        <i class="bi bi-megaphone-fill"></i> Comunicados
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" style="opacity:0.45;">
+                        <i class="bi bi-chat-dots-fill"></i> Mensajes
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Cuenta</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'perfil' %}">
+                        <i class="bi bi-person-fill"></i> Mi Perfil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" style="opacity:0.45;">
+                        <i class="bi bi-gear-fill"></i> Configuración
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-logout mt-auto">
+                <form method="post" action="{% url 'logout' %}" class="d-inline w-100">
+                    {% csrf_token %}
+                    <button type="submit" class="sidebar-logout-btn">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                    </button>
+                </form>
+            </div>
+
+            {% else %}
+            {# ===== SIDEBAR ADMIN / DIRECTOR / PROFESOR / PADRE ===== #}
             <div class="menu-label">Navegación</div>
             <ul class="nav flex-column">
                 <li class="nav-item">
@@ -66,18 +163,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'lista_calificaciones' %}">
                         <i class="bi bi-graph-up-arrow"></i> Calificaciones
-                    </a>
-                </li>
-                {% endif %}
-                {% if user.rol == 'alumno' %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mis_asistencias' %}">
-                        <i class="bi bi-calendar-check-fill"></i> Mis Asistencias
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'lista_calificaciones' %}">
-                        <i class="bi bi-graph-up-arrow"></i> Mis Calificaciones
                     </a>
                 </li>
                 {% endif %}
@@ -136,6 +221,7 @@
                     </form>
                 </li>
             </ul>
+            {% endif %}
         </div>
     </nav>
 

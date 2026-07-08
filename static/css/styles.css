@@ -77,7 +77,13 @@ body {
     text-transform: uppercase;
 }
 
-.sidebar-menu { padding: 12px 0; }
+.sidebar-menu {
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+}
 
 .sidebar .menu-label {
     color: rgba(255,255,255,0.2);
@@ -1335,4 +1341,44 @@ hr { border-color: var(--ivory); opacity: 0.8; }
     .alumno-materia-barra-bg { width: 60px; }
     .alumno-asist-table thead th,
     .alumno-asist-table tbody td { padding: 10px 14px; }
+}
+
+/* ===== SIDEBAR ALUMNO — Logout ===== */
+.sidebar-logout {
+    padding: 16px 10px 20px;
+    margin-top: auto;
+}
+
+.sidebar-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 16px;
+    border: 1.5px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.55);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.sidebar-logout-btn i {
+    font-size: 1.1rem;
+    width: 22px;
+    text-align: center;
+    color: rgba(255,255,255,0.45);
+}
+
+.sidebar-logout-btn:hover {
+    background: rgba(220,53,69,0.12);
+    border-color: rgba(220,53,69,0.3);
+    color: #fff;
+}
+
+.sidebar-logout-btn:hover i {
+    color: #dc3545;
 }
