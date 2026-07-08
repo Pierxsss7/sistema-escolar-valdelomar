@@ -1,0 +1,15 @@
+[phases.setup]
+nixPkgs = ["python311", "postgresql_16.dev", "gcc"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
+
+[phases.build]
+cmds = [
+    "rm -rf /app/templates /app/static /app/config",
+    "python manage.py migrate --noinput",
+    "python manage.py collectstatic --noinput"
+]
+
+[start]
+cmd = "gunicorn config.wsgi --access-logfile - --error-logfile -"
