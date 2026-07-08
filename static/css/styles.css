@@ -414,7 +414,7 @@ body {
 .login-left-escudo-img {
     width: 48px;
     height: auto;
-    filter: brightness(0) invert(1);
+    border-radius: 8px;
 }
 
 .login-left-brand { flex: 1; }
@@ -490,11 +490,24 @@ body {
     justify-content: center;
     background: #fff;
     padding: 40px;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.08);
+    animation: loginFadeIn 0.6s ease-out;
+}
+
+@keyframes loginFadeIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 .login-right-content {
     width: 100%;
     max-width: 420px;
+    animation: loginSlideUp 0.5s ease-out 0.2s both;
+}
+
+@keyframes loginSlideUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .login-right-header { margin-bottom: 32px; }
@@ -561,7 +574,8 @@ body {
 
 .login-field:focus-within {
     border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+    transform: translateY(-1px);
 }
 
 .login-field-icon {
@@ -630,7 +644,7 @@ body {
 .login-btn-submit {
     width: 100%;
     padding: 14px;
-    background: #2563eb;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -638,12 +652,29 @@ body {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-btn-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
 }
 
 .login-btn-submit:hover {
-    background: #1d4ed8;
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(37,99,235,0.3);
+    box-shadow: 0 8px 25px rgba(37,99,235,0.35);
+}
+
+.login-btn-submit:hover::before {
+    left: 100%;
 }
 
 .login-divider-text {
@@ -688,6 +719,8 @@ body {
 .login-btn-google:hover {
     background: #f9fafb;
     border-color: #d1d5db;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .login-google-icon { flex-shrink: 0; }
