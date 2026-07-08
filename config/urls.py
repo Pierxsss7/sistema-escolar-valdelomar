@@ -144,6 +144,7 @@ def _contexto_alumno(user, grupo):
         }
         ctx['alumno_calif_por_materia'] = []
         ctx['alumno_por_periodo'] = []
+        ctx['tareas_pendientes'] = 0
         return ctx
 
     materias_ids = Asignacion.objects.filter(
@@ -182,6 +183,12 @@ def _contexto_alumno(user, grupo):
         'pct_asistencia': pct_asistencia,
         'materias_count': len(materias_ids),
     }
+
+    tareas_pendientes = Tarea.objects.filter(
+        materia_id__in=materias_ids, activo=True,
+        fecha_entrega__gte=date.today(),
+    ).count()
+    ctx['tareas_pendientes'] = tareas_pendientes
 
     calif_por_materia = (
         todas_calif.values('materia__nombre')

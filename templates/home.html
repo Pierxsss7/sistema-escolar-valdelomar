@@ -150,38 +150,56 @@
     </div>
 </div>
 
-<!-- STATS: 4 tarjetas -->
-<div class="row g-3 mb-4 fade-in">
-    <div class="col-6 col-lg-3">
-        <div class="alumno-stat-card" style="--accent: var(--primary);">
-            <div class="alumno-stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
-            <div class="alumno-stat-value">{{ alumno_stats.promedio }}</div>
-            <div class="alumno-stat-label">Promedio General</div>
-            <div class="alumno-stat-sub">de 20 puntos</div>
+<!-- STATS: 5 tarjetas estilo referencia -->
+<div class="alumno-stats-row fade-in">
+    <div class="alumno-stat-card-ref">
+        <div class="alumno-stat-icon-ref" style="background:rgba(59,130,246,0.1);color:#3b82f6;">
+            <i class="bi bi-book-fill"></i>
+        </div>
+        <div class="alumno-stat-text">
+            <div class="alumno-stat-title-ref">Mis Cursos</div>
+            <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ alumno_stats.materias_count }}</div>
+            <div class="alumno-stat-sub-ref" style="color:#64748b;">Cursos activos</div>
         </div>
     </div>
-    <div class="col-6 col-lg-3">
-        <div class="alumno-stat-card" style="--accent: var(--emerald);">
-            <div class="alumno-stat-icon"><i class="bi bi-calendar-check"></i></div>
-            <div class="alumno-stat-value">{{ alumno_stats.pct_asistencia }}%</div>
-            <div class="alumno-stat-label">Asistencia</div>
-            <div class="alumno-stat-sub">{{ alumno_stats.asistencias_presente }} de {{ alumno_stats.asistencias_total }}</div>
+    <div class="alumno-stat-card-ref">
+        <div class="alumno-stat-icon-ref" style="background:rgba(34,197,94,0.1);color:#22c55e;">
+            <i class="bi bi-graph-up-arrow"></i>
+        </div>
+        <div class="alumno-stat-text">
+            <div class="alumno-stat-title-ref">Promedio General</div>
+            <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ alumno_stats.promedio }}</div>
+            <div class="alumno-stat-sub-ref" style="color:#64748b;">{% if alumno_stats.promedio >= 16 %}Muy bueno{% elif alumno_stats.promedio >= 11 %}Bueno{% elif alumno_stats.promedio > 0 %}Regular{% else %}Sin notas{% endif %}</div>
         </div>
     </div>
-    <div class="col-6 col-lg-3">
-        <div class="alumno-stat-card" style="--accent: var(--gold);">
-            <div class="alumno-stat-icon"><i class="bi bi-journal-text"></i></div>
-            <div class="alumno-stat-value">{{ alumno_stats.materias_count }}</div>
-            <div class="alumno-stat-label">Materias</div>
-            <div class="alumno-stat-sub">asignadas este ciclo</div>
+    <div class="alumno-stat-card-ref">
+        <div class="alumno-stat-icon-ref" style="background:rgba(99,102,241,0.1);color:#6366f1;">
+            <i class="bi bi-calendar2-check-fill"></i>
+        </div>
+        <div class="alumno-stat-text">
+            <div class="alumno-stat-title-ref">Asistencia</div>
+            <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ alumno_stats.pct_asistencia }}%</div>
+            <div class="alumno-stat-sub-ref" style="color:#64748b;">Este mes</div>
         </div>
     </div>
-    <div class="col-6 col-lg-3">
-        <div class="alumno-stat-card" style="--accent: var(--seafoam);">
-            <div class="alumno-stat-icon"><i class="bi bi-award"></i></div>
-            <div class="alumno-stat-value">{{ alumno_stats.aprobadas }}</div>
-            <div class="alumno-stat-label">Aprobadas</div>
-            <div class="alumno-stat-sub">de {{ alumno_stats.total_notas }} notas</div>
+    <div class="alumno-stat-card-ref">
+        <div class="alumno-stat-icon-ref" style="background:rgba(249,115,22,0.1);color:#f97316;">
+            <i class="bi bi-clipboard2-check-fill"></i>
+        </div>
+        <div class="alumno-stat-text">
+            <div class="alumno-stat-title-ref">Tareas Pendientes</div>
+            <div class="alumno-stat-number-ref" style="color:#1e293b;">{{ tareas_pendientes|default:"0" }}</div>
+            <div class="alumno-stat-sub-ref" style="color:#64748b;">Por entregar</div>
+        </div>
+    </div>
+    <div class="alumno-stat-card-ref">
+        <div class="alumno-stat-icon-ref" style="background:rgba(244,63,94,0.1);color:#f43f5e;">
+            <i class="bi bi-star-fill"></i>
+        </div>
+        <div class="alumno-stat-text">
+            <div class="alumno-stat-title-ref">Conducta</div>
+            <div class="alumno-stat-number-ref" style="color:#1e293b;">Excelente</div>
+            <div class="alumno-stat-sub-ref" style="color:#64748b;">Sin observaciones</div>
         </div>
     </div>
 </div>
