@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Mis Cursos{% endblock %}
+{% block page_title %}Mis Cursos{% endblock %}
+
+{% block content %}
+
+<!-- Resumen -->
+<div class="plan-resumen fade-in mb-4">
+    <div class="plan-resumen-texto">
+        <h2>Mis Cursos</h2>
+        <p>Cursos asignados en <strong>{{ grupo.grado.nombre }} — Grupo {{ grupo.nombre }}</strong></p>
+    </div>
+    <div class="plan-resumen-stats">
+        <div class="plan-stat-pill plan-stat-green">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>{{ total_aprobados }} Aprobados</span>
+        </div>
+        <div class="plan-stat-pill plan-stat-blue">
+            <i class="bi bi-book-fill"></i>
+            <span>{{ total_cursos }} Total</span>
+        </div>
+    </div>
+</div>
+
+<!-- Grid de cursos -->
+{% if cursos %}
+<div class="cursos-grid fade-in">
+    {% for c in cursos %}
+    <div class="curso-card">
+        <div class="curso-card-banner" style="background: linear-gradient(135deg, {{ c.color }} 0%, {{ c.color }}dd 100%);">
+            <div class="curso-card-banner-icon">
+                <i class="bi bi-book-fill"></i>
+            </div>
+            {% if c.aprobado %}
+            <div class="curso-card-badge-aprobado">
+                <i class="bi bi-check-circle-fill"></i> Aprobado
+            </div>
+            {% endif %}
+        </div>
+        <div class="curso-card-body">
+            <div class="curso-card-codigo">{{ c.grado }}</div>
+            <h3 class="curso-card-nombre">{{ c.nombre }}</h3>
+            <div class="curso-card-estado">
+                {% if c.aprobado %}
+                <span class="curso-estado-texto curso-estado-aprobado">Aprobado</span>
+                {% else %}
+                <span class="curso-estado-texto curso-estado-abierto">En curso</span>
+                {% endif %}
+            </div>
+            <div class="curso-card-divider"></div>
+            <div class="curso-card-profesor">
+                <div class="curso-card-profesor-avatar" style="background:{{ c.color }}20;color:{{ c.color }};">
+                    {{ c.profesor.first_name|first|upper }}{{ c.profesor.last_name|first|upper }}
+                </div>
+                <div class="curso-card-profesor-info">
+                    <span class="curso-card-profesor-nombre">{{ c.profesor.get_full_name|default:c.profesor.username }}</span>
+                    <span class="curso-card-profesor-rol">Docente</span>
+                </div>
+            </div>
+            <div class="curso-card-stats">
+                <div class="curso-card-stat">
+                    <span class="curso-card-stat-val" style="color:{% if c.aprobado %}#22c55e{% elif c.promedio %}#f97316{% else %}#999{% endif %};">
+                        {% if c.promedio %}{{ c.promedio }}{% else %}—{% endif %}
+                    </span>
+                    <span class="curso-card-stat-label">Promedio</span>
+                </div>
+                <div class="curso-card-stat">
+                    <span class="curso-card-stat-val">{{ c.total_notas }}</span>
+                    <span class="curso-card-stat-label">Notas</span>
+                </div>
+                <div class="curso-card-stat">
+                    <span class="curso-card-stat-val">{{ c.tareas_pendientes }}</span>
+                    <span class="curso-card-stat-label">Tareas</span>
+                </div>
+            </div>
+            <a href="{% url 'lista_calificaciones' %}" class="curso-card-btn">Ver detalle</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alumno-empty fade-in">
+    <i class="bi bi-book"></i>
+    <p>No tienes cursos asignados aún.</p>
+</div>
+{% endif %}
+
+{% endblock %}

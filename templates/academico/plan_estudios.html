@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}Plan de Estudios{% endblock %}
+{% block page_title %}Plan de Estudios{% endblock %}
+
+{% block content %}
+
+<!-- Resumen -->
+<div class="plan-resumen fade-in mb-4">
+    <div class="plan-resumen-texto">
+        <h2>Plan de Estudios</h2>
+        <p><strong>{{ grupo.grado.nombre }}</strong> — Progreso del ciclo</p>
+    </div>
+    <div class="plan-resumen-stats">
+        <div class="plan-stat-pill plan-stat-green">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>{{ total_aprobadas }} Aprobadas</span>
+        </div>
+        <div class="plan-stat-pill plan-stat-blue">
+            <i class="bi bi-book-fill"></i>
+            <span>{{ total_materias }} Total</span>
+        </div>
+        <div class="plan-stat-pill plan-stat-gold">
+            <i class="bi bi-trophy-fill"></i>
+            <span>{{ porcentaje_avance }}% Avance</span>
+        </div>
+    </div>
+</div>
+
+<!-- Barra de progreso -->
+<div class="card alumno-card mb-4 fade-in">
+    <div class="alumno-card-body">
+        <div class="plan-progreso-header">
+            <span class="plan-progreso-label">Progreso General</span>
+            <span class="plan-progreso-pct">{{ porcentaje_avance }}%</span>
+        </div>
+        <div class="plan-progreso-barra-bg">
+            <div class="plan-progreso-barra-fill" style="width: {{ porcentaje_avance }}%;"></div>
+        </div>
+        <div class="plan-progreso-detalle">
+            <span><span class="plan-dot plan-dot-green"></span> Aprobadas: {{ total_aprobadas }}</span>
+            <span><span class="plan-dot plan-dot-gray"></span> Pendientes: {{ total_materias|add:"-"|add:total_aprobadas }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Lista de materias -->
+{% if materias_plan %}
+<div class="plan-materias-grid fade-in">
+    {% for item in materias_plan %}
+    <div class="plan-materia-card {% if item.aprobado %}plan-materia-aprobada{% elif not item.asignada %}plan-materia-pendiente{% endif %}">
+        <div class="plan-materia-header">
+            <div class="plan-materia-num">{{ forloop.counter }}</div>
+            {% if item.aprobado %}
+            <div class="plan-materia-check">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            {% elif item.asignada %}
+            <div class="plan-materia-en-curso">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+            {% else %}
+            <div class="plan-materia-bloqueada">
+                <i class="bi bi-lock-fill"></i>
+            </div>
+            {% endif %}
+        </div>
+        <div class="plan-materia-body">
+            <h4 class="plan-materia-nombre">{{ item.materia.nombre }}</h4>
+            <p class="plan-materia-grado">{{ item.materia.grado.nombre }}</p>
+            <div class="plan-materia-info">
+                {% if item.asignada %}
+                    {% if item.promedio %}
+                    <div class="plan-materia-nota">
+                        <span class="plan-materia-nota-valor" style="color:{% if item.aprobado %}#22c55e{% elif item.promedio >= 11 %}#f97316{% else %}#ef4444{% endif %};">
+                            {{ item.promedio }}
+                        </span>
+                        <span class="plan-materia-nota-label">Promedio</span>
+                    </div>
+                    {% endif %}
+                    <div class="plan-materia-nota">
+                        <span class="plan-materia-nota-valor">{{ item.total_notas }}</span>
+                        <span class="plan-materia-nota-label">Notas</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="plan-materia-estado">
+                {% if item.aprobado %}
+                <span class="plan-estado-badge plan-estado-aprobada">
+                    <i class="bi bi-patch-check-fill"></i> Aprobado
+                </span>
+                {% elif item.asignada %}
+                <span class="plan-estado-badge plan-estado-cursando">
+                    <i class="bi bi-play-circle-fill"></i> En curso
+                </span>
+                {% else %}
+                <span class="plan-estado-badge plan-estado-pendiente">
+                    <i class="bi bi-clock-fill"></i> Pendiente
+                </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alumno-empty fade-in">
+    <i class="bi bi-journal-bookmark"></i>
+    <p>No hay materias en el plan de estudios.</p>
+</div>
+{% endif %}
+
+{% endblock %}

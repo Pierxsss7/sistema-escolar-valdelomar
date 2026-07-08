@@ -12,4 +12,6 @@ urlpatterns = [
     path('horarios/', views.lista_horarios, name='lista_horarios'),
     path('horarios/mis-horarios/', views.mis_horarios, name='mis_horarios'),
     path('horarios/crear/', views.crear_horario, name='crear_horario'),
+    path('mis-cursos/', views.mis_cursos, name='mis_cursos'),
+    path('plan-estudios/', views.plan_estudios, name='plan_estudios'),
 ]
