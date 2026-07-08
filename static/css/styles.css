@@ -59,6 +59,7 @@ body {
     height: auto;
     margin-bottom: 8px;
     filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+    mix-blend-mode: multiply;
 }
 
 .sidebar-header h3 {
@@ -415,6 +416,7 @@ body {
     width: 48px;
     height: auto;
     border-radius: 8px;
+    mix-blend-mode: multiply;
 }
 
 .login-left-brand { flex: 1; }
