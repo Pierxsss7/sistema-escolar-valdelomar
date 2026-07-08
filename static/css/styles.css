@@ -702,3 +702,615 @@ body {
 
 /* ===== DIVIDER ===== */
 hr { border-color: var(--ivory); opacity: 0.8; }
+
+/* ================================================
+   STUDENT DASHBOARD — Panel Principal del Alumno
+   ================================================ */
+
+/* Hero Welcome */
+.alumno-hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--emerald) 50%, var(--seafoam) 100%);
+    border-radius: 20px;
+    padding: 32px 36px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+}
+
+.alumno-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+}
+
+.alumno-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 30%;
+    width: 250px; height: 250px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 50%;
+}
+
+.alumno-hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+}
+
+.alumno-hero-greeting {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.alumno-hero-name {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0 0 6px;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.alumno-hero-sub {
+    font-size: 0.8rem;
+    opacity: 0.75;
+    margin: 0;
+}
+
+.alumno-hero-sep { margin: 0 8px; opacity: 0.4; }
+
+.alumno-hero-avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(10px);
+    border: 3px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+/* Stat Cards */
+.alumno-stat-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid transparent;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.alumno-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-hover-shadow);
+    border-color: var(--accent, var(--emerald));
+}
+
+.alumno-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--accent, var(--emerald));
+    border-radius: 4px 0 0 4px;
+}
+
+.alumno-stat-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.alumno-stat-value {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.alumno-stat-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 4px;
+}
+
+.alumno-stat-sub {
+    font-size: 0.68rem;
+    color: var(--text-light);
+    margin-top: 2px;
+}
+
+/* Card System */
+.alumno-card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    background: #fff;
+    overflow: hidden;
+}
+
+.alumno-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 22px;
+    border-bottom: 1px solid #f0ece0;
+}
+
+.alumno-card-header-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.alumno-card-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0;
+}
+
+.alumno-card-sub {
+    font-size: 0.7rem;
+    color: var(--text-light);
+    margin: 0;
+}
+
+.alumno-card-link {
+    margin-left: auto;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+
+.alumno-card-link:hover { color: var(--emerald); }
+
+.alumno-card-body { padding: 20px 22px; }
+
+.alumno-card-footer-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px;
+    border-top: 1px solid #f0ece0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.alumno-card-footer-link:hover {
+    background: #f6f9f4;
+    color: var(--emerald);
+}
+
+/* Materia Bars */
+.alumno-materias-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.alumno-materia-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.alumno-materia-info { flex: 1; min-width: 0; }
+
+.alumno-materia-nombre {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.2;
+}
+
+.alumno-materia-notas {
+    font-size: 0.68rem;
+    color: var(--text-light);
+}
+
+.alumno-materia-barra-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.alumno-materia-barra-bg {
+    width: 100px;
+    height: 6px;
+    background: #f0ece0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.alumno-materia-barra-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.alumno-materia-promedio {
+    font-size: 0.85rem;
+    font-weight: 700;
+    min-width: 28px;
+    text-align: right;
+}
+
+/* Attendance Ring */
+.alumno-asistencia-ring-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 12px;
+}
+
+.alumno-asistencia-ring {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+}
+
+.alumno-asistencia-ring svg {
+    width: 100%;
+    height: 100%;
+}
+
+.alumno-ring-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.alumno-ring-pct {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1;
+}
+
+.alumno-ring-label {
+    display: block;
+    font-size: 0.6rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+.alumno-asistencia-detalles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.alumno-detalle-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.alumno-detalle-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.alumno-detalle-texto {
+    color: var(--text);
+    flex: 1;
+}
+
+.alumno-detalle-valor {
+    font-weight: 700;
+    color: var(--dark);
+}
+
+/* Quick Access Grid */
+.alumno-quick-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.alumno-quick-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 8px;
+    border-radius: 12px;
+    border: 1.5px solid #f0ece0;
+    background: #fff;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.72rem;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.alumno-quick-btn i {
+    font-size: 1.3rem;
+    color: var(--primary);
+    transition: var(--transition);
+}
+
+.alumno-quick-btn:hover {
+    border-color: var(--emerald);
+    background: #f6f9f4;
+    transform: translateY(-2px);
+}
+
+.alumno-quick-btn:hover i {
+    color: var(--emerald);
+}
+
+/* Calificaciones List */
+.alumno-calif-list {
+    padding: 8px 0;
+}
+
+.alumno-calif-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 22px;
+    border-bottom: 1px solid #f5f2ec;
+    transition: var(--transition);
+}
+
+.alumno-calif-item:last-child { border-bottom: none; }
+.alumno-calif-item:hover { background: #faf8f5; }
+
+.alumno-calif-materia {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.alumno-calif-materia-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.alumno-calif-nombre {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.alumno-calif-periodo {
+    font-size: 0.68rem;
+    color: var(--text-light);
+}
+
+.alumno-calif-nota-wrapper { flex-shrink: 0; }
+
+.alumno-calif-nota {
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 10px;
+    min-width: 48px;
+    text-align: center;
+}
+
+/* Periodos */
+.alumno-periodos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.alumno-periodo-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.alumno-periodo-info { flex: 1; }
+
+.alumno-periodo-nombre {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 6px;
+}
+
+.alumno-periodo-barra-bg {
+    height: 7px;
+    background: #f0ece0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.alumno-periodo-barra-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.alumno-periodo-valor {
+    font-size: 1rem;
+    font-weight: 700;
+    min-width: 32px;
+    text-align: right;
+}
+
+/* Anuncios */
+.alumno-anuncios-list {
+    padding: 8px 0;
+}
+
+.alumno-anuncio-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 22px;
+    border-bottom: 1px solid #f5f2ec;
+}
+
+.alumno-anuncio-item:last-child { border-bottom: none; }
+
+.alumno-anuncio-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    margin-top: 6px;
+}
+
+.alumno-anuncio-titulo {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 4px;
+}
+
+.alumno-anuncio-texto {
+    font-size: 0.76rem;
+    color: #666;
+    margin: 0 0 4px;
+    line-height: 1.4;
+}
+
+.alumno-anuncio-fecha {
+    font-size: 0.65rem;
+    color: var(--text-light);
+}
+
+/* Asistencia Table */
+.alumno-asist-table-wrapper {
+    overflow-x: auto;
+}
+
+.alumno-asist-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+}
+
+.alumno-asist-table thead th {
+    background: #f8f7f4;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 22px;
+    border-bottom: 2px solid var(--emerald);
+}
+
+.alumno-asist-table tbody td {
+    padding: 11px 22px;
+    border-bottom: 1px solid #f0ece0;
+    color: var(--text);
+}
+
+.alumno-asist-table tbody tr:hover { background: #f6f9f4; }
+.alumno-asist-table tbody tr:last-child td { border-bottom: none; }
+
+/* Badge Estado */
+.alumno-badge-est {
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.alumno-badge-verde { background: rgba(45,138,78,0.12); color: #1a7a3a; }
+.alumno-badge-amarillo { background: rgba(201,168,76,0.15); color: #8a6e1a; }
+.alumno-badge-azul { background: rgba(13,202,240,0.12); color: #0a6e8a; }
+.alumno-badge-rojo { background: rgba(220,53,69,0.12); color: #b02a3a; }
+
+/* Empty States */
+.alumno-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #b0b8b0;
+}
+
+.alumno-empty i { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+.alumno-empty p { font-size: 0.85rem; margin: 0; }
+
+.alumno-empty-small {
+    text-align: center;
+    padding: 24px 16px;
+    color: #b0b8b0;
+}
+
+.alumno-empty-small i { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+.alumno-empty-small p { font-size: 0.8rem; margin: 0; }
+
+/* ===== RESPONSIVE ALUMNO ===== */
+@media (max-width: 991px) {
+    .alumno-hero { padding: 24px 20px; }
+    .alumno-hero-name { font-size: 1.4rem; }
+    .alumno-asistencia-ring-row { flex-direction: column; align-items: flex-start; }
+    .alumno-quick-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 576px) {
+    .alumno-hero-avatar { width: 56px; height: 56px; font-size: 1.3rem; }
+    .alumno-hero-name { font-size: 1.2rem; }
+    .alumno-stat-card { padding: 16px; }
+    .alumno-stat-value { font-size: 1.4rem; }
+    .alumno-card-header { padding: 14px 16px; }
+    .alumno-card-body { padding: 16px; }
+    .alumno-materia-barra-bg { width: 60px; }
+    .alumno-asist-table thead th,
+    .alumno-asist-table tbody td { padding: 10px 14px; }
+}

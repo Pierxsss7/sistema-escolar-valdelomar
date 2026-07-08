@@ -114,10 +114,107 @@ def home(request):
         )
         context['mis_asist_presente'] = mis_asistencias.filter(estado='presente').count()
         context['mis_asist_total'] = mis_asistencias.count()
+    elif request.user.rol == 'alumno':
+        inscripcion = Inscripcion.objects.filter(
+            alumno=request.user, activo=True
+        ).select_related('grupo', 'grupo__grado').first()
+
+        grupo = inscripcion.grupo if inscripcion else None
+        contexto_alumno = _contexto_alumno(request.user, grupo)
+        context.update(contexto_alumno)
+        context['mis_asignaciones'] = []
+
     else:
         context['mis_asignaciones'] = []
 
     return render(request, 'home.html', context)
+
+
+def _contexto_alumno(user, grupo):
+    ctx = {}
+    if not grupo:
+        ctx['mis_materias_grupo'] = []
+        ctx['mis_calificaciones'] = []
+        ctx['mis_asistencias_recientes'] = []
+        ctx['alumno_stats'] = {
+            'promedio': 0, 'total_notas': 0, 'aprobadas': 0,
+            'asistencias_total': 0, 'asistencias_presente': 0,
+            'asistencias_tarde': 0, 'asistencias_falta': 0,
+            'pct_asistencia': 0, 'materias_count': 0,
+        }
+        ctx['alumno_calif_por_materia'] = []
+        ctx['alumno_por_periodo'] = []
+        return ctx
+
+    materias_ids = Asignacion.objects.filter(
+        grupo=grupo
+    ).values_list('materia_id', flat=True).distinct()
+
+    ctx['mis_materias_grupo'] = Materia.objects.filter(
+        id__in=materias_ids
+    ).select_related('grado')
+
+    todas_calif = Calificacion.objects.filter(
+        alumno=user, materia_id__in=materias_ids
+    ).select_related('materia', 'periodo').order_by('-periodo__fecha_inicio', 'materia__nombre')
+
+    ctx['mis_calificaciones'] = todas_calif[:8]
+
+    total_notas = todas_calif.count()
+    aprobadas = todas_calif.filter(nota__gte=11).count()
+    promedio = todas_calif.aggregate(Avg('nota'))['nota__avg'] or 0
+
+    todas_asist = Asistencia.objects.filter(usuario=user)
+    asist_total = todas_asist.count()
+    asist_presente = todas_asist.filter(estado='presente').count()
+    asist_tarde = todas_asist.filter(estado='tarde').count()
+    asist_falta = todas_asist.filter(estado='falta').count()
+    pct_asistencia = round(asist_presente / asist_total * 100) if asist_total else 0
+
+    ctx['alumno_stats'] = {
+        'promedio': round(promedio, 1),
+        'total_notas': total_notas,
+        'aprobadas': aprobadas,
+        'asistencias_total': asist_total,
+        'asistencias_presente': asist_presente,
+        'asistencias_tarde': asist_tarde,
+        'asistencias_falta': asist_falta,
+        'pct_asistencia': pct_asistencia,
+        'materias_count': len(materias_ids),
+    }
+
+    calif_por_materia = (
+        todas_calif.values('materia__nombre')
+        .annotate(promedio_materia=Avg('nota'), total=Count('id'))
+        .order_by('materia__nombre')
+    )
+    ctx['alumno_calif_por_materia'] = [
+        {
+            'nombre': c['materia__nombre'],
+            'promedio': round(c['promedio_materia'] or 0, 1),
+            'total': c['total'],
+        }
+        for c in calif_por_materia
+    ]
+
+    periodos_con_calif = (
+        todas_calif.values('periodo__nombre')
+        .annotate(promedio_periodo=Avg('nota'))
+        .order_by('-periodo__fecha_inicio')
+    )
+    ctx['alumno_por_periodo'] = [
+        {
+            'nombre': p['periodo__nombre'],
+            'promedio': round(p['promedio_periodo'] or 0, 1),
+        }
+        for p in periodos_con_calif
+    ]
+
+    ctx['mis_asistencias_recientes'] = todas_asist.select_related(
+        'materia'
+    ).order_by('-fecha', '-id')[:6]
+
+    return ctx
 
 
 urlpatterns = [

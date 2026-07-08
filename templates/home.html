@@ -132,77 +132,380 @@
 </div>
 
 {% if user.rol == 'alumno' %}
-<div class="row g-4 mt-2 fade-in">
-    <div class="col-md-5">
-        <div class="card h-100">
-            <div class="card-header d-flex align-items-center gap-2">
-                <i class="bi bi-person-vcard"></i> Mi Perfil
+
+<!-- HERO: Bienvenida -->
+<div class="alumno-hero fade-in">
+    <div class="alumno-hero-content">
+        <div class="alumno-hero-text">
+            <p class="alumno-hero-greeting">Bienvenido,</p>
+            <h1 class="alumno-hero-name">{{ user.get_full_name }}</h1>
+            <p class="alumno-hero-sub">
+                <i class="bi bi-mortarboard-fill"></i> {{ user.get_rol_display }}
+                {% if user.dni %} <span class="alumno-hero-sep">|</span> DNI: {{ user.dni }}{% endif %}
+            </p>
+        </div>
+        <div class="alumno-hero-avatar">
+            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+        </div>
+    </div>
+</div>
+
+<!-- STATS: 4 tarjetas -->
+<div class="row g-3 mb-4 fade-in">
+    <div class="col-6 col-lg-3">
+        <div class="alumno-stat-card" style="--accent: var(--primary);">
+            <div class="alumno-stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="alumno-stat-value">{{ alumno_stats.promedio }}</div>
+            <div class="alumno-stat-label">Promedio General</div>
+            <div class="alumno-stat-sub">de 20 puntos</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="alumno-stat-card" style="--accent: var(--emerald);">
+            <div class="alumno-stat-icon"><i class="bi bi-calendar-check"></i></div>
+            <div class="alumno-stat-value">{{ alumno_stats.pct_asistencia }}%</div>
+            <div class="alumno-stat-label">Asistencia</div>
+            <div class="alumno-stat-sub">{{ alumno_stats.asistencias_presente }} de {{ alumno_stats.asistencias_total }}</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="alumno-stat-card" style="--accent: var(--gold);">
+            <div class="alumno-stat-icon"><i class="bi bi-journal-text"></i></div>
+            <div class="alumno-stat-value">{{ alumno_stats.materias_count }}</div>
+            <div class="alumno-stat-label">Materias</div>
+            <div class="alumno-stat-sub">asignadas este ciclo</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="alumno-stat-card" style="--accent: var(--seafoam);">
+            <div class="alumno-stat-icon"><i class="bi bi-award"></i></div>
+            <div class="alumno-stat-value">{{ alumno_stats.aprobadas }}</div>
+            <div class="alumno-stat-label">Aprobadas</div>
+            <div class="alumno-stat-sub">de {{ alumno_stats.total_notas }} notas</div>
+        </div>
+    </div>
+</div>
+
+<!-- ROW 1: Rendimiento + Acceso Rápido -->
+<div class="row g-4 mb-4 fade-in">
+    <!-- Rendimiento por materia -->
+    <div class="col-lg-7">
+        <div class="card alumno-card h-100">
+            <div class="alumno-card-header">
+                <div class="alumno-card-header-icon" style="background:rgba(26,71,49,0.1);color:var(--primary);">
+                    <i class="bi bi-bar-chart-fill"></i>
+                </div>
+                <div>
+                    <h6 class="alumno-card-title">Rendimiento por Materia</h6>
+                    <small class="alumno-card-sub">Promedio de cada asignatura</small>
+                </div>
+                <a href="{% url 'lista_calificaciones' %}" class="alumno-card-link">
+                    Ver todo <i class="bi bi-arrow-right"></i>
+                </a>
             </div>
-            <div class="card-body">
-                <div class="d-flex align-items-center gap-3 mb-4">
-                    <div class="user-avatar" style="width: 64px; height: 64px; font-size: 1.6rem;">
-                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+            <div class="alumno-card-body">
+                {% if alumno_calif_por_materia %}
+                <div class="alumno-materias-grid">
+                    {% for m in alumno_calif_por_materia %}
+                    <div class="alumno-materia-item">
+                        <div class="alumno-materia-info">
+                            <span class="alumno-materia-nombre">{{ m.nombre|truncatechars:22 }}</span>
+                            <span class="alumno-materia-notas">{{ m.total }} nota{{ m.total|pluralize }}</span>
+                        </div>
+                        <div class="alumno-materia-barra-wrapper">
+                            <div class="alumno-materia-barra-bg">
+                                <div class="alumno-materia-barra-fill"
+                                     style="width: {% widthratio m.promedio 20 100 %}%;
+                                     background: {% if m.promedio >= 16 %}var(--emerald){% elif m.promedio >= 11 %}var(--gold){% else %}#dc3545{% endif %};">
+                                </div>
+                            </div>
+                            <span class="alumno-materia-promedio"
+                                  style="color: {% if m.promedio >= 16 %}var(--emerald){% elif m.promedio >= 11 %}var(--gold){% else %}#dc3545{% endif %};">
+                                {{ m.promedio }}
+                            </span>
+                        </div>
                     </div>
-                    <div>
-                        <h5 class="mb-1">{{ user.get_full_name }}</h5>
-                        <span class="badge" style="background: var(--gold); color: #000; font-weight: 500;">
-                            {{ user.get_rol_display }}
-                        </span>
-                    </div>
+                    {% endfor %}
                 </div>
-                <div class="row g-2 text-center">
-                    <div class="col-4 border-end">
-                        <div style="font-size:1.4rem; font-weight:700; color:var(--primary);">{{ total_calificaciones|default:"0" }}</div>
-                        <small class="text-muted">Notas</small>
-                    </div>
-                    <div class="col-4 border-end">
-                        <div style="font-size:1.4rem; font-weight:700; color:var(--emerald);">{{ calif_aprobadas|default:"0" }}</div>
-                        <small class="text-muted">Aprobadas</small>
-                    </div>
-                    <div class="col-4">
-                        <div style="font-size:1.4rem; font-weight:700; color:var(--seafoam);">{{ total_materias|default:"0" }}</div>
-                        <small class="text-muted">Materias</small>
-                    </div>
+                {% else %}
+                <div class="alumno-empty">
+                    <i class="bi bi-bar-chart"></i>
+                    <p>Aún no tienes calificaciones registradas.</p>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
-    <div class="col-md-7">
-        <div class="card h-100">
-            <div class="card-header d-flex align-items-center gap-2">
-                <i class="bi bi-lightning-charge"></i> Acceso Rápido
+
+    <!-- Panel lateral: Asistencia + Perfil rápido -->
+    <div class="col-lg-5">
+        <!-- Tarjeta de asistencia -->
+        <div class="card alumno-card mb-4">
+            <div class="alumno-card-header">
+                <div class="alumno-card-header-icon" style="background:rgba(45,138,78,0.1);color:var(--emerald);">
+                    <i class="bi bi-calendar2-check-fill"></i>
+                </div>
+                <div>
+                    <h6 class="alumno-card-title">Mi Asistencia</h6>
+                    <small class="alumno-card-sub">Resumen del ciclo</small>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row g-2">
-                    <div class="col-6">
-                        <a href="{% url 'mis_asistencias' %}" class="btn btn-lg btn-outline-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-1" style="min-height:90px; border-radius:12px;">
-                            <i class="bi bi-calendar-check" style="font-size:1.6rem;"></i>
-                            <span>Asistencias</span>
-                        </a>
+            <div class="alumno-card-body">
+                <div class="alumno-asistencia-ring-row">
+                    <div class="alumno-asistencia-ring">
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="42" fill="none" stroke="#f0ece0" stroke-width="8"/>
+                            <circle cx="50" cy="50" r="42" fill="none"
+                                stroke="var(--emerald)" stroke-width="8" stroke-linecap="round"
+                                stroke-dasharray="263.9" transform="rotate(-90 50 50)"
+                                style="stroke-dashoffset: calc(263.9 - (263.9 * {{ alumno_stats.pct_asistencia }} / 100)); transition: stroke-dashoffset 1.2s ease;"/>
+                        </svg>
+                        <div class="alumno-ring-center">
+                            <span class="alumno-ring-pct">{{ alumno_stats.pct_asistencia }}%</span>
+                            <span class="alumno-ring-label">Presente</span>
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <a href="{% url 'lista_calificaciones' %}" class="btn btn-lg btn-outline-success w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-1" style="min-height:90px; border-radius:12px;">
-                            <i class="bi bi-graph-up" style="font-size:1.6rem;"></i>
-                            <span>Calificaciones</span>
-                        </a>
+                    <div class="alumno-asistencia-detalles">
+                        <div class="alumno-detalle-item">
+                            <span class="alumno-detalle-dot" style="background:var(--emerald);"></span>
+                            <span class="alumno-detalle-texto">Presente</span>
+                            <span class="alumno-detalle-valor">{{ alumno_stats.asistencias_presente }}</span>
+                        </div>
+                        <div class="alumno-detalle-item">
+                            <span class="alumno-detalle-dot" style="background:var(--gold);"></span>
+                            <span class="alumno-detalle-texto">Tardanzas</span>
+                            <span class="alumno-detalle-valor">{{ alumno_stats.asistencias_tarde }}</span>
+                        </div>
+                        <div class="alumno-detalle-item">
+                            <span class="alumno-detalle-dot" style="background:#dc3545;"></span>
+                            <span class="alumno-detalle-texto">Faltas</span>
+                            <span class="alumno-detalle-valor">{{ alumno_stats.asistencias_falta }}</span>
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <a href="{% url 'registrar_huella' %}" class="btn btn-lg btn-outline-secondary w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-1" style="min-height:90px; border-radius:12px;">
-                            <i class="bi bi-fingerprint" style="font-size:1.6rem;"></i>
-                            <span>Huella Digital</span>
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="{% url 'lista_materias' %}" class="btn btn-lg btn-outline-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-1" style="min-height:90px; border-radius:12px;">
-                            <i class="bi bi-book" style="font-size:1.6rem;"></i>
-                            <span>Materias</span>
-                        </a>
-                    </div>
+                </div>
+                <a href="{% url 'mis_asistencias' %}" class="alumno-card-footer-link">
+                    <i class="bi bi-calendar-week"></i> Ver historial completo
+                </a>
+            </div>
+        </div>
+
+        <!-- Acceso rápido -->
+        <div class="card alumno-card">
+            <div class="alumno-card-header">
+                <div class="alumno-card-header-icon" style="background:rgba(201,168,76,0.1);color:var(--gold);">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                </div>
+                <div>
+                    <h6 class="alumno-card-title">Acceso Rápido</h6>
+                </div>
+            </div>
+            <div class="alumno-card-body">
+                <div class="alumno-quick-grid">
+                    <a href="{% url 'lista_calificaciones' %}" class="alumno-quick-btn">
+                        <i class="bi bi-graph-up"></i>
+                        <span>Calificaciones</span>
+                    </a>
+                    <a href="{% url 'mis_asistencias' %}" class="alumno-quick-btn">
+                        <i class="bi bi-calendar-check"></i>
+                        <span>Asistencias</span>
+                    </a>
+                    <a href="{% url 'lista_materias' %}" class="alumno-quick-btn">
+                        <i class="bi bi-book"></i>
+                        <span>Materias</span>
+                    </a>
+                    <a href="{% url 'registrar_huella' %}" class="alumno-quick-btn">
+                        <i class="bi bi-fingerprint"></i>
+                        <span>Huella</span>
+                    </a>
+                    <a href="{% url 'lista_tareas' %}" class="alumno-quick-btn">
+                        <i class="bi bi-journal-richtext"></i>
+                        <span>Tareas</span>
+                    </a>
+                    <a href="{% url 'mis_horarios' %}" class="alumno-quick-btn">
+                        <i class="bi bi-calendar-week"></i>
+                        <span>Horario</span>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- ROW 2: Últimas Calificaciones + Anuncios -->
+<div class="row g-4 mb-4 fade-in">
+    <!-- Últimas calificaciones -->
+    <div class="col-lg-7">
+        <div class="card alumno-card h-100">
+            <div class="alumno-card-header">
+                <div class="alumno-card-header-icon" style="background:rgba(201,168,76,0.1);color:var(--gold);">
+                    <i class="bi bi-clipboard2-data-fill"></i>
+                </div>
+                <div>
+                    <h6 class="alumno-card-title">Últimas Calificaciones</h6>
+                    <small class="alumno-card-sub">Notas más recientes</small>
+                </div>
+                <a href="{% url 'lista_calificaciones' %}" class="alumno-card-link">
+                    Ver todas <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+            <div class="alumno-card-body p-0">
+                {% if mis_calificaciones %}
+                <div class="alumno-calif-list">
+                    {% for c in mis_calificaciones %}
+                    <div class="alumno-calif-item">
+                        <div class="alumno-calif-materia">
+                            <div class="alumno-calif-materia-icon" style="background:{% cycle 'rgba(26,71,49,0.08)' 'rgba(45,138,78,0.08)' 'rgba(201,168,76,0.08)' 'rgba(74,158,138,0.08)' %};">
+                                <i class="bi bi-journal-text" style="color:{% cycle 'var(--primary)' 'var(--emerald)' 'var(--gold)' 'var(--seafoam)' %};"></i>
+                            </div>
+                            <div>
+                                <div class="alumno-calif-nombre">{{ c.materia.nombre|truncatechars:20 }}</div>
+                                <small class="alumno-calif-periodo">{{ c.periodo.nombre|truncatechars:18 }}</small>
+                            </div>
+                        </div>
+                        <div class="alumno-calif-nota-wrapper">
+                            <div class="alumno-calif-nota"
+                                 style="background:{% if c.nota >= 16 %}rgba(45,138,78,0.1);color:var(--emerald){% elif c.nota >= 11 %}rgba(201,168,76,0.1);color:var(--gold){% else %}rgba(220,53,69,0.1);color:#dc3545{% endif %};">
+                                {{ c.nota }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alumno-empty">
+                    <i class="bi bi-clipboard2-data"></i>
+                    <p>No hay calificaciones registradas aún.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Anuncios + Rendimiento por periodo -->
+    <div class="col-lg-5">
+        <!-- Rendimiento por periodo -->
+        {% if alumno_por_periodo %}
+        <div class="card alumno-card mb-4">
+            <div class="alumno-card-header">
+                <div class="alumno-card-header-icon" style="background:rgba(74,158,138,0.1);color:var(--seafoam);">
+                    <i class="bi bi-pie-chart-fill"></i>
+                </div>
+                <div>
+                    <h6 class="alumno-card-title">Rendimiento por Periodo</h6>
+                </div>
+            </div>
+            <div class="alumno-card-body">
+                <div class="alumno-periodos-list">
+                    {% for p in alumno_por_periodo %}
+                    <div class="alumno-periodo-item">
+                        <div class="alumno-periodo-info">
+                            <span class="alumno-periodo-nombre">{{ p.nombre|truncatechars:22 }}</span>
+                            <div class="alumno-periodo-barra-bg">
+                                <div class="alumno-periodo-barra-fill"
+                                     style="width: {% widthratio p.promedio 20 100 %}%;
+                                     background: {% if p.promedio >= 16 %}var(--emerald){% elif p.promedio >= 11 %}var(--gold){% else %}#dc3545{% endif %};">
+                                </div>
+                            </div>
+                        </div>
+                        <span class="alumno-periodo-valor"
+                              style="color: {% if p.promedio >= 16 %}var(--emerald){% elif p.promedio >= 11 %}var(--gold){% else %}#dc3545{% endif %};">
+                            {{ p.promedio }}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Anuncios -->
+        <div class="card alumno-card">
+            <div class="alumno-card-header">
+                <div class="alumno-card-header-icon" style="background:rgba(220,53,69,0.08);color:#dc3545;">
+                    <i class="bi bi-megaphone-fill"></i>
+                </div>
+                <div>
+                    <h6 class="alumno-card-title">Anuncios</h6>
+                    <small class="alumno-card-sub">Avisos del colegio</small>
+                </div>
+            </div>
+            <div class="alumno-card-body p-0">
+                {% if anuncios %}
+                <div class="alumno-anuncios-list">
+                    {% for a in anuncios %}
+                    <div class="alumno-anuncio-item">
+                        <div class="alumno-anuncio-dot"></div>
+                        <div class="alumno-anuncio-contenido">
+                            <div class="alumno-anuncio-titulo">{{ a.titulo }}</div>
+                            <p class="alumno-anuncio-texto">{{ a.contenido|truncatechars:100 }}</p>
+                            <small class="alumno-anuncio-fecha">{{ a.fecha_creacion|date:'d/m/Y' }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alumno-empty-small">
+                    <i class="bi bi-megaphone"></i>
+                    <p>No hay anuncios activos.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ROW 3: Últimas Asistencias -->
+{% if mis_asistencias_recientes %}
+<div class="row fade-in mb-4">
+    <div class="col-12">
+        <div class="card alumno-card">
+            <div class="alumno-card-header">
+                <div class="alumno-card-header-icon" style="background:rgba(26,71,49,0.1);color:var(--primary);">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <div>
+                    <h6 class="alumno-card-title">Últimas Asistencias</h6>
+                    <small class="alumno-card-sub">Registro reciente</small>
+                </div>
+                <a href="{% url 'mis_asistencias' %}" class="alumno-card-link">
+                    Ver todas <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+            <div class="alumno-card-body p-0">
+                <div class="alumno-asist-table-wrapper">
+                    <table class="alumno-asist-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Materia</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for a in mis_asistencias_recientes %}
+                            <tr>
+                                <td>{{ a.fecha|date:'d/m/Y' }}</td>
+                                <td>{{ a.materia.nombre|truncatechars:25 }}</td>
+                                <td>
+                                    <span class="alumno-badge-est
+                                        {% if a.estado == 'presente' %}alumno-badge-verde
+                                        {% elif a.estado == 'tarde' %}alumno-badge-amarillo
+                                        {% elif a.estado == 'justificada' %}alumno-badge-azul
+                                        {% else %}alumno-badge-rojo{% endif %}">
+                                        {{ a.get_estado_display }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% endif %}
 
 {% if user.rol == 'profesor' %}
