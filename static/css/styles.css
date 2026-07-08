@@ -368,7 +368,7 @@ body {
 .login-left {
     flex: 0 0 50%;
     position: relative;
-    background: url('/static/img/colegio.jpg') center center / cover no-repeat;
+    background: url('/static/img/colegio.png') center center / cover no-repeat;
     display: flex;
     align-items: flex-end;
     overflow: hidden;
