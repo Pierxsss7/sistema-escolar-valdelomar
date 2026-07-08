@@ -403,22 +403,21 @@ body {
 .login-left-escudo {
     width: 72px;
     height: 72px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 16px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.12);
     flex-shrink: 0;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
 }
 
 .login-left-escudo-img {
     width: 50px;
-    height: auto;
-    border-radius: 8px;
-    mix-blend-mode: multiply;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 50%;
 }
 
 .login-left-brand { flex: 1; }
