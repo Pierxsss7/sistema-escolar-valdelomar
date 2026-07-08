@@ -369,6 +369,7 @@ body {
     flex: 0 0 50%;
     position: relative;
     background: url('/static/img/colegio.jpg') center center / cover no-repeat;
+    filter: hue-rotate(60deg) saturate(0.8) brightness(0.6);
     display: flex;
     align-items: flex-end;
     overflow: hidden;
@@ -377,7 +378,7 @@ body {
 .login-left-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(10,26,18,0.35) 0%, rgba(10,26,18,0.50) 50%, rgba(10,26,18,0.70) 100%);
+    background: linear-gradient(180deg, rgba(10,26,18,0.55) 0%, rgba(10,26,18,0.70) 50%, rgba(10,26,18,0.85) 100%);
 }
 
 .login-left-content {
