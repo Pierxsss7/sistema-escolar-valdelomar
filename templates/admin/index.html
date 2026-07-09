@@ -1,0 +1,647 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Dashboard — I.E. Abraham Valdelomar 116{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap');
+
+    body {
+        font-family: 'Inter', system-ui, sans-serif;
+        background: #f0f2ec;
+    }
+
+    #content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 24px 32px;
+    }
+
+    /* ===== DASHBOARD HEADER ===== */
+    .admin-welcome {
+        background: linear-gradient(135deg, #0a1a12 0%, #1a4731 50%, #0f2e1f 100%);
+        border-radius: 16px;
+        padding: 32px 40px;
+        margin-bottom: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .admin-welcome::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 200px;
+        height: 200px;
+        background: rgba(201,168,76,0.08);
+        border-radius: 50%;
+    }
+
+    .admin-welcome::after {
+        content: '';
+        position: absolute;
+        bottom: -30px;
+        left: 30%;
+        width: 120px;
+        height: 120px;
+        background: rgba(255,255,255,0.03);
+        border-radius: 50%;
+    }
+
+    .admin-welcome-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        z-index: 1;
+    }
+
+    .admin-welcome-escudo {
+        width: 72px;
+        height: 72px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid rgba(255,255,255,0.15);
+        flex-shrink: 0;
+    }
+
+    .admin-welcome-escudo img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: contain;
+    }
+
+    .admin-welcome-text h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 0 4px;
+        color: #fff;
+    }
+
+    .admin-welcome-text p {
+        font-size: 0.88rem;
+        color: rgba(255,255,255,0.6);
+        margin: 0;
+    }
+
+    .admin-welcome-text p strong {
+        color: #c9a84c;
+    }
+
+    .admin-welcome-right {
+        text-align: right;
+        z-index: 1;
+    }
+
+    .admin-welcome-date {
+        font-size: 0.85rem;
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 8px;
+    }
+
+    .admin-welcome-role {
+        display: inline-block;
+        background: rgba(201,168,76,0.2);
+        color: #c9a84c;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+    /* ===== STAT CARDS ===== */
+    .admin-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 28px;
+    }
+
+    .admin-stat-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 22px;
+        border: 1px solid #e8e4dc;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .admin-stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .admin-stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+    }
+
+    .admin-stat-card.green::before { background: linear-gradient(180deg, #2d8a4e, #1a4731); }
+    .admin-stat-card.gold::before { background: linear-gradient(180deg, #c9a84c, #a88a3c); }
+    .admin-stat-card.blue::before { background: linear-gradient(180deg, #3b82f6, #1d4ed8); }
+    .admin-stat-card.red::before { background: linear-gradient(180deg, #ef4444, #b91c1c); }
+
+    .admin-stat-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .admin-stat-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .admin-stat-card.green .admin-stat-icon { background: rgba(45,138,78,0.1); color: #2d8a4e; }
+    .admin-stat-card.gold .admin-stat-icon { background: rgba(201,168,76,0.1); color: #c9a84c; }
+    .admin-stat-card.blue .admin-stat-icon { background: rgba(59,130,246,0.1); color: #3b82f6; }
+    .admin-stat-card.red .admin-stat-icon { background: rgba(239,68,68,0.1); color: #ef4444; }
+
+    .admin-stat-label {
+        font-size: 0.78rem;
+        color: #6a7a6a;
+        font-weight: 500;
+    }
+
+    .admin-stat-number {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        line-height: 1;
+        margin-bottom: 4px;
+    }
+
+    .admin-stat-sub {
+        font-size: 0.72rem;
+        color: #9ca3af;
+    }
+
+    /* ===== QUICK ACCESS ===== */
+    .admin-section-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .admin-section-title i {
+        color: #c9a84c;
+        font-size: 1.2rem;
+    }
+
+    .admin-quick-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .admin-quick-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 24px;
+        border: 1px solid #e8e4dc;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .admin-quick-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        border-color: transparent;
+    }
+
+    .admin-quick-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        flex-shrink: 0;
+    }
+
+    .admin-quick-card.green .admin-quick-icon { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); color: #1a4731; }
+    .admin-quick-card.gold .admin-quick-icon { background: linear-gradient(135deg, #fff8e1, #ffecb3); color: #c9a84c; }
+    .admin-quick-card.blue .admin-quick-icon { background: linear-gradient(135deg, #e3f2fd, #bbdefb); color: #1565c0; }
+    .admin-quick-card.red .admin-quick-icon { background: linear-gradient(135deg, #fce4ec, #f8bbd0); color: #c62828; }
+    .admin-quick-card.purple .admin-quick-icon { background: linear-gradient(135deg, #f3e5f5, #e1bee7); color: #7b1fa2; }
+    .admin-quick-card.teal .admin-quick-icon { background: linear-gradient(135deg, #e0f2f1, #b2dfdb); color: #00695c; }
+
+    .admin-quick-text h3 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin: 0 0 4px;
+    }
+
+    .admin-quick-text p {
+        font-size: 0.78rem;
+        color: #6a7a6a;
+        margin: 0;
+    }
+
+    .admin-quick-arrow {
+        margin-left: auto;
+        color: #ccc;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .admin-quick-card:hover .admin-quick-arrow {
+        color: #1a4731;
+        transform: translateX(4px);
+    }
+
+    /* ===== TABLES ===== */
+    .admin-table-card {
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid #e8e4dc;
+        overflow: hidden;
+        margin-bottom: 28px;
+    }
+
+    .admin-table-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 24px;
+        border-bottom: 1px solid #f0ece0;
+    }
+
+    .admin-table-header h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .admin-table-header h2 i {
+        color: #c9a84c;
+    }
+
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .admin-table thead th {
+        background: #f8f7f4;
+        color: #6a7a6a;
+        font-weight: 600;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 14px 20px;
+        border-bottom: 2px solid #e8e4dc;
+        text-align: left;
+    }
+
+    .admin-table tbody td {
+        padding: 14px 20px;
+        border-bottom: 1px solid #f5f2ec;
+        font-size: 0.85rem;
+        color: #2d3748;
+    }
+
+    .admin-table tbody tr:hover {
+        background: #f9f8f5;
+    }
+
+    .admin-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .admin-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+
+    .admin-badge.green { background: rgba(45,138,78,0.1); color: #1a4731; }
+    .admin-badge.gold { background: rgba(201,168,76,0.1); color: #a88a3c; }
+    .admin-badge.red { background: rgba(239,68,68,0.1); color: #b91c1c; }
+
+    .admin-link {
+        color: #1a4731;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.82rem;
+        transition: all 0.2s ease;
+    }
+
+    .admin-link:hover {
+        color: #2d8a4e;
+        text-decoration: underline;
+    }
+
+    /* ===== TWO COLUMN LAYOUT ===== */
+    .admin-grid-2 {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+    }
+
+    /* ===== ACTIVITY ===== */
+    .admin-activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 0;
+        border-bottom: 1px solid #f5f2ec;
+    }
+
+    .admin-activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .admin-activity-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-top: 6px;
+        flex-shrink: 0;
+    }
+
+    .admin-activity-dot.green { background: #2d8a4e; }
+    .admin-activity-dot.gold { background: #c9a84c; }
+    .admin-activity-dot.blue { background: #3b82f6; }
+
+    .admin-activity-text {
+        font-size: 0.82rem;
+        color: #2d3748;
+        line-height: 1.4;
+    }
+
+    .admin-activity-text strong {
+        color: #1a1a2e;
+    }
+
+    .admin-activity-time {
+        font-size: 0.7rem;
+        color: #9ca3af;
+        margin-top: 2px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1200px) {
+        .admin-stats { grid-template-columns: repeat(2, 1fr); }
+        .admin-quick-grid { grid-template-columns: repeat(2, 1fr); }
+        .admin-grid-2 { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+        #content { padding: 16px; }
+        .admin-welcome { flex-direction: column; text-align: center; gap: 16px; padding: 24px; }
+        .admin-welcome-left { flex-direction: column; }
+        .admin-welcome-right { text-align: center; }
+        .admin-stats { grid-template-columns: 1fr; }
+        .admin-quick-grid { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+
+    <!-- WELCOME HEADER -->
+    <div class="admin-welcome">
+        <div class="admin-welcome-left">
+            <div class="admin-welcome-escudo">
+                <img src="{% static 'img/escudo.jpg' %}" alt="Escudo">
+            </div>
+            <div class="admin-welcome-text">
+                <h1>Panel de Administración</h1>
+                <p>I.E. Abraham Valdelomar <strong>N° 116</strong> — San Juan de Lurigancho</p>
+            </div>
+        </div>
+        <div class="admin-welcome-right">
+            <div class="admin-welcome-date">{% now "l, d \d\e F \d\e Y" %}</div>
+            <div class="admin-welcome-role">
+                <i class="bi bi-shield-check"></i> Administrador
+            </div>
+        </div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="admin-stats">
+        <a href="/admin/usuarios/usuario/?rol=alumno" class="admin-stat-card green" style="text-decoration:none;">
+            <div class="admin-stat-header">
+                <div class="admin-stat-icon"><i class="bi bi-people"></i></div>
+                <span class="admin-stat-label">Alumnos</span>
+            </div>
+            <div class="admin-stat-number">{{ dashboard_stats.alumnos|default:"0" }}</div>
+            <div class="admin-stat-sub">Estudiantes activos</div>
+        </a>
+        <a href="/admin/usuarios/usuario/?rol=profesor" class="admin-stat-card gold" style="text-decoration:none;">
+            <div class="admin-stat-header">
+                <div class="admin-stat-icon"><i class="bi bi-person-badge"></i></div>
+                <span class="admin-stat-label">Docentes</span>
+            </div>
+            <div class="admin-stat-number">{{ dashboard_stats.profesores|default:"0" }}</div>
+            <div class="admin-stat-sub">Profesores activos</div>
+        </a>
+        <a href="/admin/academico/grado/" class="admin-stat-card blue" style="text-decoration:none;">
+            <div class="admin-stat-header">
+                <div class="admin-stat-icon"><i class="bi bi-building"></i></div>
+                <span class="admin-stat-label">Grados</span>
+            </div>
+            <div class="admin-stat-number">{{ dashboard_stats.grados|default:"0" }}</div>
+            <div class="admin-stat-sub">Secciones disponibles</div>
+        </a>
+        <a href="/admin/calificaciones/calificacion/" class="admin-stat-card red" style="text-decoration:none;">
+            <div class="admin-stat-header">
+                <div class="admin-stat-icon"><i class="bi bi-file-text"></i></div>
+                <span class="admin-stat-label">Calificaciones</span>
+            </div>
+            <div class="admin-stat-number">{{ dashboard_stats.calificaciones|default:"0" }}</div>
+            <div class="admin-stat-sub">Registros este periodo</div>
+        </a>
+    </div>
+
+    <!-- QUICK ACCESS -->
+    <h2 class="admin-section-title"><i class="bi bi-lightning-charge"></i> Acceso Rápido</h2>
+    <div class="admin-quick-grid">
+        <a href="/admin/usuarios/usuario/" class="admin-quick-card green">
+            <div class="admin-quick-icon"><i class="bi bi-people-fill"></i></div>
+            <div class="admin-quick-text">
+                <h3>Usuarios</h3>
+                <p>Administrar alumnos, docentes y padres</p>
+            </div>
+            <div class="admin-quick-arrow"><i class="bi bi-chevron-right"></i></div>
+        </a>
+        <a href="/admin/academico/grado/" class="admin-quick-card gold">
+            <div class="admin-quick-icon"><i class="bi bi-book"></i></div>
+            <div class="admin-quick-text">
+                <h3>Académico</h3>
+                <p>Grupos, grados y materias</p>
+            </div>
+            <div class="admin-quick-arrow"><i class="bi bi-chevron-right"></i></div>
+        </a>
+        <a href="/admin/calificaciones/calificacion/" class="admin-quick-card blue">
+            <div class="admin-quick-icon"><i class="bi bi-clipboard-data"></i></div>
+            <div class="admin-quick-text">
+                <h3>Calificaciones</h3>
+                <p>Registrar y consultar notas</p>
+            </div>
+            <div class="admin-quick-arrow"><i class="bi bi-chevron-right"></i></div>
+        </a>
+        <a href="/admin/asistencias/asistencia/" class="admin-quick-card red">
+            <div class="admin-quick-icon"><i class="bi bi-check-circle"></i></div>
+            <div class="admin-quick-text">
+                <h3>Asistencias</h3>
+                <p>Control de asistencia diaria</p>
+            </div>
+            <div class="admin-quick-arrow"><i class="bi bi-chevron-right"></i></div>
+        </a>
+        <a href="/admin/tareas/tarea/" class="admin-quick-card purple">
+            <div class="admin-quick-icon"><i class="bi bi-journal-text"></i></div>
+            <div class="admin-quick-text">
+                <h3>Tareas</h3>
+                <p>Crear y gestionar tareas</p>
+            </div>
+            <div class="admin-quick-arrow"><i class="bi bi-chevron-right"></i></div>
+        </a>
+        <a href="/admin/biometrico/huelladocente/" class="admin-quick-card teal">
+            <div class="admin-quick-icon"><i class="bi bi-fingerprint"></i></div>
+            <div class="admin-quick-text">
+                <h3>Biométrico</h3>
+                <p>Huellas y dispositivos</p>
+            </div>
+            <div class="admin-quick-arrow"><i class="bi bi-chevron-right"></i></div>
+        </a>
+    </div>
+
+    <!-- TWO COLUMN: RECENT + ACTIVITY -->
+    <div class="admin-grid-2">
+        <!-- RECENT USERS -->
+        <div class="admin-table-card">
+            <div class="admin-table-header">
+                <h2><i class="bi bi-person-lines-fill"></i> Usuarios Recientes</h2>
+                <a href="/admin/usuarios/usuario/" class="admin-link">Ver todos →</a>
+            </div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Usuario</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in recent_users %}
+                    <tr>
+                        <td><strong>{{ usuario.get_full_name|default:usuario.username }}</strong></td>
+                        <td>{{ usuario.username }}</td>
+                        <td>
+                            {% if usuario.rol == 'admin' %}
+                                <span class="admin-badge gold">Admin</span>
+                            {% elif usuario.rol == 'profesor' %}
+                                <span class="admin-badge green">Docente</span>
+                            {% elif usuario.rol == 'alumno' %}
+                                <span class="admin-badge blue">Alumno</span>
+                            {% elif usuario.rol == 'padre' %}
+                                <span class="admin-badge red">Padre</span>
+                            {% else %}
+                                <span class="admin-badge">{{ usuario.rol }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if usuario.is_active %}
+                                <span class="admin-badge green">Activo</span>
+                            {% else %}
+                                <span class="admin-badge red">Inactivo</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align:center;color:#9ca3af;padding:24px;">
+                            <i class="bi bi-inbox" style="font-size:1.5rem;display:block;margin-bottom:8px;"></i>
+                            No hay usuarios registrados
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ACTIVITY -->
+        <div class="admin-table-card">
+            <div class="admin-table-header">
+                <h2><i class="bi bi-clock-history"></i> Actividad Reciente</h2>
+            </div>
+            <div style="padding: 8px 24px;">
+                <div class="admin-activity-item">
+                    <div class="admin-activity-dot green"></div>
+                    <div>
+                        <div class="admin-activity-text"><strong>Sistema</strong> iniciado correctamente</div>
+                        <div class="admin-activity-time">Ahora</div>
+                    </div>
+                </div>
+                <div class="admin-activity-item">
+                    <div class="admin-activity-dot gold"></div>
+                    <div>
+                        <div class="admin-activity-text">Último acceso: <strong>{{ user.get_full_name|default:user.username }}</strong></div>
+                        <div class="admin-activity-time">Hoy</div>
+                    </div>
+                </div>
+                <div class="admin-activity-item">
+                    <div class="admin-activity-dot blue"></div>
+                    <div>
+                        <div class="admin-activity-text"><strong>{{ dashboard_stats.alumnos|default:"0" }}</strong> alumnos registrados</div>
+                        <div class="admin-activity-time">Periodo actual</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+{{ block.super }}
+{% endblock %}

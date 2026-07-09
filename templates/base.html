@@ -123,33 +123,40 @@
             </div>
 
             {% else %}
-            {# ===== SIDEBAR ADMIN / DIRECTOR / PROFESOR / PADRE ===== #}
-            <div class="menu-label">Navegación</div>
+            {# ===== SIDEBAR ADMIN / DIRECTOR ===== #}
+            {% if user.rol == 'admin' or user.rol == 'director' %}
+
+            <div class="menu-label">Principal</div>
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home' %}">
                         <i class="bi bi-grid-1x2-fill"></i> Panel Principal
                     </a>
                 </li>
-                {% if user.rol == 'admin' or user.rol == 'director' or user.rol == 'profesor' %}
+            </ul>
+
+            <div class="menu-label">Gestión Institucional</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/usuarios/usuario/">
+                        <i class="bi bi-people-fill"></i> Usuarios
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'lista_grados' %}">
                         <i class="bi bi-layers-fill"></i> Grados
                     </a>
                 </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'lista_materias' %}">
-                        <i class="bi bi-book-fill"></i> Materias
-                    </a>
-                </li>
-                {% if user.rol == 'admin' or user.rol == 'director' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'lista_grupos' %}">
                         <i class="bi bi-people-fill"></i> Grupos
                     </a>
                 </li>
-                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_materias' %}">
+                        <i class="bi bi-book-fill"></i> Materias
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'lista_asignaciones' %}">
                         <i class="bi bi-journal-text"></i> Asignaciones
@@ -157,9 +164,8 @@
                 </li>
             </ul>
 
-            <div class="menu-label mt-3">Control Académico</div>
+            <div class="menu-label">Control Académico</div>
             <ul class="nav flex-column">
-                {% if user.rol == 'profesor' or user.rol == 'admin' or user.rol == 'director' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'lista_asistencias' %}">
                         <i class="bi bi-calendar-check-fill"></i> Asistencias
@@ -170,30 +176,14 @@
                         <i class="bi bi-graph-up-arrow"></i> Calificaciones
                     </a>
                 </li>
-                {% endif %}
-                {% if user.rol == 'padre' %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'dashboard_padre' %}">
-                        <i class="bi bi-heart"></i> Mis Hijos
-                    </a>
-                </li>
-                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'lista_tareas' %}">
                         <i class="bi bi-journal-richtext"></i> Tareas
                     </a>
                 </li>
-                {% if user.rol == 'profesor' %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mis_horarios' %}">
-                        <i class="bi bi-calendar-week"></i> Mi Horario
-                    </a>
-                </li>
-                {% endif %}
             </ul>
 
-            {% if user.rol == 'admin' or user.rol == 'director' %}
-            <div class="menu-label mt-3">Administración</div>
+            <div class="menu-label">Administración</div>
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'dashboard' %}">
@@ -208,19 +198,157 @@
                 {% if user.rol == 'admin' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'admin:index' %}">
-                        <i class="bi bi-gear-fill"></i> Panel Admin
+                        <i class="bi bi-gear-fill"></i> Configuración
                     </a>
                 </li>
                 {% endif %}
             </ul>
+
+            <div class="menu-label">Acciones Rápidas</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link sidebar-quick-action" href="/admin/usuarios/usuario/add/">
+                        <i class="bi bi-person-plus-fill"></i> Crear Usuario
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-quick-action" href="/admin/academico/grupo/add/">
+                        <i class="bi bi-plus-circle-fill"></i> Crear Grupo
+                    </a>
+                </li>
+            </ul>
+
+            {# ===== SIDEBAR PROFESOR ===== #}
+            {% elif user.rol == 'profesor' %}
+
+            <div class="menu-label">Principal</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        <i class="bi bi-grid-1x2-fill"></i> Panel Principal
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Mis Asignaturas</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_materias' %}">
+                        <i class="bi bi-book-fill"></i> Mis Materias
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_grados' %}">
+                        <i class="bi bi-people-fill"></i> Mis Grupos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'mis_horarios' %}">
+                        <i class="bi bi-calendar-week"></i> Mi Horario
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Control Académico</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_asistencias' %}">
+                        <i class="bi bi-calendar-check-fill"></i> Asistencias
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_calificaciones' %}">
+                        <i class="bi bi-graph-up-arrow"></i> Calificaciones
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_tareas' %}">
+                        <i class="bi bi-journal-richtext"></i> Tareas
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Mis Alumnos</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_grados' %}">
+                        <i class="bi bi-person-lines-fill"></i> Lista de Alumnos
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Acciones Rápidas</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link sidebar-quick-action" href="{% url 'lista_asistencias' %}">
+                        <i class="bi bi-check-circle-fill"></i> Registrar Asistencia
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-quick-action" href="{% url 'lista_calificaciones' %}">
+                        <i class="bi bi-pencil-square"></i> Ingresar Notas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-quick-action" href="{% url 'lista_tareas' %}">
+                        <i class="bi bi-plus-circle-fill"></i> Crear Tarea
+                    </a>
+                </li>
+            </ul>
+
+            {# ===== SIDEBAR PADRE ===== #}
+            {% elif user.rol == 'padre' %}
+
+            <div class="menu-label">Principal</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        <i class="bi bi-grid-1x2-fill"></i> Panel Principal
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Mis Hijos</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard_padre' %}">
+                        <i class="bi bi-heart-fill"></i> Mis Hijos
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label">Consultas</div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_calificaciones' %}">
+                        <i class="bi bi-graph-up-arrow"></i> Calificaciones
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_asistencias' %}">
+                        <i class="bi bi-calendar-check-fill"></i> Asistencias
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_tareas' %}">
+                        <i class="bi bi-journal-richtext"></i> Tareas
+                    </a>
+                </li>
+            </ul>
+
             {% endif %}
 
-            <div class="menu-label mt-3">Cuenta</div>
+            <div class="menu-label mt-auto">Cuenta</div>
             <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'perfil' %}">
+                        <i class="bi bi-person-fill"></i> Mi Perfil
+                    </a>
+                </li>
                 <li class="nav-item">
                     <form method="post" action="{% url 'logout' %}" class="d-inline w-100">
                         {% csrf_token %}
-                        <button type="submit" class="nav-link w-100 text-start" style="background:none;border:none;">
+                        <button type="submit" class="nav-link w-100 text-start sidebar-logout-nav">
                             <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
                         </button>
                     </form>

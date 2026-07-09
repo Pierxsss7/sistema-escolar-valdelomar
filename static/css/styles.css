@@ -1708,6 +1708,48 @@ hr { border-color: var(--ivory); opacity: 0.8; }
     color: #dc3545;
 }
 
+/* ===== SIDEBAR BADGES ===== */
+.sidebar-badge {
+    margin-left: auto;
+    background: rgba(201,168,76,0.2);
+    color: #c9a84c;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* ===== SIDEBAR QUICK ACTIONS ===== */
+.sidebar-quick-action {
+    background: rgba(45,138,78,0.08) !important;
+    border-left: 3px solid #2d8a4e !important;
+    border-radius: 0 8px 8px 0 !important;
+    margin-right: 10px;
+}
+
+.sidebar-quick-action:hover {
+    background: rgba(45,138,78,0.15) !important;
+}
+
+.sidebar-quick-action i {
+    color: #2d8a4e !important;
+}
+
+/* ===== SIDEBAR LOGOUT NAV ===== */
+.sidebar-logout-nav {
+    background: none !important;
+    border: none !important;
+    color: rgba(255,255,255,0.55);
+    transition: var(--transition);
+}
+
+.sidebar-logout-nav:hover {
+    color: #dc3545 !important;
+    background: rgba(220,53,69,0.08) !important;
+}
+
 /* ================================================
    COURSE CARDS & PLAN DE ESTUDIOS
    ================================================ */
